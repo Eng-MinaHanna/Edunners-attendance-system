@@ -34,12 +34,13 @@
     .btn-secondary { background: #28a745; color: white; }
     .btn-danger { background: #dc3545; color: white; }
     .btn-small { padding: 6px 12px; font-size: 12px; margin: 0; width: auto; }
+    .role-select { padding: 6px; font-size: 13px; margin: 0; width: auto; background-color: #f8f9fa; border: 1px solid #ddd; }
     button:active { transform: scale(0.98); }
 
     .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #eef2f5; padding: 10px; border-radius: 8px;}
     .count-badge { background: var(--primary); color: white; padding: 5px 12px; border-radius: 20px; font-size: 1.2rem; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-    th, td { padding: 12px 8px; text-align: right; border-bottom: 1px solid #eee; }
+    th, td { padding: 12px 8px; text-align: right; border-bottom: 1px solid #eee; vertical-align: middle; }
     th { background: #f8f9fa; color: var(--primary); }
     .search-box { margin-bottom: 15px; position: relative; }
     .search-box input { margin-bottom: 0; padding-right: 35px; }
@@ -52,7 +53,6 @@
     .warning { background: #fff3cd; color: #856404; }
     .info { background: #e2e3e5; color: #383d41; }
     
-    /* الكلاسات المسؤولة عن إخفاء العناصر بناءً على الصلاحية */
     .admin-only, .manager-only { display: none; }
   </style>
 </head>
@@ -72,8 +72,8 @@
     <a href="#" onclick="switchView('scanner');" id="nav-scanner">📷 تسجيل الطلاب</a>
     <a href="#" onclick="switchView('manual');" id="nav-manual">✍️ تسجيل يدوي</a>
     
-    <div class="sidebar-heading manager-only">متابعة الحضور</div>
-    <a href="#" onclick="switchView('dashboard');" id="nav-dashboard" class="manager-only">📊 لوحة الحضور</a>
+    <div class="sidebar-heading">متابعة الحضور</div>
+    <a href="#" onclick="switchView('dashboard');" id="nav-dashboard">📊 لوحة الحضور</a>
     
     <div class="sidebar-heading admin-only">إدارة النظام</div>
     <a href="#" onclick="switchView('users');" id="nav-users" class="admin-only">👥 إدارة المستخدمين</a>
@@ -168,7 +168,7 @@
 
   <script>
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbx6P-cX8xB1K-PvwvVpRSuIN5PwAgm2CTfLxPYX6eAYYpA73kHo_7Le0Lo5rcclU1aiBg/exec"; 
-    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbw4zAR57GjkcT7VN__im9Bv_o9GpUNhbsG9OKyi5otmkRKdXxUZVkziFwzz2qztbL81qw/exec";
+    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbz3dBcwWq16n7LNnJboEDZDKwngXoUNJOZ6w1Nd_5OTW2T_wIYy805erosyWRZdSNMc4A/exec";
 
     let html5QrCode;
     let allAttendees = []; 
@@ -182,7 +182,6 @@
       if(currentView === 'dashboard') loadDashboard();
     });
 
-    // --- Authentication & Role Management ---
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       const userName = localStorage.getItem('userName');
@@ -202,33 +201,20 @@
         else roleBadge.style.background = '#17a2b8';
         roleBadge.style.color = 'white';
 
-        // تطبيق الصلاحيات للأدمن
         const adminElements = document.querySelectorAll('.admin-only');
         adminElements.forEach(el => {
           if(userRole === 'Admin') {
-             // التعديل هنا: منع إظهار الصفحة بالكامل، والسماح للأزرار والجدول بالظهور فقط
-             if(el.classList.contains('view-section')) {
-                 el.style.display = ''; // نترك التحكم للـ class active
-             } else {
-                 el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
-             }
-          } else {
-             el.style.display = 'none';
-          }
+             if(el.classList.contains('view-section')) { el.style.display = ''; } 
+             else { el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block'; }
+          } else { el.style.display = 'none'; }
         });
 
-        // تطبيق الصلاحيات للمراقب
         const managerElements = document.querySelectorAll('.manager-only');
         managerElements.forEach(el => {
           if(userRole === 'Admin' || userRole === 'Manager') {
-             if(el.classList.contains('view-section')) {
-                 el.style.display = ''; 
-             } else {
-                 el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
-             }
-          } else {
-             el.style.display = 'none';
-          }
+             if(el.classList.contains('view-section')) { el.style.display = ''; } 
+             else { el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block'; }
+          } else { el.style.display = 'none'; }
         });
 
         if (currentView === 'login') currentView = 'scanner'; 
@@ -270,7 +256,6 @@
       checkAuth();
     }
 
-    // --- UI Routing ---
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('show');
@@ -311,7 +296,6 @@
       else { osc.type = 'sawtooth'; osc.frequency.value = 300; gain.gain.value = 0.1; osc.start(); osc.stop(ctx.currentTime + 0.3); }
     }
 
-    // --- Camera Functions ---
     Html5Qrcode.getCameras().then(devices => {
       const cameraSelect = document.getElementById('cameraSelection');
       if (devices && devices.length > 0) {
@@ -351,7 +335,6 @@
         .catch(err => { showMessage("❌ لم يتم العثور على QR واضح.", "error"); e.target.value = ""; });
     });
 
-    // --- Attendance API ---
     function sendDataToAPI(studentCode) {
       if(!studentCode) return;
       showMessage("⏳ جاري تسجيل الحضور...", "info");
@@ -414,17 +397,43 @@
       });
     }
 
-    // --- User Management (Admin Only) ---
+    // --- User Management ---
     function loadUsers() {
       const tbody = document.getElementById('usersList');
       tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">⏳ جاري التحميل...</td></tr>`;
       fetch(`${LOGIN_API_URL}?action=getUsers`).then(res => res.json()).then(data => {
         if (data.status === "success" && data.users.length > 0) {
+          // تم تحويل النص الثابت إلى قائمة منسدلة (Dropdown)
           tbody.innerHTML = data.users.map(u => `<tr>
-            <td>${u.name}</td> <td>${u.email}</td> <td>${u.role}</td>
+            <td>${u.name}</td> 
+            <td>${u.email}</td> 
+            <td>
+              <select class="role-select" onchange="changeUserRole('${u.email}', this.value)">
+                <option value="User" ${u.role === 'User' ? 'selected' : ''}>User</option>
+                <option value="Manager" ${u.role === 'Manager' ? 'selected' : ''}>Manager</option>
+                <option value="Admin" ${u.role === 'Admin' ? 'selected' : ''}>Admin</option>
+              </select>
+            </td>
             <td><button class="btn-danger btn-small" onclick="deleteUser('${u.email}')">حذف 🗑️</button></td>
           </tr>`).join('');
         }
+      });
+    }
+
+    // دالة جديدة لتحديث الصلاحية مباشرة
+    function changeUserRole(email, newRole) {
+      showMessage("⏳ جاري تحديث الصلاحية...", "info");
+      fetch(`${LOGIN_API_URL}?action=updateRole&email=${encodeURIComponent(email)}&role=${encodeURIComponent(newRole)}`)
+      .then(res => res.json()).then(data => {
+         if(data.status === 'success') { 
+           showMessage(data.message, "success"); 
+         } else {
+           showMessage(data.message, "error");
+           loadUsers(); // عشان يرجع القائمة لو حصل خطأ
+         }
+      }).catch(err => {
+         showMessage("❌ خطأ في الاتصال.", "error");
+         loadUsers();
       });
     }
 
@@ -458,7 +467,6 @@
       });
     }
 
-    // Start
     window.onload = checkAuth;
   </script>
 </body>
