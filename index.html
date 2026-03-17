@@ -3,71 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>نظام إدارة الكورسات الاحترافي</title>
+  <title>نظام إدارة الكورسات الاحترافي | Eduneers</title>
   
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   
   <style>
-    :root { --primary: #0056b3; --bg: #f4f7f6; --text: #333; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); overflow-x: hidden; }
+    /* 1. الألوان والهوية البصرية */
+    :root { 
+      --primary: #002147; 
+      --accent: #f5b041;  
+      --accent-hover: #e59830;
+      --bg: #f4f7f9; 
+      --text: #2c3e50; 
+      --card-bg: #ffffff;
+      --border-radius: 16px;
+    }
     
-    .navbar { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;}
-    .navbar h2 { margin: 0; font-size: 1.1rem; }
-    .hamburger { cursor: pointer; font-size: 1.8rem; background: none; border: none; color: white; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); overflow-x: hidden; }
     
-    .sidebar { position: fixed; top: 0; right: -250px; width: 250px; height: 100vh; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1000; padding-top: 60px; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #cce0ff; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    .navbar { 
+      background: linear-gradient(135deg, var(--primary), #003366); 
+      color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; 
+      box-shadow: 0 4px 20px rgba(0,33,71,0.15); position: sticky; top: 0; z-index: 100;
+    }
+    .navbar h2 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px;}
+    .hamburger { cursor: pointer; font-size: 1.8rem; background: none; border: none; color: white; padding: 0; transition: transform 0.2s;}
+    .hamburger:hover { transform: scale(1.1); color: var(--accent); }
+    
+    .sidebar { position: fixed; top: 0; right: -280px; width: 260px; height: 100vh; background: var(--card-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.1); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; padding-top: 70px; display: flex; flex-direction: column;}
     .sidebar.open { right: 0; }
-    .sidebar a { display: block; padding: 12px 20px; color: var(--text); text-decoration: none; font-size: 1.1rem; border-bottom: 1px solid #eee; font-weight: bold; }
-    .sidebar a:hover, .sidebar a.active { background: #f0f8ff; color: var(--primary); }
-    .sidebar-heading { padding: 15px 20px 5px; font-size: 0.85rem; color: #888; font-weight: bold; text-transform: uppercase; background: #fafafa;}
-    
-    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
-    .sidebar-overlay.show { display: block; }
-    .close-btn { position: absolute; top: 15px; left: 15px; font-size: 1.5rem; cursor: pointer; color: #888; border: none; background: none;}
+    .sidebar a { display: block; padding: 14px 25px; color: var(--text); text-decoration: none; font-size: 1.05rem; font-weight: 600; border-right: 4px solid transparent; transition: all 0.3s; margin-bottom: 2px;}
+    .sidebar a:hover { background: #f0f4f8; color: var(--primary); padding-right: 30px; }
+    .sidebar a.active { background: #e6f0fa; color: var(--primary); border-right: 4px solid var(--accent); }
+    .sidebar-heading { padding: 20px 25px 8px; font-size: 0.8rem; color: #95a5a6; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,33,71,0.4); backdrop-filter: blur(3px); display: none; z-index: 999; opacity: 0; transition: opacity 0.3s;}
+    .sidebar-overlay.show { display: block; opacity: 1; }
+    .close-btn { position: absolute; top: 18px; left: 20px; font-size: 1.8rem; cursor: pointer; color: #95a5a6; border: none; background: none; transition: 0.2s;}
+    .close-btn:hover { color: #e74c3c; transform: rotate(90deg); }
 
-    .container { padding: 20px; max-width: 500px; margin: auto; }
-    .view-section { display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: fadeIn 0.3s; }
+    .container { padding: 25px 20px; max-width: 550px; margin: auto; }
+    .view-section { display: none; background: var(--card-bg); padding: 30px; border-radius: var(--border-radius); box-shadow: 0 10px 30px rgba(0,0,0,0.06); animation: slideUp 0.4s ease-out; margin-bottom: 20px;}
     .view-section.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    select, input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; font-weight: bold; margin-bottom: 15px; box-sizing: border-box; }
-    button { padding: 14px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; margin-bottom: 10px; transition: 0.2s; }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-secondary { background: #28a745; color: white; }
-    .btn-danger { background: #dc3545; color: white; }
-    .btn-small { padding: 6px 12px; font-size: 12px; margin: 0; width: auto; }
-    .role-select { padding: 6px; font-size: 13px; margin: 0; width: auto; background-color: #f8f9fa; border: 1px solid #ddd; }
-    button:active { transform: scale(0.98); }
-
-    .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #eef2f5; padding: 10px; border-radius: 8px;}
-    .count-badge { background: var(--primary); color: white; padding: 5px 12px; border-radius: 20px; font-size: 1.2rem; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-    th, td { padding: 12px 8px; text-align: right; border-bottom: 1px solid #eee; vertical-align: middle; }
-    th { background: #f8f9fa; color: var(--primary); }
-    .search-box { margin-bottom: 15px; position: relative; }
-    .search-box input { margin-bottom: 0; padding-right: 35px; }
-    .search-box::before { content: '🔍'; position: absolute; right: 10px; top: 12px; font-size: 16px; }
+    select, input[type="text"], input[type="email"], input[type="password"] { 
+      width: 100%; padding: 14px; border-radius: 10px; border: 2px solid #e1e8ed; font-size: 15px; font-weight: 600; margin-bottom: 18px; box-sizing: border-box; transition: all 0.3s; background-color: #fafbfc; color: var(--text);
+    }
+    select:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+      border-color: var(--accent); background-color: #fff; box-shadow: 0 0 0 4px rgba(245, 176, 65, 0.15); outline: none;
+    }
     
-    #reader { width: 100%; border-radius: 8px; overflow: hidden; display: none; border: 2px solid var(--primary); margin-bottom: 10px;}
-    #message { margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; display: none; transition: 0.3s;}
-    .success { background: #d4edda; color: #155724; }
-    .error { background: #f8d7da; color: #721c24; }
-    .warning { background: #fff3cd; color: #856404; }
-    .info { background: #e2e3e5; color: #383d41; }
+    button { padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; margin-bottom: 12px; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px;}
+    button:active { transform: scale(0.97); }
+    .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(0,33,71,0.2); }
+    .btn-primary:hover { background: #001833; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,33,71,0.3); }
+    .btn-secondary { background: var(--accent); color: var(--primary); box-shadow: 0 4px 15px rgba(245, 176, 65, 0.3); }
+    .btn-secondary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .btn-danger { background: #e74c3c; color: white; }
+    .btn-danger:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231,76,60,0.3);}
+    .btn-small { padding: 8px 15px; font-size: 13px; margin: 0; width: auto; border-radius: 6px; box-shadow: none;}
+    .role-select { padding: 8px; font-size: 13px; margin: 0; width: auto; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;}
+
+    .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: linear-gradient(to right, #fdfbf7, #f4f7f6); padding: 15px; border-radius: 10px; border-right: 4px solid var(--accent);}
+    .count-badge { background: var(--primary); color: var(--accent); padding: 6px 15px; border-radius: 20px; font-size: 1.3rem; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+    
+    .table-container { overflow-x: auto; border-radius: 10px; border: 1px solid #e1e8ed; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: right; }
+    th, td { padding: 14px 12px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+    th { background: var(--primary); color: white; font-weight: 600; white-space: nowrap;}
+    tbody tr:nth-child(even) { background-color: #f9fbfc; }
+    tbody tr:hover { background-color: #f0f4f8; }
+    
+    .search-box { margin-bottom: 20px; position: relative; }
+    .search-box input { margin-bottom: 0; padding-right: 40px; border-radius: 25px;}
+    .search-box::before { content: '🔍'; position: absolute; right: 15px; top: 14px; font-size: 16px; opacity: 0.6;}
+    
+    #reader { width: 100%; border-radius: 12px; overflow: hidden; display: none; border: 3px dashed var(--accent); margin-bottom: 15px; background: #fafbfc;}
+    #message { margin-top: 15px; padding: 16px; border-radius: 10px; font-weight: bold; display: none; transition: 0.3s; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
+    .success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+    .error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+    .warning { background: #fff8e1; color: #f57f17; border: 1px solid #ffecb3; }
+    .info { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
     
     .admin-only, .manager-only { display: none; }
-    
-    .google-btn-container { display: flex; justify-content: center; margin-top: 20px; }
+    .google-btn-container { display: flex; justify-content: center; margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 1px dashed #ccc;}
   </style>
 </head>
 <body>
 
   <div class="navbar">
-    <h2>Eduneers <span id="welcomeName" style="font-size: 13px; font-weight: normal;"></span></h2>
+    <h2>Eduneers <span id="welcomeName" style="font-size: 13px; font-weight: normal; opacity: 0.9;"></span></h2>
     <div>
-      <span id="groupBadge" style="font-size: 11px; background: #28a745; color: white; padding: 3px 8px; border-radius: 12px; display: none; margin-right: 5px; font-weight: bold;"></span>
-      <span id="roleBadge" style="font-size: 11px; background: #ffc107; color: black; padding: 3px 8px; border-radius: 12px; display: none; margin-right: 5px; font-weight: bold;"></span>
+      <span id="groupBadge" style="font-size: 11px; background: var(--accent); color: var(--primary); padding: 4px 10px; border-radius: 12px; display: none; margin-right: 5px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"></span>
+      <span id="roleBadge" style="font-size: 11px; background: #fff; color: var(--primary); padding: 4px 10px; border-radius: 12px; display: none; margin-right: 5px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"></span>
     </div>
     <button class="hamburger" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
   </div>
@@ -86,23 +120,25 @@
     <div class="sidebar-heading admin-only">إدارة النظام</div>
     <a href="#" onclick="switchView('users');" id="nav-users" class="admin-only">👥 إدارة المستخدمين</a>
     
-    <a href="#" onclick="logout();" style="color: #dc3545; margin-top: 20px; border-top: 2px solid #eee;">🚪 تسجيل الخروج</a>
+    <div style="flex-grow: 1;"></div> 
+    <a href="#" onclick="logout();" style="color: #e74c3c; margin-bottom: 20px; border-top: 1px solid #eee; padding-top: 15px;">🚪 تسجيل الخروج</a>
   </div>
 
   <div class="container">
     <div id="message"></div>
 
     <div id="view-login" class="view-section">
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="color:var(--primary); margin-top:0;">تسجيل الدخول</h2>
-        <p style="color: #dc3545; font-size: 15px; font-weight: bold; background: #f8d7da; padding: 10px; border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 25px;">
+        <h2 style="color:var(--primary); margin-top:0; font-size: 24px;">تسجيل الدخول</h2>
+        <p style="color: #c62828; font-size: 14px; font-weight: bold; background: #ffebee; padding: 12px; border-radius: 8px; border: 1px solid #ffcdd2;">
           برجاء التسجيل بالإيميل الخاص بـ Eduneers
         </p>
       </div>
       
       <div class="google-btn-container">
         <div id="g_id_onload"
-             data-client_id="841979425871-4frlmc9t57ahvui609v35ksv8rvnvo0b.apps.googleusercontent.com"             data-context="signin"
+             data-client_id="841979425871-4frlmc9t57ahvui609v35ksv8rvnvo0b.apps.googleusercontent.com"
+             data-context="signin"
              data-ux_mode="popup"
              data-callback="handleGoogleLogin"
              data-auto_prompt="false">
@@ -118,9 +154,9 @@
       </div>
     </div>
 
-    <div id="lectureContainer" style="display:none; background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-      <p style="margin: 0 0 10px 0; font-weight: bold; color: #555;">المحاضرة الحالية:</p>
-      <select id="lecture">
+    <div id="lectureContainer" style="display:none; background: var(--card-bg); padding: 20px; border-radius: var(--border-radius); margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.04);">
+      <p style="margin: 0 0 12px 0; font-weight: bold; color: var(--primary); font-size: 15px;">المحاضرة الحالية:</p>
+      <select id="lecture" style="margin-bottom: 0;">
         <option value="1">المحاضرة 1</option> <option value="2">المحاضرة 2</option> <option value="3">المحاضرة 3</option>
         <option value="4">المحاضرة 4</option> <option value="5">المحاضرة 5</option> <option value="6">المحاضرة 6</option>
         <option value="7">المحاضرة 7</option> <option value="8">المحاضرة 8</option> <option value="9">المحاضرة 9</option>
@@ -141,21 +177,21 @@
     </div>
 
     <div id="view-manual" class="view-section">
-      <h3 style="margin-top:0; color:var(--primary);">التسجيل اليدوي</h3>
+      <h3 style="margin-top:0; color:var(--primary); border-bottom: 2px solid #f1f1f1; padding-bottom: 10px;">التسجيل اليدوي</h3>
       <input type="text" id="manualCode" placeholder="أدخل كود الطالب هنا...">
       <button class="btn-primary" onclick="submitManualCode()">حفظ الحضور 📥</button>
     </div>
 
     <div id="view-dashboard" class="view-section">
       <div class="dashboard-header">
-        <span style="font-weight: bold;">الطلاب الحاضرين:</span>
+        <span style="font-weight: bold; color: var(--primary);">الطلاب الحاضرين:</span>
         <span class="count-badge" id="dashCount">0</span>
       </div>
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="ابحث بالاسم أو كود الطالب..." onkeyup="filterDashboard()">
       </div>
-      <button class="btn-secondary" style="padding: 10px;" onclick="loadDashboard()">🔄 تحديث البيانات</button>
-      <div style="overflow-x: auto;">
+      <button class="btn-secondary" style="padding: 12px; border-radius: 25px;" onclick="loadDashboard()">🔄 تحديث البيانات</button>
+      <div class="table-container">
         <table id="attendeesTable">
           <thead>
             <tr>
@@ -163,35 +199,47 @@
             </tr>
           </thead>
           <tbody id="attendeesList">
-            <tr><td colspan="4" style="text-align:center;">اضغط تحديث لعرض البيانات</td></tr>
+            <tr><td colspan="4" style="text-align:center; padding: 20px;">اضغط تحديث لعرض البيانات</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <div id="view-users" class="view-section admin-only">
-      <h3 style="margin-top:0; color:var(--primary);">إدارة المستخدمين</h3>
-      <div style="background: #eef2f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+      <h3 style="margin-top:0; color:var(--primary); border-bottom: 2px solid #f1f1f1; padding-bottom: 10px;">إدارة المستخدمين</h3>
+      <p style="font-size: 13px; color: #666; background: #f8f9fa; padding: 10px; border-radius: 8px;">أضف بريد جوجل (Gmail) للموظف وحدد صلاحيته. (لا حاجة لكلمة مرور).</p>
+      
+      <div style="background: #f9fbfc; padding: 20px; border-radius: 12px; border: 1px solid #e1e8ed; margin-bottom: 20px;">
         <input type="text" id="newUserName" placeholder="اسم المستخدم">
         <input type="email" id="newUserEmail" placeholder="البريد الإلكتروني (Gmail)">
-        <select id="newUserRole" style="margin-bottom: 10px;">
-          <option value="User">مُسجل (User)</option>
-          <option value="Manager">مراقب (Manager)</option>
-          <option value="Admin">مدير (Admin)</option>
-        </select>
-        <select id="newUserGroup">
-          <option value="Group A">Group A</option>
-          <option value="Group B">Group B</option>
-          <option value="Group C">Group C</option>
-          <option value="Group D">Group D</option>
-        </select>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+          <select id="newUserRole" style="margin-bottom: 0;">
+            <option value="User">مُسجل (User)</option>
+            <option value="Manager">مراقب (Manager)</option>
+            <option value="Admin">مدير (Admin)</option>
+          </select>
+          <select id="newUserGroup" style="margin-bottom: 0;">
+            <option value="Group A">Group A</option>
+            <option value="Group B">Group B</option>
+            <option value="Group C">Group C</option>
+            <option value="Group D">Group D</option>
+            <option value="Group E">Group E</option>
+            <option value="Group F">Group F</option>
+            <option value="Group G">Group G</option>
+            <option value="Group H">Group H</option>
+            <option value="Group I">Group I</option>
+            <option value="Group J">Group J</option>
+            <option value="Group K">Group K</option>
+          </select>
+        </div>
         <button class="btn-primary" onclick="addUser()">إضافة مستخدم ➕</button>
       </div>
-      <button class="btn-secondary" style="padding: 10px;" onclick="loadUsers()">🔄 تحديث قائمة المستخدمين</button>
-      <div style="overflow-x: auto;">
+      
+      <button class="btn-secondary" style="padding: 12px; border-radius: 25px;" onclick="loadUsers()">🔄 تحديث قائمة المستخدمين</button>
+      <div class="table-container">
         <table>
-          <thead><tr><th>الاسم/الإيميل</th> <th>الصلاحية</th> <th>الجروب</th> <th>حذف</th></tr></thead>
-          <tbody id="usersList"><tr><td colspan="4" style="text-align:center;">جاري التحميل...</td></tr></tbody>
+          <thead><tr><th>البيانات</th> <th>الصلاحية</th> <th>الجروب</th> <th>حذف</th></tr></thead>
+          <tbody id="usersList"><tr><td colspan="4" style="text-align:center; padding: 20px;">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -199,7 +247,6 @@
   </div>
 
   <script>
-    // ⚠️⚠️ ضع الروابط الجديدة للـ APIs هنا ⚠️⚠️
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbygwcEIIUmZSUMDdFA_KFREgp3PadLOrfYaMhw6bta5cxD4aYoYxzoWl9uvEb_autnMTg/exec"; 
     const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbzQu5KbW8qm5wQSyRlqGySuabuGV03z6o9ASUx2nLT0-Ssx1nLJ9VpStVgYSjhMf20zng/exec";
 
@@ -239,7 +286,7 @@
             const finalName = data.userName || googleName;
             localStorage.setItem('userName', finalName);
             localStorage.setItem('userRole', data.role); 
-            localStorage.setItem('userGroup', data.group); // حفظ الجروب
+            localStorage.setItem('userGroup', data.group);
             localStorage.setItem('userEmail', email); 
             
             showMessage(`✅ مرحباً بك يا ${finalName}`, "success");
@@ -288,9 +335,9 @@
       groupBadge.innerText = userGroup;
       groupBadge.style.display = 'inline-block';
       
-      if (userRole === 'Admin') roleBadge.style.background = '#dc3545';
-      else if (userRole === 'Manager') roleBadge.style.background = '#fd7e14';
-      else roleBadge.style.background = '#17a2b8';
+      if (userRole === 'Admin') roleBadge.style.color = '#e74c3c';
+      else if (userRole === 'Manager') roleBadge.style.color = '#e67e22';
+      else roleBadge.style.color = '#3498db';
 
       const adminElements = document.querySelectorAll('.admin-only');
       adminElements.forEach(el => {
@@ -316,7 +363,7 @@
       if (isLoggedIn) {
         document.getElementById('menuBtn').style.display = 'block';
         document.getElementById('lectureContainer').style.display = 'block';
-        document.getElementById('welcomeName').innerText = `(${userName})`;
+        document.getElementById('welcomeName').innerText = `| ${userName}`;
         document.getElementById('roleBadge').style.display = 'inline-block';
         
         applyRolesToUI();
@@ -425,7 +472,7 @@
       if(!studentCode) return;
       showMessage("⏳ جاري تسجيل الحضور...", "info");
       const lec = document.getElementById('lecture').value;
-      const group = localStorage.getItem('userGroup') || "Group A"; // إرسال الجروب
+      const group = localStorage.getItem('userGroup') || "Group A";
       fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}`)
       .then(res => res.json()).then(data => {
           if (data.status === "success") { showMessage(data.message, "success"); playBeep('success'); } 
@@ -444,7 +491,7 @@
       const group = localStorage.getItem('userGroup') || "Group A";
       const tbody = document.getElementById('attendeesList');
       const isManager = (localStorage.getItem('userRole') === 'Admin' || localStorage.getItem('userRole') === 'Manager');
-      tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;">⏳ جاري التحميل...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center; padding: 20px;">⏳ جاري التحميل...</td></tr>`;
       
       fetch(`${ATTENDANCE_API_URL}?action=getDashboard&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}`)
         .then(res => res.json())
@@ -453,18 +500,20 @@
           if (data.status === "success" && data.attendees.length > 0) {
             allAttendees = data.attendees; renderTable(allAttendees);
           } else {
-            allAttendees = []; tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;">لا يوجد حضور في هذا الجروب</td></tr>`;
+            allAttendees = []; tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center; padding: 20px;">لا يوجد حضور في هذا الجروب</td></tr>`;
           }
-        }).catch(err => { tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;color:red;">❌ خطأ في التحميل</td></tr>`; });
+        }).catch(err => { tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;color:red; padding: 20px;">❌ خطأ في التحميل</td></tr>`; });
     }
 
     function renderTable(dataArray) {
       const tbody = document.getElementById('attendeesList');
       const isManager = (localStorage.getItem('userRole') === 'Admin' || localStorage.getItem('userRole') === 'Manager');
-      if (dataArray.length === 0) { tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;">لا توجد نتائج</td></tr>`; return; }
+      if (dataArray.length === 0) { tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center; padding: 20px;">لا توجد نتائج</td></tr>`; return; }
       
       tbody.innerHTML = dataArray.map(a => `<tr>
-        <td>${a.id}</td> <td>${a.name}</td> <td>${a.time}</td>
+        <td style="font-weight: bold; color: var(--primary);">${a.id}</td> 
+        <td>${a.name}</td> 
+        <td><span style="background: #eef2f5; padding: 4px 8px; border-radius: 6px; font-size: 13px;">${a.time}</span></td>
         ${isManager ? `<td><button class="btn-danger btn-small" onclick="deleteAttendance('${a.id}')">حذف 🗑️</button></td>` : ''}
       </tr>`).join('');
     }
@@ -489,11 +538,11 @@
     // --- إدارة المستخدمين ---
     function loadUsers() {
       const tbody = document.getElementById('usersList');
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">⏳ جاري التحميل...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">⏳ جاري التحميل...</td></tr>`;
       fetch(`${LOGIN_API_URL}?action=getUsers`).then(res => res.json()).then(data => {
         if (data.status === "success" && data.users.length > 0) {
           tbody.innerHTML = data.users.map(u => `<tr>
-            <td style="font-size:12px;"><b>${u.name}</b><br><span style="color:#666">${u.email}</span></td> 
+            <td style="font-size:13px; line-height: 1.4;"><b>${u.name}</b><br><span style="color:#7f8c8d">${u.email}</span></td> 
             <td>
               <select class="role-select" onchange="changeUserRole('${u.email}', this.value)">
                 <option value="User" ${u.role === 'User' ? 'selected' : ''}>User</option>
@@ -507,6 +556,13 @@
                 <option value="Group B" ${u.group === 'Group B' ? 'selected' : ''}>Group B</option>
                 <option value="Group C" ${u.group === 'Group C' ? 'selected' : ''}>Group C</option>
                 <option value="Group D" ${u.group === 'Group D' ? 'selected' : ''}>Group D</option>
+                <option value="Group E" ${u.group === 'Group E' ? 'selected' : ''}>Group E</option>
+                <option value="Group F" ${u.group === 'Group F' ? 'selected' : ''}>Group F</option>
+                <option value="Group G" ${u.group === 'Group G' ? 'selected' : ''}>Group G</option>
+                <option value="Group H" ${u.group === 'Group H' ? 'selected' : ''}>Group H</option>
+                <option value="Group I" ${u.group === 'Group I' ? 'selected' : ''}>Group I</option>
+                <option value="Group J" ${u.group === 'Group J' ? 'selected' : ''}>Group J</option>
+                <option value="Group K" ${u.group === 'Group K' ? 'selected' : ''}>Group K</option>
               </select>
             </td>
             <td><button class="btn-danger btn-small" onclick="deleteUser('${u.email}')">حذف 🗑️</button></td>
