@@ -9,7 +9,6 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   
   <style>
-    /* 1. الألوان والهوية البصرية */
     :root { 
       --primary: #002147; 
       --accent: #f5b041;  
@@ -36,16 +35,7 @@
     .hamburger { cursor: pointer; font-size: 1.8rem; background: none; border: none; color: white; padding: 0; transition: transform 0.2s;}
     .hamburger:hover { transform: scale(1.1); color: var(--accent); }
     
-    /* حل مشكلة اختفاء زر تسجيل الخروج في الموبايل */
-    .sidebar { 
-      position: fixed; top: 0; right: -280px; width: 260px; 
-      height: 100%; /* استخدام 100% بدلاً من 100vh لتوافق الموبايل */
-      background: var(--card-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.1); 
-      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; 
-      padding-top: 70px; padding-bottom: 40px; /* مساحة أمان بالأسفل */
-      display: block; /* إلغاء الـ Flexbox هنا لمنع دفع الزرار للأسفل */
-      overflow-y: auto; /* تفعيل التمرير */
-    }
+    .sidebar { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: var(--card-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.1); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; padding-top: 70px; padding-bottom: 40px; display: block; overflow-y: auto;}
     .sidebar.open { right: 0; }
     .sidebar a { display: block; padding: 14px 25px; color: var(--text); text-decoration: none; font-size: 1.05rem; font-weight: 600; border-right: 4px solid transparent; transition: all 0.3s; margin-bottom: 2px;}
     .sidebar a:hover { background: #f0f4f8; color: var(--primary); padding-right: 30px; }
@@ -101,7 +91,12 @@
     .info { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
     
     .admin-only, .manager-only { display: none; }
-    .google-btn-container { display: flex; justify-content: center; margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 1px dashed #ccc;}
+    .google-btn-container { display: flex; justify-content: center; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px dashed #ccc;}
+    
+    /* تنسيق فاصل الدخول */
+    .divider { text-align: center; margin: 25px 0; position: relative; }
+    .divider hr { border: none; border-top: 1px solid #ddd; }
+    .divider span { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--card-bg); padding: 0 15px; color: #888; font-size: 14px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -141,10 +136,19 @@
       <div style="text-align: center; margin-bottom: 25px;">
         <h2 style="color:var(--primary); margin-top:0; font-size: 24px;">تسجيل الدخول</h2>
         <p style="color: #c62828; font-size: 14px; font-weight: bold; background: #ffebee; padding: 12px; border-radius: 8px; border: 1px solid #ffcdd2;">
-          برجاء التسجيل بالإيميل الخاص بـ Eduneers
+          مرحباً بك في نظام إدارة الكورسات
         </p>
       </div>
       
+      <input type="email" id="loginEmail" placeholder="البريد الإلكتروني...">
+      <input type="password" id="loginPassword" placeholder="كلمة المرور...">
+      <button class="btn-primary" onclick="handleManualLogin()">دخول 🔐</button>
+      
+      <div class="divider">
+        <hr>
+        <span>أو باستخدام</span>
+      </div>
+
       <div class="google-btn-container">
         <div id="g_id_onload"
              data-client_id="841979425871-4frlmc9t57ahvui609v35ksv8rvnvo0b.apps.googleusercontent.com"
@@ -217,11 +221,11 @@
 
     <div id="view-users" class="view-section admin-only">
       <h3 style="margin-top:0; color:var(--primary); border-bottom: 2px solid #f1f1f1; padding-bottom: 10px;">إدارة المستخدمين</h3>
-      <p style="font-size: 13px; color: #666; background: #f8f9fa; padding: 10px; border-radius: 8px;">أضف بريد جوجل (Gmail) للموظف وحدد صلاحيته. (لا حاجة لكلمة مرور).</p>
       
       <div style="background: #f9fbfc; padding: 20px; border-radius: 12px; border: 1px solid #e1e8ed; margin-bottom: 20px;">
         <input type="text" id="newUserName" placeholder="اسم المستخدم">
-        <input type="email" id="newUserEmail" placeholder="البريد الإلكتروني (Gmail)">
+        <input type="email" id="newUserEmail" placeholder="البريد الإلكتروني">
+        <input type="password" id="newUserPass" placeholder="كلمة المرور (للدخول اليدوي)">
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
           <select id="newUserRole" style="margin-bottom: 0;">
             <option value="User">مُسجل (User)</option>
@@ -272,8 +276,9 @@
   </div>
 
   <script>
+    // ⚠️⚠️ ضع الروابط الجديدة للـ APIs هنا ⚠️⚠️
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbygwcEIIUmZSUMDdFA_KFREgp3PadLOrfYaMhw6bta5cxD4aYoYxzoWl9uvEb_autnMTg/exec"; 
-    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbzQu5KbW8qm5wQSyRlqGySuabuGV03z6o9ASUx2nLT0-Ssx1nLJ9VpStVgYSjhMf20zng/exec";
+    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbzzGwwHLI9FpTRacV9oTq0jOC--81OMngpZxokVmepWnZdCQLFE8yuZJRghdiadUOy16w/exec";
 
     let html5QrCode;
     let allAttendees = []; 
@@ -287,6 +292,33 @@
       if(currentView === 'dashboard') loadDashboard();
     });
 
+    // --- الدخول اليدوي ---
+    function handleManualLogin() {
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPassword').value;
+      if(!email || !pass) return alert("الرجاء إدخال الإيميل وكلمة المرور.");
+
+      showMessage("⏳ جاري التحقق...", "info");
+      
+      fetch(`${LOGIN_API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "success") {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', data.userName);
+            localStorage.setItem('userRole', data.role); 
+            localStorage.setItem('userGroup', data.group);
+            localStorage.setItem('userEmail', email); 
+            
+            showMessage(`✅ مرحباً بك يا ${data.userName}`, "success");
+            setTimeout(checkAuth, 1000); 
+          } else {
+            showMessage(data.message, "error");
+          }
+        }).catch(err => { showMessage("❌ خطأ في الاتصال بالخادم.", "error"); });
+    }
+
+    // --- الدخول بجوجل ---
     function parseJwt(token) {
       var base64Url = token.split('.')[1];
       var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -303,7 +335,7 @@
 
       showMessage("⏳ جاري التحقق من الصلاحيات...", "info");
       
-      fetch(`${LOGIN_API_URL}?action=login&email=${encodeURIComponent(email)}`)
+      fetch(`${LOGIN_API_URL}?action=googleLogin&email=${encodeURIComponent(email)}`)
         .then(res => res.json())
         .then(data => {
           if (data.status === "success") {
@@ -560,7 +592,6 @@
       });
     }
 
-    // --- توليد قائمة الجروبات برمجياً للمستخدمين عشان الكود ميبقاش طويل ---
     function generateGroupOptions(selectedGroup) {
       let options = '';
       const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -617,18 +648,20 @@
     function addUser() {
       const name = document.getElementById('newUserName').value;
       const email = document.getElementById('newUserEmail').value;
+      const pass = document.getElementById('newUserPass').value; // استرجاع الباسورد
       const role = document.getElementById('newUserRole').value;
       const group = document.getElementById('newUserGroup').value;
       
-      if(!name || !email) return alert("أكمل البيانات");
+      if(!name || !email || !pass) return alert("أكمل البيانات (الاسم، الإيميل، وكلمة المرور)");
       showMessage("⏳ جاري الإضافة...", "info");
       
-      fetch(`${LOGIN_API_URL}?action=addUser&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&role=${encodeURIComponent(role)}&group=${encodeURIComponent(group)}`)
+      fetch(`${LOGIN_API_URL}?action=addUser&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&pass=${encodeURIComponent(pass)}&role=${encodeURIComponent(role)}&group=${encodeURIComponent(group)}`)
       .then(res => res.json()).then(data => {
         if(data.status === 'success') { 
           showMessage(data.message, "success"); 
           document.getElementById('newUserName').value = '';
           document.getElementById('newUserEmail').value = '';
+          document.getElementById('newUserPass').value = '';
           loadUsers(); 
         }
       });
