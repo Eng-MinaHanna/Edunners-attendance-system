@@ -50,8 +50,8 @@
     .warning { background: #fff3cd; color: #856404; }
     .info { background: #e2e3e5; color: #383d41; }
     
-    /* إخفاء عناصر الأدمن افتراضياً */
-    .admin-only { display: none !important; }
+    /* التعديل تم هنا: شلنا كلمة !important عشان الجافاسكربت تقدر تظهرها */
+    .admin-only { display: none; }
   </style>
 </head>
 <body>
@@ -157,7 +157,6 @@
   </div>
 
   <script>
-    // ⚠️⚠️ ضع روابط الـ APIs الجديدة هنا ⚠️⚠️
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbx6P-cX8xB1K-PvwvVpRSuIN5PwAgm2CTfLxPYX6eAYYpA73kHo_7Le0Lo5rcclU1aiBg/exec"; 
     const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbw4zAR57GjkcT7VN__im9Bv_o9GpUNhbsG9OKyi5otmkRKdXxUZVkziFwzz2qztbL81qw/exec";
 
@@ -177,7 +176,7 @@
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       const userName = localStorage.getItem('userName');
-      const userRole = localStorage.getItem('userRole'); // جلب الصلاحية
+      const userRole = localStorage.getItem('userRole'); 
       
       if (isLoggedIn) {
         document.getElementById('menuBtn').style.display = 'block';
@@ -193,8 +192,12 @@
         // تطبيق الصلاحيات على الواجهة
         const adminElements = document.querySelectorAll('.admin-only');
         adminElements.forEach(el => {
-          if(userRole === 'Admin') el.style.display = el.tagName === 'TH' || el.tagName === 'TD' ? 'table-cell' : 'block';
-          else el.style.display = 'none';
+          if(userRole === 'Admin') {
+             // إظهار كعنصر جدول أو بلوك عادي
+             el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
+          } else {
+             el.style.display = 'none';
+          }
         });
 
         if (currentView === 'login') currentView = 'scanner'; 
@@ -221,7 +224,7 @@
           if (data.status === "success") {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userName', data.userName);
-            localStorage.setItem('userRole', data.role); // حفظ الصلاحية
+            localStorage.setItem('userRole', data.role); 
             showMessage(`✅ مرحباً بك يا ${data.userName}`, "success");
             setTimeout(checkAuth, 1000); 
           } else {
@@ -260,7 +263,7 @@
       document.getElementById('overlay').classList.remove('show');
 
       if(viewId === 'dashboard') loadDashboard();
-      if(viewId === 'users') loadUsers(); // تحميل المستخدمين للأدمن
+      if(viewId === 'users') loadUsers(); 
     }
 
     function showMessage(text, type) {
@@ -369,7 +372,6 @@
       renderTable(allAttendees.filter(a => a.name.toLowerCase().includes(query) || a.id.toString().toLowerCase().includes(query)));
     }
 
-    // حذف حضور (أدمن فقط)
     function deleteAttendance(studentCode) {
       if(!confirm("هل أنت متأكد من إلغاء حضور هذا الطالب؟")) return;
       const lec = document.getElementById('lecture').value;
@@ -425,6 +427,7 @@
       });
     }
 
+    // Start
     window.onload = checkAuth;
   </script>
 </body>
