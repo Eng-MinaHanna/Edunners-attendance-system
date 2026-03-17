@@ -464,7 +464,7 @@
     function showMessage(text, type) {
       const msgDiv = document.getElementById('message');
       msgDiv.style.display = 'block'; msgDiv.className = type; msgDiv.innerText = text;
-      setTimeout(() => { msgDiv.style.display = 'none'; }, 4000);
+      setTimeout(() => { msgDiv.style.display = 'none'; }, 10000);
     }
 
     function playBeep(type) {
