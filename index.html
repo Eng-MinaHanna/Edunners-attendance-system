@@ -13,7 +13,7 @@
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); overflow-x: hidden; }
     
     .navbar { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;}
-    .navbar h2 { margin: 0; font-size: 1.2rem; }
+    .navbar h2 { margin: 0; font-size: 1.1rem; }
     .hamburger { cursor: pointer; font-size: 1.8rem; background: none; border: none; color: white; padding: 0; }
     
     .sidebar { position: fixed; top: 0; right: -250px; width: 250px; height: 100vh; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1000; padding-top: 60px; }
@@ -58,15 +58,17 @@
     
     .admin-only, .manager-only { display: none; }
     
-    /* تنسيق حاوية زر جوجل */
     .google-btn-container { display: flex; justify-content: center; margin-top: 20px; }
   </style>
 </head>
 <body>
 
   <div class="navbar">
-    <h2>Eduneers Group <span id="welcomeName" style="font-size: 14px; font-weight: normal;"></span></h2>
-    <span id="roleBadge" style="font-size: 10px; background: #ffc107; color: black; padding: 2px 6px; border-radius: 10px; display: none; margin-right: 5px;"></span>
+    <h2>Eduneers <span id="welcomeName" style="font-size: 13px; font-weight: normal;"></span></h2>
+    <div>
+      <span id="groupBadge" style="font-size: 11px; background: #28a745; color: white; padding: 3px 8px; border-radius: 12px; display: none; margin-right: 5px; font-weight: bold;"></span>
+      <span id="roleBadge" style="font-size: 11px; background: #ffc107; color: black; padding: 3px 8px; border-radius: 12px; display: none; margin-right: 5px; font-weight: bold;"></span>
+    </div>
     <button class="hamburger" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
   </div>
 
@@ -91,8 +93,12 @@
     <div id="message"></div>
 
     <div id="view-login" class="view-section">
-      <h2 style="color:var(--primary); margin-top:0; text-align: center;">تسجيل الدخول</h2>
-      <p style="text-align: center; color: #666; font-size: 14px;">يرجى تسجيل الدخول باستخدام حساب جوجل الخاص بك للوصول للنظام.</p>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color:var(--primary); margin-top:0;">تسجيل الدخول</h2>
+        <p style="color: #dc3545; font-size: 15px; font-weight: bold; background: #f8d7da; padding: 10px; border-radius: 8px;">
+          برجاء التسجيل بالإيميل الخاص بـ Eduneers
+        </p>
+      </div>
       
       <div class="google-btn-container">
         <div id="g_id_onload"
@@ -165,21 +171,26 @@
 
     <div id="view-users" class="view-section admin-only">
       <h3 style="margin-top:0; color:var(--primary);">إدارة المستخدمين</h3>
-      <p style="font-size: 13px; color: #666;">أضف بريد جوجل (Gmail) للموظف وحدد صلاحيته. (خانة كلمة المرور لم تعد مطلوبة).</p>
       <div style="background: #eef2f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
         <input type="text" id="newUserName" placeholder="اسم المستخدم">
         <input type="email" id="newUserEmail" placeholder="البريد الإلكتروني (Gmail)">
-        <select id="newUserRole">
+        <select id="newUserRole" style="margin-bottom: 10px;">
           <option value="User">مُسجل (User)</option>
-          <option value="Manager">مراقب الحضور (Manager)</option>
-          <option value="Admin">مدير النظام (Admin)</option>
+          <option value="Manager">مراقب (Manager)</option>
+          <option value="Admin">مدير (Admin)</option>
+        </select>
+        <select id="newUserGroup">
+          <option value="Group A">Group A</option>
+          <option value="Group B">Group B</option>
+          <option value="Group C">Group C</option>
+          <option value="Group D">Group D</option>
         </select>
         <button class="btn-primary" onclick="addUser()">إضافة مستخدم ➕</button>
       </div>
       <button class="btn-secondary" style="padding: 10px;" onclick="loadUsers()">🔄 تحديث قائمة المستخدمين</button>
       <div style="overflow-x: auto;">
         <table>
-          <thead><tr><th>الاسم</th> <th>الإيميل</th> <th>الصلاحية</th> <th>حذف</th></tr></thead>
+          <thead><tr><th>الاسم/الإيميل</th> <th>الصلاحية</th> <th>الجروب</th> <th>حذف</th></tr></thead>
           <tbody id="usersList"><tr><td colspan="4" style="text-align:center;">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
@@ -189,8 +200,8 @@
 
   <script>
     // ⚠️⚠️ ضع الروابط الجديدة للـ APIs هنا ⚠️⚠️
-    const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbx6P-cX8xB1K-PvwvVpRSuIN5PwAgm2CTfLxPYX6eAYYpA73kHo_7Le0Lo5rcclU1aiBg/exec"; 
-    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbxBR4ii_nHygdVPV8SII9YXyHmbaAFN8QA6d0DZ5Nfy_0K6ca4lG2lrdioUgkM0mankAg/exec";
+    const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbygwcEIIUmZSUMDdFA_KFREgp3PadLOrfYaMhw6bta5cxD4aYoYxzoWl9uvEb_autnMTg/exec"; 
+    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbzQu5KbW8qm5wQSyRlqGySuabuGV03z6o9ASUx2nLT0-Ssx1nLJ9VpStVgYSjhMf20zng/exec";
 
     let html5QrCode;
     let allAttendees = []; 
@@ -204,7 +215,6 @@
       if(currentView === 'dashboard') loadDashboard();
     });
 
-    // --- فك تشفير بيانات جوجل ---
     function parseJwt(token) {
       var base64Url = token.split('.')[1];
       var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -214,11 +224,10 @@
       return JSON.parse(jsonPayload);
     };
 
-    // --- معالجة الرد من جوجل ---
     function handleGoogleLogin(response) {
       const responsePayload = parseJwt(response.credential);
       const email = responsePayload.email;
-      const googleName = responsePayload.name; // اسم الشخص من جوجل
+      const googleName = responsePayload.name; 
 
       showMessage("⏳ جاري التحقق من الصلاحيات...", "info");
       
@@ -227,10 +236,10 @@
         .then(data => {
           if (data.status === "success") {
             localStorage.setItem('isLoggedIn', 'true');
-            // لو الأدمن مسجل اسمه في الشيت هستخدمه، لو لأ هستخدم اسمه بتاع جوجل
             const finalName = data.userName || googleName;
             localStorage.setItem('userName', finalName);
             localStorage.setItem('userRole', data.role); 
+            localStorage.setItem('userGroup', data.group); // حفظ الجروب
             localStorage.setItem('userEmail', email); 
             
             showMessage(`✅ مرحباً بك يا ${finalName}`, "success");
@@ -241,8 +250,6 @@
         }).catch(err => { showMessage("❌ خطأ في الاتصال بالخادم.", "error"); });
     }
 
-
-    // --- المزامنة الحية للصلاحيات ---
     function syncRole() {
       const email = localStorage.getItem('userEmail');
       if (!email || localStorage.getItem('isLoggedIn') !== 'true') return;
@@ -255,9 +262,12 @@
             logout();
           } else if (data.status === "success") {
             const currentSavedRole = localStorage.getItem('userRole');
-            if (currentSavedRole !== data.role) {
+            const currentSavedGroup = localStorage.getItem('userGroup');
+            
+            if (currentSavedRole !== data.role || currentSavedGroup !== data.group) {
               localStorage.setItem('userRole', data.role);
-              showMessage("🔄 تم تحديث صلاحيات حسابك من الإدارة", "info");
+              localStorage.setItem('userGroup', data.group);
+              showMessage("🔄 تم تحديث بيانات حسابك من الإدارة", "info");
               applyRolesToUI(); 
               if (currentView === 'users' && data.role !== 'Admin') switchView('scanner');
             }
@@ -267,11 +277,16 @@
 
     setInterval(syncRole, 15000);
 
-    // --- تطبيق الصلاحيات على الواجهة ---
     function applyRolesToUI() {
       const userRole = localStorage.getItem('userRole');
+      const userGroup = localStorage.getItem('userGroup');
+      
       const roleBadge = document.getElementById('roleBadge');
+      const groupBadge = document.getElementById('groupBadge');
+      
       roleBadge.innerText = userRole;
+      groupBadge.innerText = userGroup;
+      groupBadge.style.display = 'inline-block';
       
       if (userRole === 'Admin') roleBadge.style.background = '#dc3545';
       else if (userRole === 'Manager') roleBadge.style.background = '#fd7e14';
@@ -314,6 +329,7 @@
         document.getElementById('lectureContainer').style.display = 'none';
         document.getElementById('welcomeName').innerText = "";
         document.getElementById('roleBadge').style.display = 'none';
+        document.getElementById('groupBadge').style.display = 'none';
         switchView('login');
       }
     }
@@ -322,11 +338,9 @@
       localStorage.clear();
       toggleSidebar(); 
       checkAuth();
-      // عمل تحديث للصفحة لضمان مسح بيانات جوجل من الذاكرة العشوائية
       location.reload(); 
     }
 
-    // --- UI Routing و وظائف الماسح والحضور (بدون تغيير) ---
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('show');
@@ -411,7 +425,8 @@
       if(!studentCode) return;
       showMessage("⏳ جاري تسجيل الحضور...", "info");
       const lec = document.getElementById('lecture').value;
-      fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}`)
+      const group = localStorage.getItem('userGroup') || "Group A"; // إرسال الجروب
+      fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}`)
       .then(res => res.json()).then(data => {
           if (data.status === "success") { showMessage(data.message, "success"); playBeep('success'); } 
           else { showMessage(data.message, data.status === "already" ? "warning" : "error"); playBeep('error'); }
@@ -426,18 +441,19 @@
 
     function loadDashboard() {
       const lec = document.getElementById('lecture').value;
+      const group = localStorage.getItem('userGroup') || "Group A";
       const tbody = document.getElementById('attendeesList');
       const isManager = (localStorage.getItem('userRole') === 'Admin' || localStorage.getItem('userRole') === 'Manager');
       tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;">⏳ جاري التحميل...</td></tr>`;
       
-      fetch(`${ATTENDANCE_API_URL}?action=getDashboard&lectureNum=${encodeURIComponent(lec)}`)
+      fetch(`${ATTENDANCE_API_URL}?action=getDashboard&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}`)
         .then(res => res.json())
         .then(data => {
           document.getElementById('dashCount').innerText = data.count || 0;
           if (data.status === "success" && data.attendees.length > 0) {
             allAttendees = data.attendees; renderTable(allAttendees);
           } else {
-            allAttendees = []; tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;">لا يوجد حضور</td></tr>`;
+            allAttendees = []; tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;">لا يوجد حضور في هذا الجروب</td></tr>`;
           }
         }).catch(err => { tbody.innerHTML = `<tr><td colspan="${isManager? 4 : 3}" style="text-align:center;color:red;">❌ خطأ في التحميل</td></tr>`; });
     }
@@ -461,28 +477,36 @@
     function deleteAttendance(studentCode) {
       if(!confirm("هل أنت متأكد من إلغاء حضور هذا الطالب؟")) return;
       const lec = document.getElementById('lecture').value;
+      const group = localStorage.getItem('userGroup') || "Group A";
       showMessage("⏳ جاري الحذف...", "info");
-      fetch(`${ATTENDANCE_API_URL}?action=deleteAttendance&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}`)
+      fetch(`${ATTENDANCE_API_URL}?action=deleteAttendance&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}`)
       .then(res => res.json()).then(data => {
          if(data.status === 'success') { showMessage(data.message, "success"); loadDashboard(); }
          else showMessage(data.message, "error");
       });
     }
 
-    // --- إدارة المستخدمين (بدون خانة الباسورد) ---
+    // --- إدارة المستخدمين ---
     function loadUsers() {
       const tbody = document.getElementById('usersList');
       tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">⏳ جاري التحميل...</td></tr>`;
       fetch(`${LOGIN_API_URL}?action=getUsers`).then(res => res.json()).then(data => {
         if (data.status === "success" && data.users.length > 0) {
           tbody.innerHTML = data.users.map(u => `<tr>
-            <td>${u.name}</td> 
-            <td>${u.email}</td> 
+            <td style="font-size:12px;"><b>${u.name}</b><br><span style="color:#666">${u.email}</span></td> 
             <td>
               <select class="role-select" onchange="changeUserRole('${u.email}', this.value)">
                 <option value="User" ${u.role === 'User' ? 'selected' : ''}>User</option>
                 <option value="Manager" ${u.role === 'Manager' ? 'selected' : ''}>Manager</option>
                 <option value="Admin" ${u.role === 'Admin' ? 'selected' : ''}>Admin</option>
+              </select>
+            </td>
+            <td>
+              <select class="role-select" onchange="changeUserGroup('${u.email}', this.value)">
+                <option value="Group A" ${u.group === 'Group A' ? 'selected' : ''}>Group A</option>
+                <option value="Group B" ${u.group === 'Group B' ? 'selected' : ''}>Group B</option>
+                <option value="Group C" ${u.group === 'Group C' ? 'selected' : ''}>Group C</option>
+                <option value="Group D" ${u.group === 'Group D' ? 'selected' : ''}>Group D</option>
               </select>
             </td>
             <td><button class="btn-danger btn-small" onclick="deleteUser('${u.email}')">حذف 🗑️</button></td>
@@ -492,24 +516,33 @@
     }
 
     function changeUserRole(email, newRole) {
-      showMessage("⏳ جاري تحديث الصلاحية...", "info");
+      showMessage("⏳ تحديث الصلاحية...", "info");
       fetch(`${LOGIN_API_URL}?action=updateRole&email=${encodeURIComponent(email)}&role=${encodeURIComponent(newRole)}`)
       .then(res => res.json()).then(data => {
          if(data.status === 'success') { showMessage(data.message, "success"); } 
          else { showMessage(data.message, "error"); loadUsers(); }
-      }).catch(err => { showMessage("❌ خطأ في الاتصال.", "error"); loadUsers(); });
+      }).catch(err => { showMessage("❌ خطأ.", "error"); loadUsers(); });
+    }
+
+    function changeUserGroup(email, newGroup) {
+      showMessage("⏳ تحديث الجروب...", "info");
+      fetch(`${LOGIN_API_URL}?action=updateGroup&email=${encodeURIComponent(email)}&group=${encodeURIComponent(newGroup)}`)
+      .then(res => res.json()).then(data => {
+         if(data.status === 'success') { showMessage(data.message, "success"); } 
+         else { showMessage(data.message, "error"); loadUsers(); }
+      }).catch(err => { showMessage("❌ خطأ.", "error"); loadUsers(); });
     }
 
     function addUser() {
       const name = document.getElementById('newUserName').value;
       const email = document.getElementById('newUserEmail').value;
       const role = document.getElementById('newUserRole').value;
-      const pass = "N/A"; // الباسورد مبقاش ليه لازمة
+      const group = document.getElementById('newUserGroup').value;
       
       if(!name || !email) return alert("أكمل البيانات");
       showMessage("⏳ جاري الإضافة...", "info");
       
-      fetch(`${LOGIN_API_URL}?action=addUser&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&pass=${encodeURIComponent(pass)}&role=${encodeURIComponent(role)}`)
+      fetch(`${LOGIN_API_URL}?action=addUser&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&role=${encodeURIComponent(role)}&group=${encodeURIComponent(group)}`)
       .then(res => res.json()).then(data => {
         if(data.status === 'success') { 
           showMessage(data.message, "success"); 
