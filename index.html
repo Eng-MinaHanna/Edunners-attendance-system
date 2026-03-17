@@ -47,7 +47,7 @@
     .search-box::before { content: '🔍'; position: absolute; right: 10px; top: 12px; font-size: 16px; }
     
     #reader { width: 100%; border-radius: 8px; overflow: hidden; display: none; border: 2px solid var(--primary); margin-bottom: 10px;}
-    #message { margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; display: none; }
+    #message { margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; display: none; transition: 0.3s;}
     .success { background: #d4edda; color: #155724; }
     .error { background: #f8d7da; color: #721c24; }
     .warning { background: #fff3cd; color: #856404; }
@@ -167,8 +167,9 @@
   </div>
 
   <script>
+    // ⚠️⚠️ لا تنسى تضع الروابط الخاصة بك هنا ⚠️⚠️
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbx6P-cX8xB1K-PvwvVpRSuIN5PwAgm2CTfLxPYX6eAYYpA73kHo_7Le0Lo5rcclU1aiBg/exec"; 
-    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbz3dBcwWq16n7LNnJboEDZDKwngXoUNJOZ6w1Nd_5OTW2T_wIYy805erosyWRZdSNMc4A/exec";
+    const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbxd3PAimPHdPsf6xFGk3Tz6vWBrMm-Trah77qhC93tfSWmtsrPDNWzDM1R_AdA9M0diqg/exec";
 
     let html5QrCode;
     let allAttendees = []; 
@@ -182,43 +183,78 @@
       if(currentView === 'dashboard') loadDashboard();
     });
 
+    // --- المزامنة الحية للصلاحيات ---
+    function syncRole() {
+      const email = localStorage.getItem('userEmail');
+      if (!email || localStorage.getItem('isLoggedIn') !== 'true') return;
+
+      fetch(`${LOGIN_API_URL}?action=checkMyRole&email=${encodeURIComponent(email)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "deleted") {
+            // لو الأدمن حذفه خالص، يخرجه برا السيستم
+            alert("تم إيقاف حسابك من قبل الإدارة.");
+            logout();
+          } else if (data.status === "success") {
+            const currentSavedRole = localStorage.getItem('userRole');
+            if (currentSavedRole !== data.role) {
+              // لو الصلاحية اتغيرت، نحدثها ونطبقها فوراً
+              localStorage.setItem('userRole', data.role);
+              showMessage("🔄 تم تحديث صلاحيات حسابك من الإدارة", "info");
+              applyRolesToUI(); 
+              
+              // لو هو فاتح صفحة مبقتش من حقه، نرجعه للصفحة الرئيسية
+              if (currentView === 'users' && data.role !== 'Admin') switchView('scanner');
+            }
+          }
+        }).catch(err => console.log("Sync error"));
+    }
+
+    // تشغيل المزامنة كل 15 ثانية في الخلفية
+    setInterval(syncRole, 15000);
+
+    // --- Authentication & Role Management ---
+    function applyRolesToUI() {
+      const userRole = localStorage.getItem('userRole');
+      const roleBadge = document.getElementById('roleBadge');
+      roleBadge.innerText = userRole;
+      
+      if (userRole === 'Admin') roleBadge.style.background = '#dc3545';
+      else if (userRole === 'Manager') roleBadge.style.background = '#fd7e14';
+      else roleBadge.style.background = '#17a2b8';
+
+      const adminElements = document.querySelectorAll('.admin-only');
+      adminElements.forEach(el => {
+        if(userRole === 'Admin') {
+           if(el.classList.contains('view-section')) el.style.display = ''; 
+           else el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
+        } else { el.style.display = 'none'; }
+      });
+
+      const managerElements = document.querySelectorAll('.manager-only');
+      managerElements.forEach(el => {
+        if(userRole === 'Admin' || userRole === 'Manager') {
+           if(el.classList.contains('view-section')) el.style.display = ''; 
+           else el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
+        } else { el.style.display = 'none'; }
+      });
+    }
+
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       const userName = localStorage.getItem('userName');
-      const userRole = localStorage.getItem('userRole'); 
       
       if (isLoggedIn) {
         document.getElementById('menuBtn').style.display = 'block';
         document.getElementById('lectureContainer').style.display = 'block';
         document.getElementById('welcomeName').innerText = `(${userName})`;
+        document.getElementById('roleBadge').style.display = 'inline-block';
         
-        const roleBadge = document.getElementById('roleBadge');
-        roleBadge.style.display = 'inline-block';
-        roleBadge.innerText = userRole;
-        
-        if (userRole === 'Admin') roleBadge.style.background = '#dc3545';
-        else if (userRole === 'Manager') roleBadge.style.background = '#fd7e14';
-        else roleBadge.style.background = '#17a2b8';
-        roleBadge.style.color = 'white';
-
-        const adminElements = document.querySelectorAll('.admin-only');
-        adminElements.forEach(el => {
-          if(userRole === 'Admin') {
-             if(el.classList.contains('view-section')) { el.style.display = ''; } 
-             else { el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block'; }
-          } else { el.style.display = 'none'; }
-        });
-
-        const managerElements = document.querySelectorAll('.manager-only');
-        managerElements.forEach(el => {
-          if(userRole === 'Admin' || userRole === 'Manager') {
-             if(el.classList.contains('view-section')) { el.style.display = ''; } 
-             else { el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block'; }
-          } else { el.style.display = 'none'; }
-        });
+        applyRolesToUI();
 
         if (currentView === 'login') currentView = 'scanner'; 
         switchView(currentView);
+        syncRole(); // مزامنة فورية عند فتح الموقع
       } else {
         document.getElementById('menuBtn').style.display = 'none';
         document.getElementById('lectureContainer').style.display = 'none';
@@ -242,6 +278,8 @@
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userName', data.userName);
             localStorage.setItem('userRole', data.role); 
+            localStorage.setItem('userEmail', email); // حفظ الإيميل للمزامنة
+            
             showMessage(`✅ مرحباً بك يا ${data.userName}`, "success");
             setTimeout(checkAuth, 1000); 
           } else {
@@ -280,6 +318,8 @@
 
       if(viewId === 'dashboard') loadDashboard();
       if(viewId === 'users') loadUsers(); 
+      
+      syncRole(); // المزامنة عند تبديل الصفحات للضمان
     }
 
     function showMessage(text, type) {
@@ -403,7 +443,6 @@
       tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">⏳ جاري التحميل...</td></tr>`;
       fetch(`${LOGIN_API_URL}?action=getUsers`).then(res => res.json()).then(data => {
         if (data.status === "success" && data.users.length > 0) {
-          // تم تحويل النص الثابت إلى قائمة منسدلة (Dropdown)
           tbody.innerHTML = data.users.map(u => `<tr>
             <td>${u.name}</td> 
             <td>${u.email}</td> 
@@ -420,7 +459,6 @@
       });
     }
 
-    // دالة جديدة لتحديث الصلاحية مباشرة
     function changeUserRole(email, newRole) {
       showMessage("⏳ جاري تحديث الصلاحية...", "info");
       fetch(`${LOGIN_API_URL}?action=updateRole&email=${encodeURIComponent(email)}&role=${encodeURIComponent(newRole)}`)
@@ -429,12 +467,9 @@
            showMessage(data.message, "success"); 
          } else {
            showMessage(data.message, "error");
-           loadUsers(); // عشان يرجع القائمة لو حصل خطأ
+           loadUsers(); 
          }
-      }).catch(err => {
-         showMessage("❌ خطأ في الاتصال.", "error");
-         loadUsers();
-      });
+      }).catch(err => { showMessage("❌ خطأ في الاتصال.", "error"); loadUsers(); });
     }
 
     function addUser() {
@@ -467,7 +502,15 @@
       });
     }
 
-    window.onload = checkAuth;
+    window.onload = function() {
+      // لازم المستخدم يسجل دخول الأول عشان نحفظ إيميله ونقدر نعمل مزامنة
+      if (localStorage.getItem('isLoggedIn') === 'true' && !localStorage.getItem('userEmail')) {
+         // لو مسجل من زمان ومفيش ايميل محفوظ عنده، نخليه يسجل دخول من تاني
+         logout();
+      } else {
+         checkAuth();
+      }
+    };
   </script>
 </body>
 </html>
