@@ -202,18 +202,33 @@
         else roleBadge.style.background = '#17a2b8';
         roleBadge.style.color = 'white';
 
-        // تطبيق الصلاحيات للأدمن (إدارة المستخدمين)
+        // تطبيق الصلاحيات للأدمن
         const adminElements = document.querySelectorAll('.admin-only');
         adminElements.forEach(el => {
-          if(userRole === 'Admin') el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
-          else el.style.display = 'none';
+          if(userRole === 'Admin') {
+             // التعديل هنا: منع إظهار الصفحة بالكامل، والسماح للأزرار والجدول بالظهور فقط
+             if(el.classList.contains('view-section')) {
+                 el.style.display = ''; // نترك التحكم للـ class active
+             } else {
+                 el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
+             }
+          } else {
+             el.style.display = 'none';
+          }
         });
 
-        // تطبيق الصلاحيات للمراقب والأدمن (لوحة الحضور)
+        // تطبيق الصلاحيات للمراقب
         const managerElements = document.querySelectorAll('.manager-only');
         managerElements.forEach(el => {
-          if(userRole === 'Admin' || userRole === 'Manager') el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
-          else el.style.display = 'none';
+          if(userRole === 'Admin' || userRole === 'Manager') {
+             if(el.classList.contains('view-section')) {
+                 el.style.display = ''; 
+             } else {
+                 el.style.display = (el.tagName === 'TH' || el.tagName === 'TD') ? 'table-cell' : 'block';
+             }
+          } else {
+             el.style.display = 'none';
+          }
         });
 
         if (currentView === 'login') currentView = 'scanner'; 
