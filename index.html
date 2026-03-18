@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>نظام إدارة الكورسات الاحترافي | Eduneers</title>
+  <title> Attendance System | Eduneers </title>
   
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -93,10 +93,9 @@
     .warning { background: #fff8e1; color: #f57f17; border: 1px solid #ffecb3; }
     .info { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
     
-/* 👑 تنسيق الصلاحيات الجديد (CSS Roles) - تم الإصلاح */
+    /* 👑 تنسيق الصلاحيات الجديد (CSS Roles) */
     .admin-only, .manager-only, .owner-only { display: none !important; }
 
-    /* إظهار العناصر العادية حسب الصلاحية بشرط ألا تكون (تابة رئيسية) */
     body.role-owner :not(.view-section).owner-only, 
     body.role-owner :not(.view-section).admin-only, 
     body.role-owner :not(.view-section).manager-only,
@@ -112,7 +111,6 @@
 
     body.role-owner div.owner-only.flex-container { display: flex !important; }
 
-    /* التابات الرئيسية تظهر فقط إذا قمنا بالضغط عليها (active) */
     body.role-owner .view-section.active.owner-only,
     body.role-owner .view-section.active.admin-only,
     body.role-owner .view-section.active.manager-only,
@@ -121,6 +119,12 @@
     body.role-manager .view-section.active.manager-only { 
       display: block !important; 
     }
+
+    .google-btn-container { display: flex; justify-content: center; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px dashed #ccc;}
+    .divider { text-align: center; margin: 25px 0; position: relative; }
+    .divider hr { border: none; border-top: 1px solid #ddd; }
+    .divider span { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--card-bg); padding: 0 15px; color: #888; font-size: 14px; font-weight: bold; }
+    .chart-container { position: relative; height: 300px; width: 100%; background: #f9fbfc; border-radius: 12px; border: 1px solid #e1e8ed; padding: 10px; box-sizing: border-box; margin-bottom: 20px;}
   </style>
 </head>
 <body>
@@ -289,7 +293,6 @@
             <option value="User">مُسجل (User)</option>
             <option value="Manager">مراقب (Manager)</option>
             <option value="Admin">مدير (Admin)</option>
-            <option value="Owner">مالك (Owner) 👑</option>
           </select>
           <select id="newUserGroup" style="margin-bottom: 0;">
             </select>
@@ -309,10 +312,8 @@
   </div>
 
   <script>
-    // ⚠️ غير الروابط للروابط الجديدة بتاعتك ⚠️
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbxES_Iu9hEtVBe2zA3MIuwQ96oW_DcfR_txI1DAsZQhQgNVFLdZnzdlSLlYMT5_AlyAVQ/exec"; 
     const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbytmjOF7nf-s39iXRn8TTbC_S59ZBmw7o-lgwvJ157YD5OogVqjQV-y1870KXyZAIvunA/exec";
-    
     const API_TOKEN = "Eduneers_SecR3t_2026";
 
     let html5QrCode;
@@ -320,7 +321,6 @@
     let currentView = localStorage.getItem('savedView') || 'login';
     let attendanceChartInstance = null;
 
-    // تعبئة قوائم الجروبات
     function fillGroupSelects() {
       let options = '';
       const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -454,7 +454,6 @@
             const currentSavedRole = localStorage.getItem('userRole');
             const currentSavedGroup = localStorage.getItem('userGroup');
             
-            // 👑 المالك لا يتم إجباره على تغيير جروبه إلا برغبته
             if (currentSavedRole !== data.role || (currentSavedGroup !== data.group && data.role !== 'Owner')) {
               localStorage.setItem('userRole', data.role);
               if (data.role !== 'Owner') localStorage.setItem('userGroup', data.group);
@@ -468,7 +467,6 @@
 
     setInterval(syncRole, 15000);
 
-    // 👑 تغيير الجروب للمالك يدوياً
     function changeGlobalGroup(newGroup) {
       localStorage.setItem('userGroup', newGroup);
       document.getElementById('groupBadge').innerText = newGroup;
@@ -476,7 +474,6 @@
       if(currentView === 'analytics') loadAnalytics('group');
     }
 
-    // تطبيق الصلاحيات الجديدة (Owner CSS System)
     function applyRolesToUI() {
       const userRole = localStorage.getItem('userRole');
       const userGroup = localStorage.getItem('userGroup');
@@ -488,7 +485,7 @@
       groupBadge.innerText = userGroup;
       groupBadge.style.display = 'inline-block';
       
-      document.body.className = ''; // Reset
+      document.body.className = ''; 
       if (userRole === 'Owner') {
           document.body.classList.add('role-owner');
           roleBadge.style.color = '#8e44ad';
@@ -614,7 +611,6 @@
       if(!studentCode) return;
       studentCode = studentCode.toUpperCase();
 
-      // 👑 الاستشعار الذكي للمالك (عشان يسجل في الجروب الصح لوحده)
       if (localStorage.getItem('userRole') === 'Owner') {
           const match = studentCode.match(/^[A-Z]+/);
           if (match) {
@@ -643,7 +639,6 @@
       
       if (/^\d+$/.test(code)) {
         const userRole = localStorage.getItem('userRole');
-        // المالك لو كتب أرقام بس لازم يكون محدد الجروب من القائمة اللي فوق
         if (userRole === 'Owner' && !document.getElementById('globalGroupSelect').value) {
             return alert("أنت مسجل كمالك، يرجى كتابة حرف الجروب قبل الرقم (مثال: K15)");
         }
@@ -724,7 +719,6 @@
       showMessage("✅ تم تصدير الملف بنجاح", "success");
     }
 
-    // 📈 إحصائيات المالك والمدير
     function loadAnalytics(type = 'group') {
       showMessage("⏳ جاري جلب الإحصائيات...", "info");
       const group = localStorage.getItem('userGroup') || "Group A";
@@ -734,7 +728,6 @@
       let url = "";
       let chartTitle = "";
 
-      // لو طلب يشوف إحصائيات كل الجروبات وهو Owner
       if (type === 'all' && role === 'Owner') {
          url = `${ATTENDANCE_API_URL}?token=${API_TOKEN}&action=getOwnerAnalytics&lectureNum=${encodeURIComponent(lec)}`;
          document.getElementById('analyticsDesc').innerText = `مقارنة حضور كل الجروبات في المحاضرة رقم ${lec}`;
@@ -763,7 +756,7 @@
           datasets: [{
             label: labelTitle,
             data: dataArray,
-            backgroundColor: '#8e44ad', // لون بنفسجي مميز للمالك
+            backgroundColor: '#8e44ad', 
             borderColor: '#f5b041', borderWidth: 2, borderRadius: 8, hoverBackgroundColor: '#f5b041'
           }]
         },
@@ -787,14 +780,22 @@
       
       fetch(`${LOGIN_API_URL}?token=${API_TOKEN}&action=getUsers`).then(res => res.json()).then(data => {
         if (data.status === "success" && data.users.length > 0) {
-          tbody.innerHTML = data.users.map(u => `<tr>
+          
+          // 🛡️ إخفاء المالك من جدول المستخدمين تماماً
+          const visibleUsers = data.users.filter(u => u.role !== 'Owner');
+          
+          if (visibleUsers.length === 0) {
+             tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">لا يوجد مستخدمين لعرضهم</td></tr>`;
+             return;
+          }
+
+          tbody.innerHTML = visibleUsers.map(u => `<tr>
             <td style="font-size:13px; line-height: 1.4;"><b>${u.name}</b><br><span style="color:#7f8c8d">${u.email}</span></td> 
             <td>
               <select class="role-select" onchange="changeUserRole('${u.email}', this.value)">
                 <option value="User" ${u.role === 'User' ? 'selected' : ''}>User</option>
                 <option value="Manager" ${u.role === 'Manager' ? 'selected' : ''}>Manager</option>
                 <option value="Admin" ${u.role === 'Admin' ? 'selected' : ''}>Admin</option>
-                <option value="Owner" ${u.role === 'Owner' ? 'selected' : ''}>Owner</option>
               </select>
             </td>
             <td>
@@ -804,6 +805,8 @@
             </td>
             <td><button class="btn-danger btn-small" onclick="deleteUser('${u.email}')">حذف 🗑️</button></td>
           </tr>`).join('');
+        } else {
+           tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">لا يوجد مستخدمين لعرضهم</td></tr>`;
         }
       });
     }
