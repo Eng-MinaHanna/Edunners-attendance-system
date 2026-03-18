@@ -1,0 +1,17 @@
+{
+  "name": "Eduneers System",
+  "short_name": "Eduneers",
+  "description": "Attendance System",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#f5b041",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2941/2941658.png", 
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
