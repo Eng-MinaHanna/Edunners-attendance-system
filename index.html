@@ -32,9 +32,9 @@
       --primary: #f8fafc;
       --primary-light: #e2e8f0;
       --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
-      --text-main: #f8fafc; /* Brighter text for readability */
-      --text-muted: #cbd5e1; /* Clearer muted text */
-      --card-bg: rgba(15, 23, 42, 0.85); /* Solid glass effect */
+      --text-main: #f8fafc; 
+      --text-muted: #cbd5e1; 
+      --card-bg: rgba(15, 23, 42, 0.85); 
     }
     
     body.dark-mode .navbar { background: rgba(15, 23, 42, 0.98); border-bottom: 1px solid var(--electric-glow); box-shadow: 0 0 20px rgba(0,210,255,0.15);}
@@ -134,7 +134,7 @@
 
     /* 🖥️ DESKTOP LAYOUT FIXES (RESPONSIVE) */
     .container { padding: 40px 20px; max-width: 1000px; margin: auto; position: relative; z-index: 1; }
-    .form-wrapper { max-width: 500px; width: 100%; margin: 0 auto; } /* Centered, un-stretched forms */
+    .form-wrapper { max-width: 500px; width: 100%; margin: 0 auto; }
     
     /* 💎 Glass Cards */
     .view-section { 
@@ -146,7 +146,7 @@
       animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); margin-bottom: 25px;
       transition: background 0.5s ease;
     }
-    @media (min-width: 768px) { .view-section { padding: 45px; } } /* More breathing room on PC */
+    @media (min-width: 768px) { .view-section { padding: 45px; } }
     .view-section.active { display: block; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
@@ -162,7 +162,7 @@
       background-color: #fff; border-color: var(--accent); 
       box-shadow: 0 0 0 4px var(--accent-glow), inset 0 2px 4px rgba(0,0,0,0.01); outline: none;
     }
-    select:disabled { background-color: #e2e8f0; cursor: not-allowed; opacity: 0.7; }
+    body.dark-mode select:focus, body.dark-mode input:focus { box-shadow: 0 0 0 4px var(--electric-glow); border-color: var(--electric-blue); }
     
     /* ⚡ Electrical Buttons */
     button { 
@@ -236,29 +236,41 @@
     body.dark-mode .error { color: #f87171; border-color: #dc2626; background: rgba(248, 113, 113, 0.15);}
     body.dark-mode .info { color: #60a5fa; border-color: #2563eb; background: rgba(96, 165, 250, 0.15);}
 
-    /* ⚡ HIGH-TECH PROGRESS LOADER ⚡ */
+    /* ⚡ HIGH-TECH PROGRESS LOADER (Linear Bar) ⚡ */
     #electricLoader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       display: none; justify-content: center; align-items: center; flex-direction: column;
-      z-index: 9999; color: var(--accent); transition: opacity 0.3s;
+      z-index: 9999; color: var(--text-main); transition: opacity 0.3s;
     }
     body.dark-mode #electricLoader { color: var(--electric-blue); }
+
+    .loader-text { margin-bottom: 20px; font-size: 18px; font-weight: 700; letter-spacing: 1px; animation: pulseText 1.5s infinite alternate; text-shadow: 0 0 10px currentColor;}
     
-    .loader-ring {
-      width: 100px; height: 100px; border-radius: 50%; position: relative;
-      border: 3px solid rgba(255,255,255,0.05);
-      border-top-color: var(--accent); border-bottom-color: var(--accent);
-      animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-      box-shadow: 0 0 20px var(--accent-glow), inset 0 0 10px var(--accent-glow);
+    .progress-bar-container {
+      width: 80%; max-width: 400px; height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px; overflow: hidden;
+      position: relative; box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
     }
-    body.dark-mode .loader-ring { border-top-color: var(--electric-blue); border-bottom-color: var(--electric-blue); box-shadow: 0 0 30px var(--electric-glow), inset 0 0 15px var(--electric-glow); }
+    body.dark-mode .progress-bar-container { background: rgba(0,0,0,0.4); }
+
+    .progress-bar-fill {
+      height: 100%; width: 0%;
+      background: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+      border-radius: 10px;
+      transition: width 0.1s linear;
+    }
+    body.dark-mode .progress-bar-fill { background: var(--electric-blue); box-shadow: 0 0 15px var(--electric-glow); }
+
+    .loader-percent {
+      margin-top: 15px; font-size: 24px; font-weight: 800; font-family: monospace;
+      text-shadow: 0 0 10px currentColor; color: var(--accent);
+    }
+    body.dark-mode .loader-percent { color: var(--electric-blue); }
     
-    .loader-core { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: 800; font-family: monospace; text-shadow: 0 0 10px currentColor; }
-    .loader-text { margin-top: 25px; font-size: 18px; font-weight: 700; letter-spacing: 1px; animation: pulseText 1.5s infinite alternate; text-shadow: 0 0 15px currentColor;}
-    
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes pulseText { 0% { opacity: 0.5; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1.02); } }
+    @keyframes pulseText { 0% { opacity: 0.7; } 100% { opacity: 1; } }
 
     /* Login Atom Animation */
     .atom-logo { width: 80px; height: 80px; margin: 0 auto 15px; position: relative; display: flex; justify-content: center; align-items: center; }
@@ -297,6 +309,7 @@
     .divider hr { border: none; border-top: 1px solid rgba(0,0,0,0.1); }
     body.dark-mode .divider hr { border-top-color: rgba(255,255,255,0.1); }
     .divider span { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #fff; padding: 0 20px; color: var(--text-muted); font-size: 14px; font-weight: 700; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05);}
+    body.dark-mode .divider span { background: #0f172a; color: var(--electric-blue); border-color: rgba(0,210,255,0.2); box-shadow: 0 0 10px rgba(0,210,255,0.1); }
     
     .chart-container { position: relative; height: 320px; width: 100%; background: #fff; border-radius: 20px; border: 1px solid #e2e8f0; padding: 15px; box-sizing: border-box; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.02);}
     .admin-form-container { background: rgba(255,255,255,0.5); padding: 25px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); max-width: 600px; margin-left: auto; margin-right: auto;}
@@ -307,13 +320,13 @@
   <!-- Animated Circuit Background -->
   <div class="circuit-bg"></div>
 
-  <!-- ⚡ Global High-Tech Loader ⚡ -->
+  <!-- ⚡ Global High-Tech Loader (Linear) ⚡ -->
   <div id="electricLoader">
-    <div style="position: relative;">
-      <div class="loader-ring"></div>
-      <div class="loader-core" id="loaderPercent">0%</div>
-    </div>
     <div class="loader-text" id="loaderMessage">جاري نقل البيانات...</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressBarFill"></div>
+    </div>
+    <div class="loader-percent" id="loaderPercent">0%</div>
   </div>
 
   <div class="navbar">
@@ -519,7 +532,7 @@
     // 📶 طابور وضع عدم الاتصال
     let offlineQueue = JSON.parse(localStorage.getItem('offlineQueue')) || [];
 
-    // ⚡ High-Tech Progress Bar Logic ⚡
+    // ⚡ High-Tech Progress Bar Logic (Linear) ⚡
     let loaderInterval;
     function showProgress(message) {
       document.getElementById('electricLoader').style.display = 'flex';
@@ -527,20 +540,26 @@
       document.getElementById('loaderMessage').innerText = message;
       let p = 0;
       document.getElementById('loaderPercent').innerText = p + '%';
+      document.getElementById('progressBarFill').style.width = p + '%';
       clearInterval(loaderInterval);
       loaderInterval = setInterval(() => {
         p += Math.floor(Math.random() * 8) + 1; // Increase fast randomly
         if(p > 90) p = 90; // Hold at 90% until the API responds
         document.getElementById('loaderPercent').innerText = p + '%';
+        document.getElementById('progressBarFill').style.width = p + '%';
       }, 100);
     }
 
     function completeProgress() {
       clearInterval(loaderInterval);
       document.getElementById('loaderPercent').innerText = '100%';
+      document.getElementById('progressBarFill').style.width = '100%';
       setTimeout(() => {
         document.getElementById('electricLoader').style.opacity = '0';
-        setTimeout(() => { document.getElementById('electricLoader').style.display = 'none'; }, 300);
+        setTimeout(() => { 
+            document.getElementById('electricLoader').style.display = 'none'; 
+            document.getElementById('progressBarFill').style.width = '0%'; // Reset for next time
+        }, 300);
       }, 400);
     }
 
@@ -592,6 +611,7 @@
       showProgress("جاري توليد حزم البيانات ورفعها للسيرفر المركزي...");
       let successCount = 0;
       
+      // نرفع السجلات واحداً تلو الآخر لتجنب الضغط على السيرفر
       function uploadNext(index) {
         if (index >= offlineQueue.length) {
            offlineQueue = [];
@@ -830,19 +850,18 @@
 
     document.getElementById('qr-input-file').addEventListener('change', e => {
       if (e.target.files.length == 0) return; stopLiveCamera(); 
-      showProgress("جاري تحليل الصورة والتعرف على البيانات...");
+      // تم إزالة Loader الثقيل واستبداله بإشعار عائم لتسريع العمل
+      showMessage("⏳ جاري تحليل الصورة...", "info");
       
       if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
       html5QrCode.scanFile(e.target.files[0], true).then(decodedText => { 
-        completeProgress();
         sendDataToAPI(decodedText); e.target.value = ""; 
       }).catch(err => { 
-        completeProgress();
         showMessage("❌ لم يتم التعرف على الكود.", "error"); e.target.value = ""; 
       });
     });
 
-    // 📶 دالة إرسال البيانات (تدعم الأوفلاين و Loading)
+    // 📶 دالة إرسال البيانات (تدعم الأوفلاين - بدون مقاطعة الشاشة)
     function sendDataToAPI(studentCode) {
       if(!studentCode) return; studentCode = studentCode.toUpperCase();
       const role = localStorage.getItem('userRole');
@@ -865,14 +884,13 @@
         return; 
       }
 
-      showProgress("جاري التوثيق في قاعدة البيانات الرئيسية 📡...");
+      // إشعار عائم فقط حتى لا يتعطل المساعد عن تصوير الطالب التالي
+      showMessage("⏳ جاري التوثيق في قاعدة البيانات الرئيسية 📡...", "info");
       
       fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}${getAuthParams()}`)
       .then(res => res.json()).then(data => {
-          completeProgress();
           if (data.status === "success") { showMessage(data.message, "success"); playBeep('success'); } else { showMessage(data.message, data.status === "already" ? "warning" : "error"); playBeep('error'); }
       }).catch(err => { 
-          completeProgress();
           offlineQueue.push({ code: studentCode, lecture: lec, group: group, time: new Date().toISOString() });
           localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
           updateOfflineBadge();
