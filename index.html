@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title> Attendance System | Eduneers </title>
+  <title>نظام إدارة الكورسات الاحترافي | Eduneers</title>
   
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -94,8 +94,9 @@
     .info { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
     
     /* 👑 تنسيق الصلاحيات الجديد (CSS Roles) */
-    .admin-only, .manager-only, .owner-only { display: none !important; }
+    .admin-only, .manager-only, .owner-only, .cross-group-only { display: none !important; }
 
+    /* الإظهار حسب الصلاحية بدون تدمير نظام التابات */
     body.role-owner :not(.view-section).owner-only, 
     body.role-owner :not(.view-section).admin-only, 
     body.role-owner :not(.view-section).manager-only,
@@ -110,6 +111,9 @@
     body.role-manager table .manager-only { display: table-cell !important; }
 
     body.role-owner div.owner-only.flex-container { display: flex !important; }
+    
+    /* 🛡️ التعديل: إظهار قائمة اختيار الجروب للمالك والأدمن معاً */
+    body.role-owner div.cross-group-only, body.role-admin div.cross-group-only { display: flex !important; }
 
     body.role-owner .view-section.active.owner-only,
     body.role-owner .view-section.active.admin-only,
@@ -211,7 +215,7 @@
             <option value="19">المحاضرة 19</option> <option value="20">المحاضرة 20</option>
           </select>
         </div>
-        <div class="owner-only flex-container" style="flex: 1; flex-direction: column;">
+        <div class="cross-group-only" style="flex: 1; flex-direction: column;">
           <p style="margin: 0 0 12px 0; font-weight: bold; color: #8e44ad; font-size: 15px;">تحديد الجروب:</p>
           <select id="globalGroupSelect" style="margin-bottom: 0; border-color: #8e44ad;" onchange="changeGlobalGroup(this.value)">
             </select>
@@ -454,9 +458,10 @@
             const currentSavedRole = localStorage.getItem('userRole');
             const currentSavedGroup = localStorage.getItem('userGroup');
             
-            if (currentSavedRole !== data.role || (currentSavedGroup !== data.group && data.role !== 'Owner')) {
+            // 🛡️ المالك والأدمن لا يتم إجبارهم على تغيير الجروب من قاعدة البيانات
+            if (currentSavedRole !== data.role || (currentSavedGroup !== data.group && data.role !== 'Owner' && data.role !== 'Admin')) {
               localStorage.setItem('userRole', data.role);
-              if (data.role !== 'Owner') localStorage.setItem('userGroup', data.group);
+              if (data.role !== 'Owner' && data.role !== 'Admin') localStorage.setItem('userGroup', data.group);
               showMessage("🔄 تم تحديث بيانات حسابك من الإدارة", "info");
               applyRolesToUI(); 
               if (currentView === 'users' && data.role !== 'Admin' && data.role !== 'Owner') switchView('scanner');
@@ -611,7 +616,9 @@
       if(!studentCode) return;
       studentCode = studentCode.toUpperCase();
 
-      if (localStorage.getItem('userRole') === 'Owner') {
+      const role = localStorage.getItem('userRole');
+      // 🛡️ التعديل: الاستشعار الذكي يشتغل للمالك والأدمن معاً
+      if (role === 'Owner' || role === 'Admin') {
           const match = studentCode.match(/^[A-Z]+/);
           if (match) {
               const detectedGroup = "Group " + match[0];
@@ -639,8 +646,9 @@
       
       if (/^\d+$/.test(code)) {
         const userRole = localStorage.getItem('userRole');
-        if (userRole === 'Owner' && !document.getElementById('globalGroupSelect').value) {
-            return alert("أنت مسجل كمالك، يرجى كتابة حرف الجروب قبل الرقم (مثال: K15)");
+        // 🛡️ التعديل: المالك والأدمن لازم يكتبوا الحرف لو هيكتبوا أرقام بس
+        if ((userRole === 'Owner' || userRole === 'Admin') && !document.getElementById('globalGroupSelect').value) {
+            return alert("أنت مسجل كمدير/مالك، يرجى كتابة حرف الجروب قبل الرقم (مثال: K15)");
         }
         const userGroup = localStorage.getItem('userGroup') || "Group A";
         const groupLetter = userGroup.replace("Group ", "").trim(); 
