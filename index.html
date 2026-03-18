@@ -66,6 +66,8 @@
     .btn-secondary:hover { background: var(--accent-hover); transform: translateY(-2px); }
     .btn-danger { background: #e74c3c; color: white; }
     .btn-danger:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231,76,60,0.3);}
+    .btn-excel { background: #27ae60; color: white; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); }
+    .btn-excel:hover { background: #219653; transform: translateY(-2px); }
     .btn-small { padding: 8px 15px; font-size: 13px; margin: 0; width: auto; border-radius: 6px; box-shadow: none;}
     .role-select { padding: 8px; font-size: 13px; margin: 0; width: auto; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;}
 
@@ -84,7 +86,7 @@
     .search-box::before { content: '🔍'; position: absolute; right: 15px; top: 14px; font-size: 16px; opacity: 0.6;}
     
     #reader { width: 100%; border-radius: 12px; overflow: hidden; display: none; border: 3px dashed var(--accent); margin-bottom: 15px; background: #fafbfc;}
-    #message { margin-top: 15px; padding: 16px; border-radius: 10px; font-weight: bold; display: none; transition: 0.3s; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
+    #message { margin-top: 15px; padding: 16px; border-radius: 10px; font-weight: bold; display: none; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
     .success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
     .error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
     .warning { background: #fff8e1; color: #f57f17; border: 1px solid #ffecb3; }
@@ -206,7 +208,12 @@
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="ابحث بالاسم أو كود الطالب..." onkeyup="filterDashboard()">
       </div>
-      <button class="btn-secondary" style="padding: 12px; border-radius: 25px;" onclick="loadDashboard()">🔄 تحديث البيانات</button>
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button class="btn-secondary" style="padding: 12px; border-radius: 25px; flex: 1;" onclick="loadDashboard()">🔄 تحديث</button>
+        <button class="btn-excel" style="padding: 12px; border-radius: 25px; flex: 1;" onclick="exportToExcel()">📥 تصدير Excel</button>
+      </div>
+
       <div class="table-container">
         <table id="attendeesTable">
           <thead>
@@ -268,14 +275,12 @@
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbyEgvhjFFDm84C0iY1NwefX3-4TOIx_3cijPKsrMSJGt8o5V2coNXW0eMntxExNI9U_jg/exec"; 
     const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbyrHH-WIvekmsyoUauAEQ9abEFo3O5YHXQnF5OwwT1y7zjp2Xqw0GGo7v007WAzllemTQ/exec";
     
-    // 🛡️ كلمة السر للـ API
     const API_TOKEN = "Eduneers_SecR3t_2026";
 
     let html5QrCode;
     let allAttendees = []; 
     let currentView = localStorage.getItem('savedView') || 'login';
 
-    // 🛡️ دالة التحميل الآمنة (Crash-Proof) لحل مشكلة الشاشة البيضاء
     window.onload = function() {
       try {
         let savedLecture = localStorage.getItem('savedLecture') || '1';
@@ -620,6 +625,37 @@
          if(data.status === 'success') { showMessage(data.message, "success"); loadDashboard(); }
          else showMessage(data.message, "error");
       });
+    }
+
+    // 🌟 ميزة استخراج البيانات إلى Excel 🌟
+    function exportToExcel() {
+      if (allAttendees.length === 0) {
+        return alert("لا توجد بيانات حضور لتصديرها.");
+      }
+
+      const lec = document.getElementById('lecture').value;
+      const group = localStorage.getItem('userGroup') || "Group A";
+      
+      // إضافة BOM لدعم اللغة العربية في برنامج الإكسيل
+      let csvContent = "\uFEFF"; 
+      csvContent += "كود الطالب,اسم الطالب,وقت الحضور\n";
+
+      allAttendees.forEach(student => {
+        // تنظيف الاسم من الفواصل تحسباً لتجنب بوظان الـ CSV
+        let safeName = student.name.replace(/,/g, " ");
+        csvContent += `${student.id},${safeName},${student.time}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `كشف_حضور_${group}_المحاضرة_${lec}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      showMessage("✅ تم تصدير الملف بنجاح", "success");
     }
 
     function generateGroupOptions(selectedGroup) {
