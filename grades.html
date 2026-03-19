@@ -113,6 +113,7 @@
   </div>
 
   <!-- 🗂️ القائمة الجانبية (Sidebar) -->
+  <!-- 🗂️ Sidebar Menu -->
   <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="sidebar">
     <button class="close-btn" onclick="toggleSidebar()">×</button>
@@ -120,13 +121,34 @@
         <div style="font-weight: 900; color: var(--electric-blue); font-size: 1.2rem;">نظام التقييم</div>
         <div id="sideRole" style="font-size: 10px; opacity: 0.6; margin-top: 5px; text-transform: uppercase;"></div>
     </div>
-    <a href="#" onclick="switchTab('grading', document.getElementById('tab-grading')); toggleSidebar();">📝 رصد الدرجات</a>
-    <a href="#" onclick="switchTab('searchView', document.getElementById('tab-search')); toggleSidebar();">🔍 استعلام عن طالب</a>
-    <a href="#" id="side-top" class="manager-only" onclick="switchTab('topView', document.getElementById('tab-top')); toggleSidebar();">🏆 لوحة الشرف Top 5</a>
-    <a href="#" id="side-settings" class="admin-only" onclick="switchTab('settings', document.getElementById('tab-settings')); toggleSidebar();">⚙️ إعدادات الكويزات</a>
-    <div style="margin-top: 20px; padding: 10px 25px; font-size: 0.7rem; color: #94a3b8; font-weight: 800;">الأنظمة الأخرى</div>
-    <a href="index.html" style="color: var(--accent);">🏠 نظام الحضور</a>
-    <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 20px;">🚪 تسجيل الخروج</a>
+    
+    <!-- الروابط -->
+    <a href="#" onclick="switchTab('grading', document.getElementById('tab-grading')); toggleSidebar();">
+      <span>📝</span> <span>رصد الدرجات</span>
+    </a>
+    
+    <a href="#" onclick="switchTab('searchView', document.getElementById('tab-search')); toggleSidebar();">
+      <span>🔍</span> <span>استعلام عن طالب</span>
+    </a>
+    
+    <!-- 🏆 هذا هو زر التوب 5 الذي كان مختفياً -->
+    <a href="#" class="manager-only" onclick="switchTab('topView', document.getElementById('tab-top')); toggleSidebar();">
+      <span>🏆</span> <span>لوحة الشرف Top 5</span>
+    </a>
+    
+    <a href="#" class="admin-only" onclick="switchTab('settings', document.getElementById('tab-settings')); toggleSidebar();">
+      <span>⚙️</span> <span>إعدادات الكويزات</span>
+    </a>
+
+    <div style="height: 1px; background: rgba(0,0,0,0.1); margin: 15px 25px;"></div>
+    
+    <a href="index.html" style="color: var(--accent);">
+      <span>🏠</span> <span>نظام الحضور</span>
+    </a>
+    
+    <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 20px;">
+      <span>🚪</span> <span>تسجيل الخروج</span>
+    </a>
   </div>
 
   <!-- 🏷️ Tabs Header -->
@@ -237,24 +259,34 @@
 
     let myChart = null;
 
-    window.onload = () => {
+window.onload = () => {
       if (localStorage.getItem('isLoggedIn') !== 'true') { window.location.href = 'index.html'; return; }
       if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
       
-      const role = localStorage.getItem('userRole');
+      // جلب الرتبة وتحويلها لحروف كبيرة لضمان المطابقة
+      const rawRole = localStorage.getItem('userRole') || "CADRE";
+      const role = rawRole.toUpperCase(); 
       const name = localStorage.getItem('userName');
+
       document.getElementById('welcomeName').innerText = `| ${name}`;
-      document.getElementById('sideRole').innerText = role;
+      document.getElementById('sideRole').innerText = rawRole;
       document.getElementById('groupLabel').innerText = localStorage.getItem('userGroup') || "Group A";
       
-      if(['Owner','CO-Founder','Team Manager','Admin','Coordinator'].includes(role)) {
-          document.querySelectorAll('.manager-only').forEach(e => e.style.display = 'block');
-          document.getElementById('tab-top').style.display = 'flex';
+      // 🔓 تفعيل الصلاحيات وإظهار الأزرار المخفية
+      // Manager Permissions: توب 5
+      if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN', 'COORDINATOR'].includes(role)) {
+          document.querySelectorAll('.manager-only').forEach(e => {
+              e.style.setProperty('display', 'flex', 'important');
+          });
       }
-      if(['Owner','CO-Founder','Team Manager','Admin'].includes(role)) {
-          document.querySelectorAll('.admin-only, .cross-group-only').forEach(e => e.style.display = 'block');
-          document.getElementById('tab-settings').style.display = 'flex';
+      
+      // Admin Permissions: الإعدادات وتحكم الجروب
+      if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN'].includes(role)) {
+          document.querySelectorAll('.admin-only, .cross-group-only').forEach(e => {
+              e.style.setProperty('display', 'flex', 'important');
+          });
       }
+      
       fillGroupSelects();
     };
 
