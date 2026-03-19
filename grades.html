@@ -13,12 +13,12 @@
     :root { 
       --primary: #0f172a; --primary-light: #1e293b; --accent: #f5b041; --accent-glow: rgba(245, 176, 65, 0.6);
       --electric-blue: #00d2ff; --electric-glow: rgba(0, 210, 255, 0.5); --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-      --text-main: #334155; --text-muted: #64748b; --card-bg: rgba(255, 255, 255, 0.85); --border-radius: 24px;   
+      --text-main: #1e293b; --text-muted: #64748b; --card-bg: rgba(255, 255, 255, 0.9); --border-radius: 24px;   
     }
     
     body.dark-mode { 
       --primary: #f8fafc; --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); 
-      --text-main: #f8fafc; --text-muted: #cbd5e1; --card-bg: rgba(15, 23, 42, 0.85); 
+      --text-main: #ffffff; --text-muted: #cbd5e1; --card-bg: rgba(15, 23, 42, 0.9); 
     }
     
     body { font-family: 'Cairo', sans-serif; background: var(--bg-gradient); margin: 0; color: var(--text-main); min-height: 100vh; transition: 0.5s; overflow-x: hidden;}
@@ -27,62 +27,75 @@
     body.dark-mode .circuit-bg { background-image: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.1) 2px, transparent 3px), linear-gradient(rgba(0, 210, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 210, 255, 0.05) 1px, transparent 1px); }
     @keyframes pulseCircuit { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
 
-    /* 💎 High-Tech Navbar */
-    .navbar { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); color: white; padding: 12px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.5s; }
-    body.dark-mode .navbar { background: rgba(15, 23, 42, 0.98); border-bottom: 1px solid rgba(0, 210, 255, 0.15); }
+    /* 💎 Navbar */
+    .navbar { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(16px); color: white; padding: 12px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .nav-content { max-width: 1000px; margin: 0 auto; padding: 0 15px; display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box; }
-    .nav-brand h2 { margin: 0; font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 6px; color: #fff; }
-    .nav-brand h2 .brand-text { background: linear-gradient(to left, #fff, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
-    .nav-brand span#welcomeName { font-size: 12px; font-weight: 600; opacity: 0.8; color: #cbd5e1; }
-    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .nav-brand h2 { margin: 0; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 6px; color: #fff; }
+    .nav-brand h2 .brand-text { background: linear-gradient(to left, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+    .nav-actions { display: flex; gap: 8px; align-items: center; }
 
-    .hamburger { cursor: pointer; font-size: 1.6rem; background: none; border: none; color: white; padding: 0; }
-    .theme-toggle { background: none; border: none; font-size: 1.4rem; cursor: pointer; width: 35px; height: 35px; border-radius: 50%; }
+    .theme-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 1.2rem; cursor: pointer; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: 0.3s; color: white; }
+    .theme-toggle:hover { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+    body.dark-mode .theme-toggle:hover { background: var(--electric-blue); border-color: var(--electric-blue); box-shadow: 0 0 15px var(--electric-glow); }
+
+    .hamburger { cursor: pointer; font-size: 1.6rem; background: none; border: none; color: white; padding: 5px; }
 
     /* 🏷️ Badges */
-    .nav-badge { font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; font-family: monospace; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); white-space: nowrap; flex-shrink: 0; }
+    .nav-badge { font-size: 10px; font-weight: 800; padding: 5px 8px; border-radius: 6px; font-family: monospace; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
     .group-badge { background: rgba(245, 176, 65, 0.1); color: var(--accent); border: 1px solid rgba(245, 176, 65, 0.3); }
-    .role-badge { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
 
-    /* 💎 Sidebar (Fixed RTL) */
-    .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); box-shadow: -15px 0 50px rgba(0,0,0,0.1); transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; padding-top: 70px; overflow-y: auto; text-align: right; }
-    body.dark-mode .sidebar { background: rgba(15, 23, 42, 0.98); border-left: 1px solid var(--electric-glow); }
+    /* 💎 Sidebar (RTL Fixed) */
+    .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); box-shadow: -15px 0 50px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; padding-top: 60px; overflow-y: auto; text-align: right; border-left: 1px solid rgba(0,0,0,0.05); }
+    body.dark-mode .sidebar { background: #0f172a; border-left: 1px solid var(--electric-glow); }
     .sidebar.open { right: 0; }
-    .sidebar a { display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: flex-start !important; gap: 12px; padding: 14px 20px; margin: 8px 15px; color: var(--text-muted); text-decoration: none; font-size: 1.05rem; font-weight: 700; border-radius: 14px; transition: 0.3s; }
-    .sidebar a:hover { background: #f8fafc; color: var(--primary); transform: translateX(-5px); }
+    .sidebar a { display: flex !important; align-items: center !important; gap: 12px; padding: 15px 25px; margin: 5px 10px; color: var(--text-muted); text-decoration: none; font-size: 1rem; font-weight: 700; border-radius: 12px; transition: 0.3s; }
+    .sidebar a:hover { background: rgba(15, 23, 42, 0.05); color: var(--primary); transform: translateX(-5px); }
+    body.dark-mode .sidebar a:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
     .sidebar a.active { background: linear-gradient(to left, rgba(147, 51, 234, 0.1), transparent); color: #9333ea; box-shadow: inset -4px 0 0 #9333ea; }
-    .sidebar-heading { padding: 20px 25px 5px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; }
+    .sidebar-heading { padding: 20px 25px 5px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; }
     .close-btn { position: absolute; top: 15px; left: 15px; font-size: 2rem; cursor: pointer; color: #94a3b8; border: none; background: none; }
-    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 999; backdrop-filter: blur(3px); }
     .sidebar-overlay.show { display: block; }
 
-    /* 🔴 View Sections Fix */
-    .container { padding: 40px 20px; max-width: 1000px; margin: auto; }
-    .view-section { display: none; background: var(--card-bg); padding: 35px 25px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.2); animation: slideUp 0.5s ease; margin-bottom: 25px; }
+    /* 🔴 Sections */
+    .container { padding: 30px 15px; max-width: 1000px; margin: auto; }
+    .view-section { display: none; background: var(--card-bg); padding: 30px 20px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.2); animation: slideUp 0.4s ease; margin-bottom: 25px; }
     .view-section.active { display: block !important; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
 
-    /* Forms & Inputs */
-    select, input { width: 100%; padding: 14px 20px; border-radius: 16px; border: 2px solid transparent; background-color: #f8fafc; color: var(--text-main); font-size: 15px; font-weight: 800; margin-bottom: 15px; box-sizing: border-box; font-family: 'Cairo', sans-serif; text-align: center; }
-    body.dark-mode input, body.dark-mode select { background-color: #1e293b; color: #fff; border: 1px solid #334155; }
-    button { padding: 16px; width: 100%; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; margin-bottom: 10px; }
-    .btn-primary { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; }
+    /* 🔘 Inputs Fixed Visibility */
+    select, input[type="text"], input[type="number"] { 
+      width: 100%; padding: 12px 15px; border-radius: 12px; border: 2px solid transparent; 
+      background-color: rgba(0,0,0,0.03); color: var(--text-main); font-size: 15px; 
+      font-weight: 800; margin-bottom: 12px; box-sizing: border-box; text-align: center; 
+    }
+    body.dark-mode input, body.dark-mode select { background-color: #1e293b; color: #ffffff; border: 1px solid #334155; }
+    
+    /* 🔢 Fix for "From-To" Small Inputs */
+    .small-input { 
+      width: 65px !important; padding: 8px 5px !important; margin: 0 5px !important; 
+      display: inline-block !important; font-size: 14px !important; 
+      border: 1px solid rgba(0,0,0,0.1) !important;
+    }
+    body.dark-mode .small-input { border-color: #475569 !important; background: #0f172a !important; color: #fff !important;}
+
+    button { padding: 14px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+    .btn-primary { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; box-shadow: 0 8px 15px rgba(147, 51, 234, 0.2); }
     .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; }
 
-    .grades-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-    .grade-box { flex: 1; min-width: 140px; text-align: center; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); }
-    body.dark-mode .grade-box { background: rgba(255,255,255,0.05); }
-    .grade-box label { font-size: 13px; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 8px; }
+    .grades-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .grade-box { flex: 1; min-width: 130px; text-align: center; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); }
+    body.dark-mode .grade-box { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); }
+    .grade-box label { font-size: 12px; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 8px; }
 
-    .chart-container { height: 350px; width: 100%; background: #fff; border-radius: 20px; border: 1px solid #e2e8f0; padding: 15px; margin-top: 20px; }
+    .chart-container { height: 350px; width: 100%; background: #fff; border-radius: 20px; border: 1px solid #e2e8f0; padding: 15px; margin-top: 15px; }
     body.dark-mode .chart-container { background: #1e293b; border-color: #334155; }
 
-    /* Visibility Roles */
     .admin-only, .manager-only, .cross-group-only { display: none !important; }
 
     /* Loader */
-    #electricLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; color: #fff; }
-    .progress-bar-container { width: 80%; max-width: 400px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; margin: 20px 0; }
+    #electricLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; color: #fff; }
+    .progress-bar-container { width: 70%; max-width: 300px; height: 5px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 15px 0; }
     .progress-bar-fill { height: 100%; width: 0%; background: var(--electric-blue); box-shadow: 0 0 15px var(--electric-blue); transition: 0.1s linear; }
   </style>
 </head>
@@ -91,20 +104,19 @@
   <div class="circuit-bg"></div>
 
   <div id="electricLoader">
-    <div id="loaderMessage">جاري التحميل...</div>
+    <div id="loaderMessage" style="font-weight: 800; font-size: 1.1rem;">جاري معالجة البيانات...</div>
     <div class="progress-bar-container"><div class="progress-bar-fill" id="progressBarFill"></div></div>
-    <div style="font-size: 24px; font-weight: 800;" id="loaderPercent">0%</div>
+    <div style="font-size: 20px; font-weight: 800; font-family: monospace;" id="loaderPercent">0%</div>
   </div>
 
   <div class="navbar">
     <div class="nav-content">
       <div class="nav-brand">
-        <h2>🎯 <span class="brand-text">التقييم</span> <span id="welcomeName"></span></h2>
+        <h2>🎯 <span class="brand-text">التقييم</span> <span id="welcomeName" style="font-size: 11px; opacity: 0.7; font-weight: 400; margin-right: 5px;"></span></h2>
       </div>
       <div class="nav-actions">
         <span id="groupBadge" class="nav-badge group-badge" style="display: none;"></span>
-        <span id="roleBadge" class="nav-badge role-badge" style="display: none;"></span>
-        <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()">☀️</button>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()" title="تغيير الوضع">☀️</button>
         <button class="hamburger" onclick="toggleSidebar()">☰</button>
       </div>
     </div>
@@ -131,18 +143,18 @@
   <div class="container">
     <div id="message" style="display:none; padding:15px; border-radius:12px; font-weight:800; text-align:center; margin-bottom:20px;"></div>
 
-    <div class="cross-group-only" style="background: var(--card-bg); padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2);">
-        <p style="margin: 0 0 10px 0; font-weight: 800; color: #8e44ad; font-size: 13px; text-transform: uppercase; text-align:center;">تحكم الجروب 👑</p>
-        <select id="globalGroupSelect" style="margin-bottom:0;" onchange="changeGlobalGroup(this.value)"></select>
+    <div class="cross-group-only" style="background: var(--card-bg); padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); text-align:center;">
+        <label style="font-weight: 800; color: #8e44ad; font-size: 13px; display:block; margin-bottom:10px;">تحكم الجروب 👑</label>
+        <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px;" onchange="changeGlobalGroup(this.value)"></select>
     </div>
 
     <!-- 📝 الشاشة 1: رصد الدرجات -->
     <div id="view-grading" class="view-section active">
-      <h3 style="text-align: center; color: var(--primary);">رصد درجات الطالب</h3>
+      <h3 style="text-align: center; color: var(--primary); margin-bottom:25px;">إدخال تقييم الطالب</h3>
       <div class="form-wrapper">
         <div style="display:flex; gap:10px; margin-bottom: 15px;">
           <input type="text" id="studentCode" placeholder="كود الطالب" style="margin-bottom:0;">
-          <button class="btn-secondary" style="width: auto; padding: 0 20px;" onclick="document.getElementById('qr-input-file').click()">📷</button>
+          <button class="btn-secondary" style="width: auto; padding: 0 15px;" onclick="document.getElementById('qr-input-file').click()">📷</button>
           <input type="file" id="qr-input-file" accept="image/*" capture="environment" style="display:none;" onchange="handleQRImage(event)">
         </div>
 
@@ -150,51 +162,52 @@
           <div class="grade-box">
             <label>رقم التاسك</label>
             <select id="taskNum"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">Task ${i}</option>`);</script></select>
-            <label style="margin-top:10px;">الدرجة (من 70)</label>
+            <label style="margin-top:10px;">الدرجة (أقصى 70)</label>
             <input type="number" id="gradeTask" placeholder="0">
           </div>
           <div class="grade-box">
             <label>رقم الكويز</label>
             <select id="quizNum" onchange="fetchMaxQuizGrade()"><script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">Quiz ${i}</option>`);</script></select>
-            <label style="margin-top:10px;">الدرجة (من <span id="lblQuizMax">?</span>)</label>
+            <label style="margin-top:10px;">الدرجة (أقصى <span id="lblQuizMax">?</span>)</label>
             <input type="number" id="gradeQuiz" placeholder="0">
           </div>
         </div>
-        <button class="btn-primary" onclick="submitGrades()">حفظ السجل 💾</button>
+        <button class="btn-primary" onclick="submitGrades()">حفظ البيانات 📡</button>
       </div>
     </div>
 
     <!-- 🏆 الشاشة 2: لوحة الشرف -->
     <div id="view-top" class="view-section">
-      <h3 style="text-align: center;">🏆 أعلى 5 طلاب (مجمع)</h3>
-      <div class="form-wrapper">
+      <h3 style="text-align: center;">🏆 استخراج أعلى 5 متفوقين</h3>
+      <div class="form-wrapper" style="text-align:center;">
+        <div class="grade-box" style="margin-bottom:15px;">
+          <label>المحاضرات (حضور + فيدباك)</label>
+          من <input type="number" id="fromLec" value="1" class="small-input"> إلى <input type="number" id="toLec" value="5" class="small-input">
+        </div>
         <div class="grades-grid">
-          <div class="grade-box" style="flex-basis:100%">
-            <label>المحاضرات (حضور وفيدباك)</label>
-            من <input type="number" id="fromLec" value="1" style="width:60px"> إلى <input type="number" id="toLec" value="5" style="width:60px">
-          </div>
           <div class="grade-box">
             <label>التاسكات</label>
-            من <input type="number" id="fromTask" value="1" style="width:50px"> إلى <input type="number" id="toTask" value="5" style="width:50px">
+            من <input type="number" id="fromTask" value="1" class="small-input"> إلى <input type="number" id="toTask" value="5" class="small-input">
           </div>
           <div class="grade-box">
             <label>الكويزات</label>
-            من <input type="number" id="fromQuiz" value="1" style="width:50px"> إلى <input type="number" id="toQuiz" value="5" style="width:50px">
+            من <input type="number" id="fromQuiz" value="1" class="small-input"> إلى <input type="number" id="toQuiz" value="5" class="small-input">
           </div>
         </div>
-        <button class="btn-primary" onclick="generateTopChart()">استخراج المتفوقين 🚀</button>
+        <button class="btn-primary" onclick="generateTopChart()">تحليل البيانات وعرض النتائج 🚀</button>
       </div>
       <div class="chart-container"><canvas id="topChart"></canvas></div>
     </div>
 
     <!-- ⚙️ الشاشة 3: الإعدادات -->
     <div id="view-settings" class="view-section">
-      <h3 style="text-align: center;">⚙️ إعدادات الكويزات</h3>
+      <h3 style="text-align: center;">⚙️ تهيئة الكويزات (إدارة)</h3>
       <div class="form-wrapper">
-        <label>اختر رقم الكويز لتحديد نهايته العظمى:</label>
+        <label>حدد الكويز المستهدف:</label>
         <select id="settingQuizNum" onchange="loadSettingQuizMax()"><script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">Quiz ${i}</option>`);</script></select>
-        <input type="number" id="settingQuizMax" placeholder="الدرجة النهائية">
-        <button class="btn-primary" onclick="saveQuizMax()">حفظ الإعداد 🔒</button>
+        <label>الدرجة النهائية لهذا الكويز:</label>
+        <input type="number" id="settingQuizMax" placeholder="مثال: 15">
+        <button class="btn-primary" onclick="saveQuizMax()">تثبيت النهاية العظمى 🔒</button>
       </div>
     </div>
 
@@ -211,7 +224,10 @@
     let topChartInstance = null;
 
     window.onload = function() {
-      if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+      if (localStorage.getItem('darkMode') === 'true') {
+          document.body.classList.add('dark-mode');
+          document.getElementById('themeToggle').innerText = '🌙';
+      }
       if (localStorage.getItem('isLoggedIn') !== 'true') { window.location.href = 'index.html'; return; }
       
       const userName = localStorage.getItem('userName');
@@ -251,32 +267,24 @@
     function applyRoleAndGroup() {
       const userRole = localStorage.getItem('userRole'); 
       const userGroup = localStorage.getItem('userGroup') || 'Group A';
-      
       document.getElementById('groupBadge').innerText = userGroup;
       document.getElementById('groupBadge').style.display = 'flex';
       
-      const rb = document.getElementById('roleBadge');
-      rb.innerText = userRole; rb.style.display = 'flex';
-
       document.body.className = document.body.classList.contains('dark-mode') ? 'dark-mode ' : ''; 
-      if (userRole === 'Owner' || userRole === 'CO-Founder') { 
-        document.body.classList.add('role-owner'); 
-        showElements('.manager-only'); showElements('.admin-only'); showElements('.cross-group-only');
-      } else if (userRole === 'Team Manager' || userRole === 'Admin') {
-        document.body.classList.add('role-admin');
-        showElements('.manager-only'); showElements('.admin-only'); showElements('.cross-group-only');
+      if (userRole === 'Owner' || userRole === 'CO-Founder' || userRole === 'Team Manager' || userRole === 'Admin') { 
+        document.body.classList.add('role-admin'); 
+        document.querySelectorAll('.manager-only, .admin-only, .cross-group-only').forEach(el => el.style.setProperty('display', 'block', 'important'));
       } else if (userRole === 'Coordinator') {
         document.body.classList.add('role-manager');
-        showElements('.manager-only');
+        document.querySelectorAll('.manager-only').forEach(el => el.style.setProperty('display', 'block', 'important'));
       }
     }
 
-    function showElements(selector) { document.querySelectorAll(selector).forEach(el => el.style.setProperty('display', 'block', 'important')); }
-
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-      document.getElementById('themeToggle').innerText = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDark);
+      document.getElementById('themeToggle').innerText = isDark ? '🌙' : '☀️';
     }
 
     function logout() { localStorage.clear(); window.location.href = 'index.html'; }
@@ -292,7 +300,7 @@
       const qNum = document.getElementById('settingQuizNum').value;
       const maxVal = document.getElementById('settingQuizMax').value;
       localStorage.setItem(`maxQuiz_${qNum}`, maxVal);
-      alert("تم الحفظ"); fetchMaxQuizGrade();
+      alert("تم الحفظ بنجاح 🔒"); fetchMaxQuizGrade();
     }
 
     function fetchMaxQuizGrade() {
@@ -321,12 +329,17 @@
       const auth = `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}`;
       
       document.getElementById('electricLoader').style.display = 'flex';
+      let p = 0;
+      let itv = setInterval(() => { p+=5; if(p>95) p=95; document.getElementById('loaderPercent').innerText=p+'%'; document.getElementById('progressBarFill').style.width=p+'%'; }, 50);
+
       try {
         if(taskVal !== "") await fetch(`${GRADES_API_URL}?action=saveGrade&qrCode=${code}&taskNum=${tNum}&group=${group}&val=${taskVal}${auth}`);
         if(quizVal !== "") await fetch(`${QUIZZES_API_URL}?action=saveQuiz&qrCode=${code}&quizNum=${qNum}&group=${group}&val=${quizVal}${auth}`);
-        alert("تم الحفظ بنجاح");
+        alert("✅ تم الرصد بنجاح!");
         document.getElementById('studentCode').value = ""; document.getElementById('gradeTask').value = ""; document.getElementById('gradeQuiz').value = "";
-      } catch(e) { alert("فشل الاتصال"); }
+      } catch(e) { alert("❌ فشل الاتصال بالسيرفر"); }
+      
+      clearInterval(itv);
       document.getElementById('electricLoader').style.display = 'none';
     }
 
@@ -338,6 +351,9 @@
       const auth = `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}`;
 
       document.getElementById('electricLoader').style.display = 'flex';
+      let p = 0;
+      let itv = setInterval(() => { p+=2; if(p>98) p=98; document.getElementById('loaderPercent').innerText=p+'%'; document.getElementById('progressBarFill').style.width=p+'%'; }, 100);
+
       try {
         const [taskRes, quizRes, attRes, feedRes] = await Promise.all([
           fetch(`${GRADES_API_URL}?action=getTop&fromTask=${fTask}&toTask=${tTask}&group=${group}${auth}`).then(r => r.json()),
@@ -351,18 +367,30 @@
         collect(taskRes); collect(quizRes); collect(attRes); collect(feedRes);
 
         let top5 = Object.values(merged).sort((a,b) => b.total - a.total).slice(0, 5);
+        if(top5.length === 0) alert("لا توجد بيانات لهذا النطاق");
         drawChart(top5.map(s => s.name.split(" ")[0]), top5.map(s => s.total));
-      } catch(e) { alert("خطأ في البيانات"); }
+      } catch(e) { alert("خطأ في جلب البيانات"); }
+      
+      clearInterval(itv);
       document.getElementById('electricLoader').style.display = 'none';
     }
 
     function drawChart(labels, data) {
       const ctx = document.getElementById('topChart').getContext('2d');
       if(topChartInstance) topChartInstance.destroy();
+      const isDark = document.body.classList.contains('dark-mode');
       topChartInstance = new Chart(ctx, {
         type: 'bar',
-        data: { labels: labels, datasets: [{ label: 'مجموع النقاط', data: data, backgroundColor: '#9333ea', borderRadius: 8 }] },
-        options: { responsive: true, maintainAspectRatio: false }
+        data: { labels: labels, datasets: [{ label: 'مجموع النقاط', data: data, backgroundColor: isDark ? '#00d2ff' : '#9333ea', borderRadius: 8 }] },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, ticks: { color: isDark ? '#fff' : '#666' } },
+                x: { ticks: { color: isDark ? '#fff' : '#666' } }
+            },
+            plugins: { legend: { labels: { color: isDark ? '#fff' : '#666' } } }
+        }
       });
     }
   </script>
