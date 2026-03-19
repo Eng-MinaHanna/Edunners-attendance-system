@@ -49,15 +49,12 @@
     .sidebar-overlay.show { display: block; }
     .close-btn { position: absolute; top: 15px; left: 15px; font-size: 2rem; cursor: pointer; color: var(--text-muted); border: none; background: none; }
 
-    /* 🏷️ Tabs */
-    .tabs-container { display: flex; background: var(--card-bg); margin: 15px auto; max-width: 1000px; border-radius: 15px; padding: 5px; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); overflow-x: auto; backdrop-filter: blur(10px); }
-    .tab-item { flex: 1; padding: 12px; text-align: center; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 0.8rem; color: #64748b; transition: 0.3s; min-width: 90px; }
-    .tab-item.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    body.dark-mode .tab-item.active { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; }
-
-    .container { padding: 10px 15px; max-width: 1000px; margin: auto; }
+    .container { padding: 20px 15px; max-width: 1000px; margin: auto; }
+    
+    /* 🔴 التعديل الأهم: إخفاء كل الأقسام وعرض الـ active فقط */
     .view-section { display: none !important; background: var(--card-bg); padding: 30px 25px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); animation: slideUp 0.4s ease; margin-bottom: 25px; backdrop-filter: blur(15px); }
     .view-section.active { display: block !important; }
+    
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
 
     /* Inputs & Toggles */
@@ -69,7 +66,7 @@
     .small-input { width: 70px !important; display: inline-block; padding: 8px 5px !important; margin: 0 5px !important; border: 2px solid var(--accent) !important; color: inherit !important; background: transparent !important; font-weight: 900 !important; }
 
     .btn-submit { width: 100%; padding: 16px; border-radius: 14px; border: none; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 10px;}
-    body.dark-mode .btn-submit { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; }
+    body.dark-mode .btn-submit { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.2); }
     .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
     
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
@@ -152,29 +149,22 @@
         <div id="sideRole" style="font-size: 10px; opacity: 0.7; margin-top: 5px; text-transform: uppercase; background: rgba(255,255,255,0.1); display: inline-block; padding: 4px 10px; border-radius: 8px;"></div>
     </div>
     
-    <a href="#" onclick="switchTab('grading', document.getElementById('tab-grading')); toggleSidebar();">
+    <a href="#" class="active" onclick="switchView('grading'); toggleSidebar();" id="nav-grading">
       <span>📝</span> <span>رصد الدرجات</span>
     </a>
-    <a href="#" onclick="switchTab('searchView', document.getElementById('tab-search')); toggleSidebar();">
+    <a href="#" onclick="switchView('searchView'); toggleSidebar();" id="nav-searchView">
       <span>🔍</span> <span>استعلام عن طالب</span>
     </a>
-    <a href="#" class="manager-only" onclick="switchTab('topView', document.getElementById('tab-top')); toggleSidebar();">
+    <a href="#" class="manager-only" onclick="switchView('topView'); toggleSidebar();" id="nav-topView">
       <span>🏆</span> <span>لوحة الشرف Top 5</span>
     </a>
-    <a href="#" class="admin-only" onclick="switchTab('settings', document.getElementById('tab-settings')); toggleSidebar();">
+    <a href="#" class="admin-only" onclick="switchView('settings'); toggleSidebar();" id="nav-settings">
       <span>⚙️</span> <span>إعدادات الكويزات</span>
     </a>
 
     <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 25px;"></div>
     <a href="index.html" style="color: var(--accent);"><span>🏠</span> <span>نظام الحضور</span></a>
     <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 10px;"><span>🚪</span> <span>تسجيل الخروج</span></a>
-  </div>
-
-  <div class="tabs-container">
-    <div class="tab-item active" id="tab-grading" onclick="switchTab('grading', this)"><span>📝</span><span> رصد</span></div>
-    <div class="tab-item" id="tab-search" onclick="switchTab('searchView', this)"><span>🔍</span><span> استعلام</span></div>
-    <div id="tab-top" class="tab-item manager-only" onclick="switchTab('topView', this)"><span>🏆</span><span> التوب 5</span></div>
-    <div id="tab-settings" class="tab-item admin-only" onclick="switchTab('settings', this)"><span>⚙️</span><span> إعدادات</span></div>
   </div>
 
   <div class="container">
@@ -185,7 +175,7 @@
         <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
     </div>
 
-    <div id="grading" class="view-section active">
+    <div id="view-grading" class="view-section active">
       <div style="max-width: 500px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">رصد تقييم المحاضرة</h3>
         
@@ -221,7 +211,7 @@
       </div>
     </div>
 
-    <div id="searchView" class="view-section">
+    <div id="view-searchView" class="view-section">
       <div style="max-width: 500px; margin: auto;">
         <h3 style="color:var(--accent); text-align:center; font-size:24px; font-weight:800;">استعلام شامل عن متدرب</h3>
         
@@ -245,7 +235,7 @@
       </div>
     </div>
 
-    <div id="topView" class="view-section manager-only">
+    <div id="view-topView" class="view-section manager-only">
       <div style="max-width: 600px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:26px; font-weight:900; margin-bottom:20px;">🏆 لوحة متفوقي الجروب</h3>
         
@@ -267,7 +257,7 @@
       </div>
     </div>
 
-    <div id="settings" class="view-section admin-only">
+    <div id="view-settings" class="view-section admin-only">
       <div style="max-width: 500px; margin: auto;">
         <h3 style="text-align:center; font-size:22px; font-weight:800; margin-bottom:20px;">⚙️ إعدادات النهايات العظمى</h3>
         <label style="font-size:13px; font-weight:bold; color:var(--text-muted);">رقم الكويز المستهدف:</label>
@@ -315,13 +305,13 @@
       fillGroupSelects();
     };
 
-    function switchTab(viewId, el) {
+    function switchView(viewId) {
       document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
       
-      document.getElementById(viewId).classList.add('active'); 
-      if(el) el.classList.add('active');
+      document.getElementById(`view-${viewId}`).classList.add('active'); 
+      const navItem = document.getElementById(`nav-${viewId}`);
+      if(navItem) navItem.classList.add('active');
     }
 
     function toggleDarkMode() { 
@@ -345,7 +335,7 @@
     function handleQR(input, targetId) {
       if (!input.files[0]) return;
       showLoader(true, "جاري تحليل الصورة...");
-      const reader = new Html5Qrcode("grading"); // dummy element for scanFile
+      const reader = new Html5Qrcode("view-grading"); // dummy element for scanFile
       reader.scanFile(input.files[0], true).then(res => {
           showLoader(false);
           let clean = res.toUpperCase().replace("EDUR9", "").replace(/[A-Z]/g, "");
