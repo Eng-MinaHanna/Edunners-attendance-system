@@ -51,7 +51,7 @@
 
     .container { padding: 20px 15px; max-width: 1000px; margin: auto; }
     
-    /* 🔴 التعديل الأهم: إخفاء كل الأقسام وعرض الـ active فقط */
+    /* 🔴 إصلاح الأقسام - التحكم الكلي للمشاهدة */
     .view-section { display: none !important; background: var(--card-bg); padding: 30px 25px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); animation: slideUp 0.4s ease; margin-bottom: 25px; backdrop-filter: blur(15px); }
     .view-section.active { display: block !important; }
     
@@ -108,11 +108,27 @@
     #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.95); display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; color: white; backdrop-filter: blur(10px); }
     .bar-bg { width: 70%; max-width: 400px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 15px 0; }
     .bar-fill { width: 0%; height: 100%; background: var(--electric-blue); transition: 0.1s linear; box-shadow: 0 0 15px var(--electric-blue); }
-    
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 14px 25px; border-radius: 12px; color: white; font-weight: 700; display: none; z-index: 3000; box-shadow: 0 5px 20px rgba(0,0,0,0.3); animation: popIn 0.3s ease; }
     @keyframes popIn { from { transform: translate(-50%, 20px); opacity: 0;} to { transform: translate(-50%, 0); opacity: 1;} }
     
+    /* 🛡️ منطق الصلاحيات الاحترافي (إخفاء وإظهار) */
     .manager-only, .admin-only, .cross-group-only { display: none !important; }
+
+    /* إظهار العناصر العادية بناءً على الصلاحية */
+    body.role-manager :not(.view-section).manager-only { display: block !important; }
+    body.role-manager a.manager-only { display: flex !important; }
+
+    body.role-admin :not(.view-section).manager-only, body.role-admin :not(.view-section).admin-only, body.role-admin :not(.view-section).cross-group-only { display: block !important; }
+    body.role-admin a.manager-only, body.role-admin a.admin-only { display: flex !important; }
+
+    body.role-co-founder :not(.view-section).manager-only, body.role-co-founder :not(.view-section).admin-only, body.role-co-founder :not(.view-section).cross-group-only { display: block !important; }
+    body.role-co-founder a.manager-only, body.role-co-founder a.admin-only { display: flex !important; }
+
+    body.role-owner :not(.view-section).manager-only, body.role-owner :not(.view-section).admin-only, body.role-owner :not(.view-section).cross-group-only { display: block !important; }
+    body.role-owner a.manager-only, body.role-owner a.admin-only { display: flex !important; }
+
+    /* إخفاء قسري للشاشات إذا حاول شخص عادي الدخول لها */
+    body.role-user .manager-only, body.role-user .admin-only, body.role-manager .admin-only { display: none !important; }
   </style>
 </head>
 <body class="dark-mode">
@@ -271,7 +287,6 @@
   </div>
 
   <script>
-    // ⚠️ روابط الـ APIs الحقيقية الخاصة بك (تعمل 100%)
     const GRADES_API = "https://script.google.com/macros/s/AKfycbzJkCGpIcc6uzgITufJcDnv8yC2RvF-DTlX1rw-9ZojdHmQyj2GSHsPFFAKCOiWV4Q/exec"; 
     const QUIZ_API = "https://script.google.com/macros/s/AKfycbwne4ufHfwjbcS6p39pfslPsTtPsQn8n24zapV4ytou5L4sacK0Y8KHYq_vx64PiYOVMQ/exec"; 
     const ATTEND_API = "https://script.google.com/macros/s/AKfycbzrLXNuxcAM5A1euSqtbqt-3L2sqAPXGb0A3JF7hiCaJ5giW86c51bs45ISAPANa4PP/exec"; 
@@ -294,21 +309,22 @@
       document.getElementById('groupBadge').innerText = groupVal;
       document.getElementById('groupBadge').style.display = "inline-block";
 
-      // 🔓 تفعيل الصلاحيات
-      if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN', 'COORDINATOR', 'MANAGER'].includes(role)) {
-          document.querySelectorAll('.manager-only').forEach(e => e.style.setProperty('display', 'flex', 'important'));
-      }
-      if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN'].includes(role)) {
-          document.querySelectorAll('.admin-only, .cross-group-only').forEach(e => e.style.setProperty('display', 'block', 'important'));
-      }
+      // دمج كلاس الصلاحيات في الـ Body ليعمل הـ CSS بشكل دقيق
+      if (role === 'OWNER') document.body.classList.add('role-owner');
+      else if (role === 'CO-FOUNDER') document.body.classList.add('role-co-founder');
+      else if (role === 'TEAM MANAGER' || role === 'ADMIN') document.body.classList.add('role-admin');
+      else if (role === 'COORDINATOR' || role === 'MANAGER') document.body.classList.add('role-manager');
+      else document.body.classList.add('role-user');
       
       fillGroupSelects();
     };
 
     function switchView(viewId) {
+      // إخفاء كل الأقسام
       document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
       
+      // إظهار القسم المطلوب
       document.getElementById(`view-${viewId}`).classList.add('active'); 
       const navItem = document.getElementById(`nav-${viewId}`);
       if(navItem) navItem.classList.add('active');
@@ -317,7 +333,7 @@
     function toggleDarkMode() { 
         document.body.classList.toggle('dark-mode'); 
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')); 
-        if(myChart) extractTop5(); // Re-render chart colors
+        if(myChart) extractTop5(); 
     }
     
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
@@ -335,7 +351,7 @@
     function handleQR(input, targetId) {
       if (!input.files[0]) return;
       showLoader(true, "جاري تحليل الصورة...");
-      const reader = new Html5Qrcode("view-grading"); // dummy element for scanFile
+      const reader = new Html5Qrcode("view-grading"); 
       reader.scanFile(input.files[0], true).then(res => {
           showLoader(false);
           let clean = res.toUpperCase().replace("EDUR9", "").replace(/[A-Z]/g, "");
@@ -366,7 +382,6 @@
         return `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}&group=${encodeURIComponent(localStorage.getItem('userGroup'))}`;
     }
 
-    // 📡 دالة الإرسال الحقيقية للـ APIs
     async function submitData() {
         let num = document.getElementById('studentCode').value.trim();
         if(!num) return showToast("❌ برجاء إدخال رقم كود الطالب", "error");
@@ -379,19 +394,15 @@
         showLoader(true, "جاري إرسال التقييمات للسيرفر المركزي 📡...");
         try {
             let p = [];
-            // إرسال الحضور إذا كان الزر مفعلاً
             if(document.getElementById('attBtn').classList.contains('active-att')) {
                 p.push(fetch(`${ATTEND_API}?action=scan&qrCode=${code}&lectureNum=${lec}&weight=15${auth}`));
             }
-            // إرسال التاسك
             let taskVal = document.getElementById('valTask').value;
             if(taskVal) p.push(fetch(`${GRADES_API}?action=saveGrade&qrCode=${code}&taskNum=${lec}&val=${taskVal}${auth}`));
             
-            // إرسال الكويز
             let quizVal = document.getElementById('valQuiz').value;
             if(quizVal) p.push(fetch(`${QUIZ_API}?action=saveQuiz&qrCode=${code}&quizNum=${lec}&val=${quizVal}${auth}`));
             
-            // إرسال الإضافات (فيدباك، سلوك، بونص)
             let f = document.getElementById('feedBtn').classList.contains('active-feed') ? 1 : 0;
             let a = document.getElementById('attitBtn').classList.contains('active-attit') ? 5 : 0;
             let b = document.getElementById('valBonus').value || 0;
@@ -409,7 +420,6 @@
             showLoader(false);
             showToast("✅ تم التوثيق بنجاح للطالب: " + groupLetter + num, "success");
             
-            // تفريغ الحقول بعد النجاح
             document.getElementById('studentCode').value = ""; 
             document.getElementById('valTask').value = ""; 
             document.getElementById('valQuiz').value = ""; 
@@ -418,13 +428,9 @@
             document.getElementById('feedBtn').classList.remove('active-feed');
             document.getElementById('attitBtn').classList.remove('active-attit');
             
-        } catch(e) { 
-            showLoader(false); 
-            showToast("❌ حدث خطأ في الاتصال بالشبكة", "error"); 
-        }
+        } catch(e) { showLoader(false); showToast("❌ حدث خطأ في الاتصال بالشبكة", "error"); }
     }
 
-    // 🔍 دالة الاستعلام الحقيقية
     async function searchStudent() {
         let num = document.getElementById('searchCode').value.trim();
         let fl = document.getElementById('sfL').value, tl = document.getElementById('stL').value;
@@ -453,7 +459,7 @@
                 if(s && s.name) document.getElementById('resName').innerText = s.name;
             };
             
-            document.getElementById('resName').innerText = "لم يتم العثور على اسم"; // افتراضي
+            document.getElementById('resName').innerText = "لم يتم العثور على اسم";
             addRow(rA, "إجمالي الحضور");
             addRow(rX, "إجمالي (الفيدباك + السلوك + البونص)");
             addRow(rT, "إجمالي التاسكات");
@@ -464,13 +470,9 @@
             document.getElementById('resTotal').innerText = total;
             showLoader(false);
             
-        } catch(e) { 
-            showLoader(false); 
-            showToast("❌ خطأ في جلب البيانات", "error"); 
-        }
+        } catch(e) { showLoader(false); showToast("❌ خطأ في جلب البيانات", "error"); }
     }
 
-    // 🏆 دالة لوحة الشرف الحقيقية
     async function extractTop5() {
       let fl = document.getElementById('fL').value, tl = document.getElementById('tL').value;
       if (parseInt(fl) > parseInt(tl)) return showToast("❌ نطاق المحاضرات غير صحيح", "error");
@@ -526,10 +528,7 @@
         document.getElementById('chartWrapper').style.display = 'block';
         renderChart(sorted.map(x => x.n.split(" ")[0]), sorted.map(x => x.t));
         
-      } catch(e) { 
-          showLoader(false); 
-          showToast("❌ فشل استخراج لوحة الشرف", "error"); 
-      }
+      } catch(e) { showLoader(false); showToast("❌ فشل استخراج لوحة الشرف", "error"); }
     }
 
     function renderChart(labels, data) {
@@ -541,27 +540,11 @@
       
       myChart = new Chart(ctx, { 
           type: 'bar', 
-          data: { 
-              labels, 
-              datasets: [{ 
-                  label: 'إجمالي النقاط', 
-                  data, 
-                  backgroundColor: ['#FFD700', '#C0C0C0', '#CD7F32', barColor, barColor], 
-                  borderRadius: 8 
-              }] 
-          }, 
-          options: { 
-              responsive: true, maintainAspectRatio: false, 
-              scales: { 
-                  y: { ticks: { color: textColor } }, 
-                  x: { ticks: { color: textColor, font: {family: 'Cairo', weight: 'bold'} } } 
-              },
-              plugins: { legend: { display: false } }
-          } 
+          data: { labels, datasets: [{ label: 'إجمالي النقاط', data, backgroundColor: ['#FFD700', '#C0C0C0', '#CD7F32', barColor, barColor], borderRadius: 8 }] }, 
+          options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: textColor } }, x: { ticks: { color: textColor, font: {family: 'Cairo', weight: 'bold'} } } }, plugins: { legend: { display: false } } } 
       });
     }
 
-    // Dummy function for settings
     function loadSettingMax() {}
     function saveMaxConfig() { showToast("✅ تم حفظ الإعدادات بنجاح"); }
   </script>
