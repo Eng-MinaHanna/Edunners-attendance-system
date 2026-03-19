@@ -100,7 +100,6 @@
     .btn-primary { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; box-shadow: 0 10px 20px rgba(147, 51, 234, 0.2); }
     body.dark-mode .btn-primary { background: linear-gradient(135deg, var(--electric-blue), #0284c7); box-shadow: 0 0 15px var(--electric-glow); color:#fff;}
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(147, 51, 234, 0.4); }
-    body.dark-mode .btn-primary:hover { box-shadow: 0 0 25px var(--electric-blue); }
     .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; }
     .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow); }
     .btn-small { padding: 8px 16px; font-size: 13px; margin: 0; width: auto; border-radius: 10px; box-shadow: none; font-weight: 700;}
@@ -111,13 +110,6 @@
     .grade-box label { font-size: 14px; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase;}
     .grade-box input, .grade-box select { margin-bottom: 0; background: #fff;}
     body.dark-mode .grade-box input, body.dark-mode .grade-box select { background: #0f172a;}
-    
-    .table-container { overflow-x: auto; border-radius: 16px; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.5s; }
-    body.dark-mode .table-container { background: rgba(15, 23, 42, 0.9); border-color: #334155; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: center; }
-    th, td { padding: 14px 10px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-    th { background: #f8fafc; color: var(--text-muted); font-weight: 800; transition: 0.5s; }
-    body.dark-mode th { background: #0f172a; color: var(--electric-blue); border-bottom: 2px solid #334155;}
     
     #message { margin-top: 15px; padding: 18px; border-radius: 16px; font-weight: 800; display: none; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 20px;}
     .success { background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid #a7f3d0; }
@@ -147,14 +139,17 @@
 </head>
 <body>
 
+  <!-- Animated Circuit Background -->
   <div class="circuit-bg"></div>
 
+  <!-- ⚡ Global High-Tech Loader (Linear) ⚡ -->
   <div id="electricLoader">
     <div class="loader-text" id="loaderMessage">جاري نقل البيانات...</div>
     <div class="progress-bar-container"><div class="progress-bar-fill" id="progressBarFill"></div></div>
     <div class="loader-percent" id="loaderPercent">0%</div>
   </div>
 
+  <!-- 💎 Navbar الموحد -->
   <div class="navbar">
     <div class="nav-content">
       <div class="nav-brand">
@@ -164,13 +159,15 @@
         <span id="groupBadge" class="nav-badge group-badge" style="display: none;"></span>
         <span id="roleBadge" class="nav-badge role-badge" style="display: none;"></span>
         <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()">☀️</button>
-        <button class="theme-toggle" onclick="window.location.href='index.html'" title="نظام الحضور">🏠</button>
+        <!-- زر العودة لنظام الحضور -->
+        <button class="theme-toggle" onclick="window.location.href='index.html'" title="الانتقال لنظام الحضور">🏠</button>
+        <!-- زر القائمة الجانبية -->
         <button class="hamburger" id="menuBtn" onclick="toggleSidebar()">☰</button>
       </div>
     </div>
   </div>
 
-  <!-- 🗂️ القائمة الجانبية الموحدة -->
+  <!-- 🗂️ القائمة الجانبية (Sidebar) -->
   <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="sidebar">
     <button class="close-btn" onclick="toggleSidebar()">×</button>
@@ -181,7 +178,8 @@
     <a href="#" onclick="switchView('settings'); toggleSidebar();" id="nav-settings" class="admin-only">⚙️ إعدادات الكويزات</a>
     
     <div class="sidebar-heading" style="margin-top: 15px;">نظام الحضور (Attendance)</div>
-    <a href="index.html" style="color: var(--accent);">🏠 الانتقال لنظام الحضور</a>
+    <!-- رابط للعودة لنظام الحضور -->
+    <a href="index.html" style="color: var(--accent);">🏠 نظام تسجيل الطلاب</a>
     
     <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
       <a href="#" onclick="logout();" style="color: #ef4444;">🚪 تسجيل الخروج</a>
@@ -202,7 +200,7 @@
     <div style="display: flex; gap: 10px; margin-bottom: 20px;" class="form-wrapper">
       <button class="btn-primary" onclick="switchView('grading')" style="flex:1; padding: 10px;">📝 الرصد</button>
       <button class="btn-secondary manager-only" onclick="switchView('top')" style="flex:1; padding: 10px; background: linear-gradient(135deg, #10b981, #059669);">🏆 لوحة الشرف</button>
-      <button class="btn-secondary admin-only" onclick="switchView('settings')" style="flex:1; padding: 10px; background: #94a3b8; color:#fff;">⚙️ الكويزات</button>
+      <button class="btn-secondary admin-only" onclick="switchView('settings')" style="flex:1; padding: 10px; background: #94a3b8; color:#fff;">⚙️ إعدادات</button>
     </div>
 
     <!-- 📝 قسم رصد الدرجات -->
@@ -301,7 +299,7 @@
   </div>
 
   <script>
-    // ⚠️ استبدل هذه الروابط بروابط الـ Apps Script الأربعة الخاصة بك
+    // ⚠️ استبدل هذه الروابط بروابط الـ Apps Script الخاصة بك
     const GRADES_API_URL = "https://script.google.com/macros/s/AKfycbzJkCGpIcc6uzgITufJcDnv8yC2RvF-DTlX1rw-9ZojdHmQyj2GSHsPFFAKCOiWV4Q/exec"; 
     const QUIZZES_API_URL = "https://script.google.com/macros/s/AKfycbzL9jhUwFFZbPOFSoAtnOIR8qsvdXNzzSJ7kRMNaxb3f2CV_G95HUOdwxDqmJ5i-jHUEQ/exec"; 
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbyKdM1HWykrFkeI_n_DVQhJ1t8xxk8Zg8zL5eXSc3zsFwdYfXTBUW9C77EabSO4zRgL7g/exec"; 
@@ -362,20 +360,18 @@
         document.getElementById('themeToggle').innerText = '🌙';
       }
       
-      // التوجيه التلقائي إذا لم يسجل دخوله من النظام الأول
       if (localStorage.getItem('isLoggedIn') !== 'true') {
-        alert("🔒 يرجى تسجيل الدخول من نظام الحضور أولاً.");
+        alert("🔒 غير مصرح بالوصول! يرجى تسجيل الدخول من نظام الحضور أولاً.");
         window.location.href = 'index.html';
         return;
       }
       
+      const userName = localStorage.getItem('userName');
+      if(userName) document.getElementById('welcomeName').innerText = `| ${userName}`;
+
       fillGroupSelects();
       applyRoleAndGroup();
       loadSettingQuizMax();
-      
-      // إظهار اسم المستخدم
-      const userName = localStorage.getItem('userName');
-      if(userName) document.getElementById('welcomeName').innerText = `| ${userName}`;
     };
 
     function toggleSidebar() { 
@@ -411,7 +407,6 @@
       }
       
       document.getElementById('lblCurrentGroup').innerText = userGroup;
-      document.getElementById('lblTopGroup').innerText = userGroup;
       
       document.body.className = document.body.classList.contains('dark-mode') ? 'dark-mode ' : ''; 
       if (userRole === 'Owner') { document.body.classList.add('role-owner'); } 
@@ -428,7 +423,7 @@
       const isDark = document.body.classList.contains('dark-mode');
       localStorage.setItem('darkMode', isDark);
       document.getElementById('themeToggle').innerText = isDark ? '🌙' : '☀️';
-      if(topChartInstance) generateTopChart(); // Redraw chart colors
+      if(topChartInstance) generateTopChart(); 
     }
 
     function switchView(viewId) {
@@ -524,7 +519,6 @@
       } catch(err) { completeProgress(); showMessage("❌ فشل الاتصال.", "error"); playBeep('error'); }
     }
 
-    // 🏆 لوحة الشرف والرسم البياني المجمعة
     async function generateTopChart() {
       const fTask = document.getElementById('fromTask').value; const tTask = document.getElementById('toTask').value;
       const fQuiz = document.getElementById('fromQuiz').value; const tQuiz = document.getElementById('toQuiz').value;
