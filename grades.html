@@ -27,59 +27,65 @@
     body.dark-mode .circuit-bg { background-image: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.1) 2px, transparent 3px), linear-gradient(rgba(0, 210, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 210, 255, 0.05) 1px, transparent 1px); }
     @keyframes pulseCircuit { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
 
-    /* 💎 Navbar */
-    .navbar { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(16px); color: white; padding: 12px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    /* 💎 Modern Navbar */
+    .navbar { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(16px); color: white; padding: 10px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .nav-content { max-width: 1000px; margin: 0 auto; padding: 0 15px; display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box; }
-    .nav-brand h2 { margin: 0; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 6px; color: #fff; }
-    .nav-brand h2 .brand-text { background: linear-gradient(to left, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+    
+    .nav-brand h2 { margin: 0; font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 6px; color: #fff; }
+    .nav-brand h2 .brand-text { background: linear-gradient(to left, #fff, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+    body.dark-mode .nav-brand h2 .brand-text { background: linear-gradient(to left, #fff, var(--electric-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+    
     .nav-actions { display: flex; gap: 8px; align-items: center; }
 
-    .theme-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 1.2rem; cursor: pointer; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: 0.3s; color: white; }
-    .theme-toggle:hover { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-    body.dark-mode .theme-toggle:hover { background: var(--electric-blue); border-color: var(--electric-blue); box-shadow: 0 0 15px var(--electric-glow); }
-
-    .hamburger { cursor: pointer; font-size: 1.6rem; background: none; border: none; color: white; padding: 5px; }
-
-    /* 🏷️ Badges */
-    .nav-badge { font-size: 10px; font-weight: 800; padding: 5px 8px; border-radius: 6px; font-family: monospace; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+    /* 🏷️ Badges Styling */
+    .nav-badge { font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 8px; font-family: monospace; display: flex; align-items: center; justify-content: center; white-space: nowrap; backdrop-filter: blur(5px); }
     .group-badge { background: rgba(245, 176, 65, 0.1); color: var(--accent); border: 1px solid rgba(245, 176, 65, 0.3); }
+    .role-badge { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
 
-    /* 💎 Sidebar (RTL Fixed) */
+    /* Role Specific Colors (Same as Index) */
+    body.role-owner .role-badge { color: #eab308; border-color: rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.1); }
+    body.role-admin .role-badge { color: #f87171; border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.1); }
+    body.role-manager .role-badge { color: #fb923c; border-color: rgba(251, 146, 60, 0.4); background: rgba(251, 146, 60, 0.1); }
+
+    /* Buttons in Navbar */
+    .nav-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: 0.3s; font-size: 1.1rem; }
+    .nav-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+    .hamburger { background: none; border: none; color: white; font-size: 1.6rem; cursor: pointer; padding: 0 5px; }
+
+    /* 📱 Responsive Navbar Fixes */
+    @media (max-width: 700px) {
+      .nav-brand span#welcomeName { display: none; }
+      #roleBadge { display: none !important; }
+      .nav-badge { padding: 4px 6px; font-size: 9px; }
+      .nav-actions { gap: 5px; }
+    }
+
+    /* 💎 Sidebar (Fixed RTL) */
     .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); box-shadow: -15px 0 50px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; padding-top: 60px; overflow-y: auto; text-align: right; border-left: 1px solid rgba(0,0,0,0.05); }
     body.dark-mode .sidebar { background: #0f172a; border-left: 1px solid var(--electric-glow); }
     .sidebar.open { right: 0; }
     .sidebar a { display: flex !important; align-items: center !important; gap: 12px; padding: 15px 25px; margin: 5px 10px; color: var(--text-muted); text-decoration: none; font-size: 1rem; font-weight: 700; border-radius: 12px; transition: 0.3s; }
     .sidebar a:hover { background: rgba(15, 23, 42, 0.05); color: var(--primary); transform: translateX(-5px); }
-    body.dark-mode .sidebar a:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
     .sidebar a.active { background: linear-gradient(to left, rgba(147, 51, 234, 0.1), transparent); color: #9333ea; box-shadow: inset -4px 0 0 #9333ea; }
     .sidebar-heading { padding: 20px 25px 5px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; }
     .close-btn { position: absolute; top: 15px; left: 15px; font-size: 2rem; cursor: pointer; color: #94a3b8; border: none; background: none; }
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 999; backdrop-filter: blur(3px); }
     .sidebar-overlay.show { display: block; }
 
-    /* 🔴 Sections */
+    /* 🔴 View Sections Fix */
     .container { padding: 30px 15px; max-width: 1000px; margin: auto; }
-    .view-section { display: none; background: var(--card-bg); padding: 30px 20px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.2); animation: slideUp 0.4s ease; margin-bottom: 25px; }
+    .view-section { display: none !important; background: var(--card-bg); padding: 35px 25px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.2); animation: slideUp 0.4s ease; margin-bottom: 25px; }
     .view-section.active { display: block !important; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
 
-    /* 🔘 Inputs Fixed Visibility */
-    select, input[type="text"], input[type="number"] { 
-      width: 100%; padding: 12px 15px; border-radius: 12px; border: 2px solid transparent; 
-      background-color: rgba(0,0,0,0.03); color: var(--text-main); font-size: 15px; 
-      font-weight: 800; margin-bottom: 12px; box-sizing: border-box; text-align: center; 
-    }
+    /* 🔘 Inputs & Buttons */
+    select, input[type="text"], input[type="number"] { width: 100%; padding: 12px 15px; border-radius: 12px; border: 2px solid transparent; background-color: rgba(0,0,0,0.03); color: var(--text-main); font-size: 15px; font-weight: 800; margin-bottom: 12px; box-sizing: border-box; text-align: center; }
     body.dark-mode input, body.dark-mode select { background-color: #1e293b; color: #ffffff; border: 1px solid #334155; }
-    
-    /* 🔢 Fix for "From-To" Small Inputs */
-    .small-input { 
-      width: 65px !important; padding: 8px 5px !important; margin: 0 5px !important; 
-      display: inline-block !important; font-size: 14px !important; 
-      border: 1px solid rgba(0,0,0,0.1) !important;
-    }
-    body.dark-mode .small-input { border-color: #475569 !important; background: #0f172a !important; color: #fff !important;}
+    .small-input { width: 65px !important; padding: 8px 5px !important; margin: 0 5px !important; display: inline-block !important; font-size: 14px !important; border: 1px solid rgba(0,0,0,0.1) !important; color: inherit !important; }
+    body.dark-mode .small-input { background: #0f172a !important; border-color: #475569 !important; }
 
-    button { padding: 14px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+    button { padding: 14px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; margin-bottom: 10px; }
     .btn-primary { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; box-shadow: 0 8px 15px rgba(147, 51, 234, 0.2); }
     .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; }
 
@@ -103,25 +109,30 @@
 
   <div class="circuit-bg"></div>
 
+  <!-- ⚡ High-Tech Loader -->
   <div id="electricLoader">
-    <div id="loaderMessage" style="font-weight: 800; font-size: 1.1rem;">جاري معالجة البيانات...</div>
+    <div id="loaderMessage" style="font-weight: 800;">جاري مزامنة البيانات...</div>
     <div class="progress-bar-container"><div class="progress-bar-fill" id="progressBarFill"></div></div>
     <div style="font-size: 20px; font-weight: 800; font-family: monospace;" id="loaderPercent">0%</div>
   </div>
 
+  <!-- 💎 Navbar -->
   <div class="navbar">
     <div class="nav-content">
       <div class="nav-brand">
-        <h2>🎯 <span class="brand-text">التقييم</span> <span id="welcomeName" style="font-size: 11px; opacity: 0.7; font-weight: 400; margin-right: 5px;"></span></h2>
+        <h2>⚡ <span class="brand-text">التقييم</span> <span id="welcomeName" style="font-size: 11px; opacity: 0.7; font-weight: 400; margin-right: 5px;"></span></h2>
       </div>
       <div class="nav-actions">
         <span id="groupBadge" class="nav-badge group-badge" style="display: none;"></span>
-        <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()" title="تغيير الوضع">☀️</button>
+        <span id="roleBadge" class="nav-badge role-badge" style="display: none;"></span>
+        <button class="nav-btn" id="themeToggle" onclick="toggleDarkMode()" title="تغيير الوضع">☀️</button>
+        <button class="nav-btn" onclick="window.location.href='index.html'" title="نظام الحضور">🏠</button>
         <button class="hamburger" onclick="toggleSidebar()">☰</button>
       </div>
     </div>
   </div>
 
+  <!-- 🗂️ Sidebar -->
   <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="sidebar">
     <button class="close-btn" onclick="toggleSidebar()">×</button>
@@ -148,7 +159,7 @@
         <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px;" onchange="changeGlobalGroup(this.value)"></select>
     </div>
 
-    <!-- 📝 الشاشة 1: رصد الدرجات -->
+    <!-- 📝 الشاشة 1: الرصد -->
     <div id="view-grading" class="view-section active">
       <h3 style="text-align: center; color: var(--primary); margin-bottom:25px;">إدخال تقييم الطالب</h3>
       <div class="form-wrapper">
@@ -177,10 +188,10 @@
     </div>
 
     <!-- 🏆 الشاشة 2: لوحة الشرف -->
-    <div id="view-top" class="view-section">
-      <h3 style="text-align: center;">🏆 استخراج أعلى 5 متفوقين</h3>
+    <div id="view-top" class="view-section manager-only">
+      <h3 style="text-align: center;">🏆 استخراج المتفوقين (Top 5)</h3>
       <div class="form-wrapper" style="text-align:center;">
-        <div class="grade-box" style="margin-bottom:15px;">
+        <div class="grade-box" style="margin-bottom:15px; flex-basis:100%">
           <label>المحاضرات (حضور + فيدباك)</label>
           من <input type="number" id="fromLec" value="1" class="small-input"> إلى <input type="number" id="toLec" value="5" class="small-input">
         </div>
@@ -194,27 +205,27 @@
             من <input type="number" id="fromQuiz" value="1" class="small-input"> إلى <input type="number" id="toQuiz" value="5" class="small-input">
           </div>
         </div>
-        <button class="btn-primary" onclick="generateTopChart()">تحليل البيانات وعرض النتائج 🚀</button>
+        <button class="btn-primary" onclick="generateTopChart()">تحليل النقاط وعرض النتائج 🚀</button>
       </div>
       <div class="chart-container"><canvas id="topChart"></canvas></div>
     </div>
 
     <!-- ⚙️ الشاشة 3: الإعدادات -->
-    <div id="view-settings" class="view-section">
-      <h3 style="text-align: center;">⚙️ تهيئة الكويزات (إدارة)</h3>
+    <div id="view-settings" class="view-section admin-only">
+      <h3 style="text-align: center;">⚙️ إعدادات الكويزات (إدارة)</h3>
       <div class="form-wrapper">
         <label>حدد الكويز المستهدف:</label>
         <select id="settingQuizNum" onchange="loadSettingQuizMax()"><script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">Quiz ${i}</option>`);</script></select>
         <label>الدرجة النهائية لهذا الكويز:</label>
         <input type="number" id="settingQuizMax" placeholder="مثال: 15">
-        <button class="btn-primary" onclick="saveQuizMax()">تثبيت النهاية العظمى 🔒</button>
+        <button class="btn-primary" onclick="saveQuizMax()">تثبيت الدرجة القصوى 🔒</button>
       </div>
     </div>
 
   </div>
 
   <script>
-    // ⚠️ الروابط الخاصة بك
+    // ⚠️ روابط الـ APIs
     const GRADES_API_URL = "https://script.google.com/macros/s/AKfycbzJkCGpIcc6uzgITufJcDnv8yC2RvF-DTlX1rw-9ZojdHmQyj2GSHsPFFAKCOiWV4Q/exec"; 
     const QUIZZES_API_URL = "https://script.google.com/macros/s/AKfycbzL9jhUwFFZbPOFSoAtnOIR8qsvdXNzzSJ7kRMNaxb3f2CV_G95HUOdwxDqmJ5i-jHUEQ/exec"; 
     const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbyKdM1HWykrFkeI_n_DVQhJ1t8xxk8Zg8zL5eXSc3zsFwdYfXTBUW9C77EabSO4zRgL7g/exec"; 
@@ -248,12 +259,9 @@
       document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
       
-      const target = document.getElementById(`view-${viewId}`);
-      if(target) target.classList.add('active');
-      
+      document.getElementById(`view-${viewId}`).classList.add('active');
       const navItem = document.getElementById(`nav-${viewId}`);
       if(navItem) navItem.classList.add('active');
-      
       if(document.getElementById('sidebar').classList.contains('open')) toggleSidebar();
     }
 
@@ -270,6 +278,12 @@
       document.getElementById('groupBadge').innerText = userGroup;
       document.getElementById('groupBadge').style.display = 'flex';
       
+      const rb = document.getElementById('roleBadge');
+      rb.innerText = (userRole === 'Owner') ? 'المالك 👑' : (userRole === 'CO-Founder') ? 'CO-Founder ✨' : 
+                     (userRole === 'Team Manager' || userRole === 'Admin') ? 'Team Manager' : 
+                     (userRole === 'Coordinator' || userRole === 'Manager') ? 'Coordinator' : 'Cadre';
+      rb.style.display = 'flex';
+
       document.body.className = document.body.classList.contains('dark-mode') ? 'dark-mode ' : ''; 
       if (userRole === 'Owner' || userRole === 'CO-Founder' || userRole === 'Team Manager' || userRole === 'Admin') { 
         document.body.classList.add('role-admin'); 
@@ -300,7 +314,7 @@
       const qNum = document.getElementById('settingQuizNum').value;
       const maxVal = document.getElementById('settingQuizMax').value;
       localStorage.setItem(`maxQuiz_${qNum}`, maxVal);
-      alert("تم الحفظ بنجاح 🔒"); fetchMaxQuizGrade();
+      alert("تم حفظ درجة الماكس 🔒"); fetchMaxQuizGrade();
     }
 
     function fetchMaxQuizGrade() {
@@ -368,7 +382,7 @@
 
         let top5 = Object.values(merged).sort((a,b) => b.total - a.total).slice(0, 5);
         if(top5.length === 0) alert("لا توجد بيانات لهذا النطاق");
-        drawChart(top5.map(s => s.name.split(" ")[0]), top5.map(s => s.total));
+        drawChart(top5.map(s => s.name.split(" ")[0] + " " + (s.name.split(" ")[1]||"")), top5.map(s => s.total));
       } catch(e) { alert("خطأ في جلب البيانات"); }
       
       clearInterval(itv);
@@ -381,15 +395,11 @@
       const isDark = document.body.classList.contains('dark-mode');
       topChartInstance = new Chart(ctx, {
         type: 'bar',
-        data: { labels: labels, datasets: [{ label: 'مجموع النقاط', data: data, backgroundColor: isDark ? '#00d2ff' : '#9333ea', borderRadius: 8 }] },
+        data: { labels: labels, datasets: [{ label: 'مجموع النقاط التراكمي', data: data, backgroundColor: isDark ? '#00d2ff' : '#9333ea', borderRadius: 8 }] },
         options: { 
-            responsive: true, 
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, ticks: { color: isDark ? '#fff' : '#666' } },
-                x: { ticks: { color: isDark ? '#fff' : '#666' } }
-            },
-            plugins: { legend: { labels: { color: isDark ? '#fff' : '#666' } } }
+            responsive: true, maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, ticks: { color: isDark ? '#fff' : '#666' } }, x: { ticks: { color: isDark ? '#fff' : '#666' } } },
+            plugins: { legend: { display: false } }
         }
       });
     }
