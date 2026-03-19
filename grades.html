@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>نظام التقييم الشامل | Eduneers</title>
+  <title>نظام التقييم المتكامل | Eduneers</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -23,8 +23,8 @@
     .nav-tools { display: flex; gap: 8px; }
     .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 35px; height: 35px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
 
-    .tabs-container { display: flex; background: var(--card); margin: 15px; border-radius: 15px; padding: 5px; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); }
-    .tab-item { flex: 1; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 0.85rem; color: #64748b; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .tabs-container { display: flex; background: var(--card); margin: 15px; border-radius: 15px; padding: 5px; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); overflow-x: auto; }
+    .tab-item { flex: 1; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 0.8rem; color: #64748b; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 70px; }
     .tab-item.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     body.dark-mode .tab-item.active { background: var(--electric-blue); color: #0f172a; }
 
@@ -43,13 +43,18 @@
     .btn-submit { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--primary); color: white; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
     body.dark-mode .btn-submit { background: var(--electric-blue); color: #0f172a; }
 
-    /* 🟢 Toggles Styling */
-    .toggle-btn { background: #e2e8f0; color: #64748b; padding: 12px; border-radius: 12px; font-weight: 800; cursor: pointer; border: 2px solid transparent; transition: 0.3s; text-align: center; user-select: none; }
-    .toggle-btn.active-att { background: #2563eb; color: white; border-color: #1d4ed8; }
-    .toggle-btn.active-feed { background: #059669; color: white; border-color: #047857; }
+    /* Search Results Styling */
+    .search-result-card { background: rgba(0,0,0,0.02); border-radius: 15px; padding: 15px; border: 1px solid var(--border); margin-top: 15px; }
+    .result-name { font-size: 1.2rem; font-weight: 900; color: var(--electric-blue); text-align: center; margin-bottom: 10px; }
+    .result-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+    .result-table th { background: var(--primary); color: white; padding: 8px; border-radius: 5px; }
+    .result-table td { padding: 8px; border-bottom: 1px solid var(--border); text-align: center; font-weight: 700; }
+    .total-badge { background: var(--accent); color: white; padding: 5px 15px; border-radius: 50px; font-weight: 900; display: inline-block; margin-top: 10px; }
 
-    /* 🏆 Top 5 Specifics */
-    .range-box { background: rgba(0,0,0,0.02); padding: 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border); }
+    .toggle-btn { background: #e2e8f0; color: #64748b; padding: 12px; border-radius: 12px; font-weight: 800; cursor: pointer; border: 2px solid transparent; transition: 0.3s; text-align: center; }
+    .toggle-btn.active-att { background: #2563eb; color: white; }
+    .toggle-btn.active-feed { background: #059669; color: white; }
+
     .small-num { width: 60px !important; display: inline-block !important; margin: 0 5px !important; padding: 5px !important; }
     .chart-container { height: 300px; margin-top: 15px; }
 
@@ -62,7 +67,7 @@
 <body class="dark-mode">
 
   <div id="loader">
-    <div id="loaderMsg" style="font-weight: 800;">جاري إرسال البيانات...</div>
+    <div id="loaderMsg" style="font-weight: 800;">جاري معالجة البيانات...</div>
     <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
     <div id="percent" style="font-weight: 800; font-size: 1.5rem;">0%</div>
   </div>
@@ -76,7 +81,8 @@
   </div>
 
   <div class="tabs-container">
-    <div class="tab-item active" onclick="switchTab('grading', this)"><span>📝</span><span>الرصد</span></div>
+    <div class="tab-item active" onclick="switchTab('grading', this)"><span>📝</span><span>رصد</span></div>
+    <div class="tab-item" onclick="switchTab('searchView', this)"><span>🔍</span><span>استعلام</span></div>
     <div id="tab-top" class="tab-item" style="display:none;" onclick="switchTab('top', this)"><span>🏆</span><span>توب 5</span></div>
     <div id="tab-settings" class="tab-item" style="display:none;" onclick="switchTab('settings', this)"><span>⚙️</span><span>إعدادات</span></div>
   </div>
@@ -88,40 +94,50 @@
     <div id="grading" class="view-content active">
       <div class="card">
         <h3>الرصد السريع</h3>
-        
         <label>كود الطالب (الرقم فقط)</label>
         <div style="display:flex; gap:8px;">
-          <input type="text" id="studentCode" placeholder="مثال: 5" style="margin-bottom:0; font-size: 1.3rem;">
-          <button onclick="document.getElementById('qr-input').click()" style="width:50px; background:var(--accent); border:none; border-radius:12px; color:white; cursor:pointer;">📷</button>
-          <input type="file" id="qr-input" accept="image/*" capture="environment" style="display:none;" onchange="handleQR(this)">
+          <input type="text" id="studentCode" placeholder="مثال: 5" style="margin-bottom:0;">
+          <button onclick="document.getElementById('qr-input').click()" style="width:50px; background:var(--accent); border:none; border-radius:12px; color:white;">📷</button>
+          <input type="file" id="qr-input" accept="image/*" capture="environment" style="display:none;" onchange="handleQR(this, 'studentCode')">
         </div>
-
         <div style="margin: 15px 0;">
-            <label>رقم المحاضرة الحالية (للحضور والفيدباك)</label>
+            <label>المحاضرة (للحضور والفيدباك)</label>
             <select id="currentLecNum"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script></select>
         </div>
-
         <div class="grid-2">
-            <div class="toggle-btn" id="attBtn" onclick="this.classList.toggle('active-att')">👤 حضور (5د)</div>
-            <div class="toggle-btn" id="feedBtn" onclick="this.classList.toggle('active-feed')">💬 فيدباك (5د)</div>
+            <div class="toggle-btn" id="attBtn" onclick="this.classList.toggle('active-att')">👤 حضور</div>
+            <div class="toggle-btn" id="feedBtn" onclick="this.classList.toggle('active-feed')">💬 فيدباك</div>
         </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
-
+        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
         <div class="grid-2">
-          <div>
-            <label>رقم التاسك</label>
-            <select id="taskNum"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">Task ${i}</option>`);</script></select>
-            <input type="number" id="valTask" placeholder="درجة (70)">
-          </div>
-          <div>
-            <label>رقم الكويز</label>
-            <select id="quizNum" onchange="updateMaxLabel()"><script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">Quiz ${i}</option>`);</script></select>
-            <input type="number" id="valQuiz" placeholder="درجة">
-          </div>
+          <div><label>رقم التاسك</label><select id="taskNum"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">Task ${i}</option>`);</script></select><input type="number" id="valTask" placeholder="درجة (70)"></div>
+          <div><label>رقم الكويز</label><select id="quizNum" onchange="updateMaxLabel()"><script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">Quiz ${i}</option>`);</script></select><input type="number" id="valQuiz" placeholder="درجة"></div>
         </div>
-
         <button class="btn-submit" onclick="submitData()">حفظ التقييم الشامل 💾</button>
+      </div>
+    </div>
+
+    <!-- 🔍 تبويب الاستعلام والبحث -->
+    <div id="searchView" class="view-content">
+      <div class="card">
+        <h3>البحث عن طالب</h3>
+        <label>أدخل رقم الكود للبحث</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="searchCode" placeholder="مثال: 15" style="margin-bottom:0;">
+          <button class="btn-submit" style="width:auto; padding:0 20px; margin-bottom:0;" onclick="searchStudent()">🔍</button>
+        </div>
+        <div id="searchResult" style="display:none;">
+            <div class="search-result-card">
+                <div class="result-name" id="resName">---</div>
+                <div style="text-align:center;"><span class="total-badge">إجمالي النقاط: <span id="resTotal">0</span></span></div>
+                
+                <h4 style="margin:15px 0 5px; font-size:0.9rem; color:var(--accent);">📋 التاسكات (المرصودة)</h4>
+                <table class="result-table"><thead><tr><th>رقم التاسك</th><th>الدرجة</th></tr></thead><tbody id="resTasks"></tbody></table>
+                
+                <h4 style="margin:20px 0 5px; font-size:0.9rem; color:var(--electric-blue);">✍️ الكويزات (المرصودة)</h4>
+                <table class="result-table"><thead><tr><th>رقم الكويز</th><th>الدرجة</th></tr></thead><tbody id="resQuizzes"></tbody></table>
+            </div>
+        </div>
       </div>
     </div>
 
@@ -129,10 +145,7 @@
     <div id="top" class="view-content">
       <div class="card">
         <h3>🏆 استخراج المتفوقين</h3>
-        <div class="range-box">
-          <label>المحاضرات (حضور + فيدباك)</label>
-          من <input type="number" id="fL" value="1" class="small-num"> إلى <input type="number" id="tL" value="5" class="small-num">
-        </div>
+        <div class="range-box"><label>المحاضرات (حضور + فيدباك)</label>من <input type="number" id="fL" value="1" class="small-num"> إلى <input type="number" id="tL" value="5" class="small-num"></div>
         <div class="grid-2">
           <div class="range-box"><label>التاسكات</label>من <input type="number" id="fT" value="1" class="small-num"> إلى <input type="number" id="tT" value="5" class="small-num"></div>
           <div class="range-box"><label>الكويزات</label>من <input type="number" id="fQ" value="1" class="small-num"> إلى <input type="number" id="tQ" value="5" class="small-num"></div>
@@ -146,19 +159,17 @@
     <div id="settings" class="view-content">
       <div class="card">
         <h3>⚙️ إعدادات النهايات العظمى</h3>
-        <label>رقم الكويز</label>
-        <select id="setQNum" onchange="loadSettingMax()"><script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">Quiz ${i}</option>`);</script></select>
-        <label>الدرجة النهائية</label>
-        <input type="number" id="setQMax" placeholder="مثلاً: 15">
-        <button class="btn-submit" onclick="saveMaxConfig()">حفظ الإعداد 🔒</button>
+        <label>رقم الكويز</label><select id="setQNum" onchange="loadSettingMax()"><script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">Quiz ${i}</option>`);</script></select>
+        <label>الدرجة النهائية</label><input type="number" id="setQMax" placeholder="مثلاً: 15"><button class="btn-submit" onclick="saveMaxConfig()">حفظ الإعداد 🔒</button>
       </div>
     </div>
   </div>
 
+  <div id="message"></div>
+
   <script>
-    // ⚠️ روابط الـ APIs
-    const GRADES_API = "https://script.google.com/macros/s/AKfycbzJkCGpIcc6uzgITufJcDnv8yC2RvF-DTlX1rw-9ZojdHmQyj2GSHsPFFAKCOiWV4Q/exec"; 
-    const QUIZ_API = "https://script.google.com/macros/s/AKfycbzL9jhUwFFZbPOFSoAtnOIR8qsvdXNzzSJ7kRMNaxb3f2CV_G95HUOdwxDqmJ5i-jHUEQ/exec"; 
+    const GRADES_API = "https://script.google.com/macros/s/AKfycbyj06VXyQVaiDiSxkXxg8MHYvhh93B0XpR5Th_W-K6akki2ny4o101kN84gyCQc2gml/exec"; 
+    const QUIZ_API = "https://script.google.com/macros/s/AKfycbwne4ufHfwjbcS6p39pfslPsTtPsQn8n24zapV4ytou5L4sacK0Y8KHYq_vx64PiYOVMQ/exec"; 
     const ATTEND_API = "https://script.google.com/macros/s/AKfycbyKdM1HWykrFkeI_n_DVQhJ1t8xxk8Zg8zL5eXSc3zsFwdYfXTBUW9C77EabSO4zRgL7g/exec"; 
     const FEED_API = "https://script.google.com/macros/s/AKfycbz06d7stdEv5_4m529xIKToSNiR-_pciUDFcdhFQXA7RrE9rt_Puv8dhBdpR4V5L3XioQ/exec"; 
 
@@ -166,7 +177,6 @@
 
     window.onload = () => {
       if (localStorage.getItem('isLoggedIn') !== 'true') window.location.href = 'index.html';
-      if (localStorage.getItem('darkMode') === 'false') document.body.classList.remove('dark-mode');
       const role = localStorage.getItem('userRole');
       const group = localStorage.getItem('userGroup') || "Group A";
       document.getElementById('userRole').innerText = `| ${role}`;
@@ -213,62 +223,100 @@
       updateMaxLabel();
     }
 
-    function handleQR(input) {
+    function handleQR(input, targetId) {
       if (!input.files[0]) return;
       const reader = new Html5Qrcode("grading");
-      showMsg("⏳ جاري تحليل الكود...", "#2563eb");
+      showMsg("⏳ جاري التحليل...", "#2563eb");
       reader.scanFile(input.files[0], true).then(res => {
-          let code = res.toUpperCase();
-          if(/^\d+$/.test(code)) code = code; // Handle if raw number in QR
-          document.getElementById('studentCode').value = code;
+          document.getElementById(targetId).value = res.toUpperCase();
           showMsg("✅ تم التعرف على الكود", "#059669");
       }).catch(e => showMsg("❌ كود غير واضح", "#dc2626"));
+    }
+
+    // 🚀 دالة البحث المتقدم
+    async function searchStudent() {
+        let code = document.getElementById('searchCode').value.trim();
+        if(!code) return alert("ادخل كود الطالب للبحث");
+
+        if(/^\d+$/.test(code)) {
+            const groupLetter = localStorage.getItem('userGroup').replace("Group ", "").trim();
+            code = groupLetter + code + "EDUR9";
+        } else { code = code.toUpperCase(); }
+
+        const auth = `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}&group=${localStorage.getItem('userGroup')}`;
+        
+        document.getElementById('loader').style.display = 'flex';
+        updateProgress(30);
+
+        try {
+            // طلب البيانات من شيتي التاسكات والكويزات
+            const [resT, resQ] = await Promise.all([
+                fetch(`${GRADES_API}?action=getStudentData&qrCode=${code}${auth}`).then(r => r.json()),
+                fetch(`${QUIZ_API}?action=getStudentData&qrCode=${code}${auth}`).then(r => r.json())
+            ]);
+
+            updateProgress(80);
+
+            if(resT.status === "success") {
+                document.getElementById('searchResult').style.display = 'block';
+                document.getElementById('resName').innerText = resT.name;
+                
+                // ملء جداول التاسكات
+                let tHtml = ""; let total = 0;
+                resT.data.forEach(item => { 
+                    tHtml += `<tr><td>Task ${item.num}</td><td>${item.val}</td></tr>`;
+                    total += parseFloat(item.val || 0);
+                });
+                document.getElementById('resTasks').innerHTML = tHtml || "<tr><td colspan='2'>لا توجد تاسكات مرصودة</td></tr>";
+
+                // ملء جداول الكويزات
+                let qHtml = "";
+                resQ.data.forEach(item => { 
+                    qHtml += `<tr><td>Quiz ${item.num}</td><td>${item.val}</td></tr>`;
+                    total += parseFloat(item.val || 0);
+                });
+                document.getElementById('resQuizzes').innerHTML = qHtml || "<tr><td colspan='2'>لا توجد كويزات مرصودة</td></tr>";
+                
+                document.getElementById('resTotal').innerText = total;
+                showMsg("✅ تم العثور على البيانات", "#059669");
+            } else {
+                showMsg("❌ الطالب غير موجود في سجلات الجروب", "#dc2626");
+                document.getElementById('searchResult').style.display = 'none';
+            }
+        } catch(e) { showMsg("❌ خطأ في الاتصال بالسيرفر", "#dc2626"); }
+        
+        updateProgress(100);
+        setTimeout(() => { document.getElementById('loader').style.display = 'none'; updateProgress(0); }, 500);
     }
 
     async function submitData() {
       let rawCode = document.getElementById('studentCode').value.trim();
       if(!rawCode) return alert("ادخل كود الطالب");
-
-      // 🧠 تحويل الكود الذكي (مثلاً 5 إلى K5EDUR9)
       let finalCode = rawCode;
       if(/^\d+$/.test(rawCode)) {
          const groupLetter = localStorage.getItem('userGroup').replace("Group ", "").trim();
          finalCode = groupLetter + rawCode + "EDUR9";
-      } else {
-         finalCode = rawCode.toUpperCase();
-      }
-
+      } else { finalCode = rawCode.toUpperCase(); }
       const tVal = document.getElementById('valTask').value;
       const qVal = document.getElementById('valQuiz').value;
       const isAtt = document.getElementById('attBtn').classList.contains('active-att');
       const isFeed = document.getElementById('feedBtn').classList.contains('active-feed');
       const lecNum = document.getElementById('currentLecNum').value;
-      
       const auth = `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}&group=${localStorage.getItem('userGroup')}`;
-      
       document.getElementById('loader').style.display = 'flex';
       updateProgress(20);
-
       try {
         let promises = [];
         if(tVal !== "") promises.push(fetch(`${GRADES_API}?action=saveGrade&qrCode=${finalCode}&taskNum=${document.getElementById('taskNum').value}&val=${tVal}${auth}`));
         if(qVal !== "") promises.push(fetch(`${QUIZ_API}?action=saveQuiz&qrCode=${finalCode}&quizNum=${document.getElementById('quizNum').value}&val=${qVal}${auth}`));
         if(isAtt) promises.push(fetch(`${ATTEND_API}?action=scan&qrCode=${finalCode}&lectureNum=${lecNum}${auth}`));
         if(isFeed) promises.push(fetch(`${FEED_API}?action=scan&qrCode=${finalCode}&lectureNum=${lecNum}${auth}`));
-
         await Promise.all(promises);
-        
         updateProgress(100);
-        showMsg("✅ تم الرصد بنجاح لـ " + finalCode.replace("EDUR9", ""), "#059669");
-        
-        // تفريغ الخانات بعد النجاح
-        document.getElementById('studentCode').value = "";
-        document.getElementById('valTask').value = "";
-        document.getElementById('valQuiz').value = "";
-        document.getElementById('attBtn').classList.remove('active-att');
-        document.getElementById('feedBtn').classList.remove('active-feed');
-      } catch(e) { showMsg("❌ فشل الاتصال", "#dc2626"); }
-      
+        showMsg("✅ تم الحفظ بنجاح", "#059669");
+        document.getElementById('studentCode').value = ""; document.getElementById('valTask').value = ""; document.getElementById('valQuiz').value = "";
+        document.getElementById('attBtn').classList.remove('active-att'); document.getElementById('feedBtn').classList.remove('active-feed');
+      } catch(e) { showMsg("❌ فشل الإرسال", "#dc2626"); }
       setTimeout(() => { document.getElementById('loader').style.display = 'none'; updateProgress(0); }, 500);
     }
 
@@ -277,10 +325,8 @@
       const ft = document.getElementById('fT').value, tt = document.getElementById('tT').value;
       const fq = document.getElementById('fQ').value, tq = document.getElementById('tQ').value;
       const auth = `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}&group=${localStorage.getItem('userGroup')}`;
-
       document.getElementById('loader').style.display = 'flex';
       updateProgress(30);
-
       try {
         const [resT, resQ, resA, resF] = await Promise.all([
           fetch(`${GRADES_API}?action=getTop&fromTask=${ft}&toTask=${tt}${auth}`).then(r => r.json()),
@@ -288,22 +334,15 @@
           fetch(`${ATTEND_API}?action=getTop&fromLec=${fl}&toLec=${tl}${auth}`).then(r => r.json()).catch(()=>({scores:[]})),
           fetch(`${FEED_API}?action=getTop&fromLec=${fl}&toLec=${tl}${auth}`).then(r => r.json()).catch(()=>({scores:[]}))
         ]);
-
         let merged = {};
         const collect = (d) => { if(d.status==='success') d.scores.forEach(s => { if(!merged[s.id]) merged[s.id]={n:s.name, t:0}; merged[s.id].t += s.total; }); };
         collect(resT); collect(resQ); collect(resA); collect(resF);
-
         let final = Object.values(merged).sort((a,b) => b.t - a.t).slice(0, 5);
         if(final.length === 0) { showMsg("⚠️ لا توجد بيانات", "#f5b041"); }
         else { renderChart(final.map(s => s.n.split(" ")[0] + " " + (s.n.split(" ")[1]||"")), final.map(s => s.t)); }
-
       } catch(e) { showMsg("❌ خطأ في البيانات", "#dc2626"); }
-      completeProgress();
-    }
-
-    function completeProgress() {
-        updateProgress(100);
-        setTimeout(() => { document.getElementById('loader').style.display = 'none'; updateProgress(0); }, 500);
+      updateProgress(100);
+      setTimeout(() => { document.getElementById('loader').style.display = 'none'; updateProgress(0); }, 500);
     }
 
     function renderChart(labels, data) {
@@ -313,11 +352,7 @@
       myChart = new Chart(ctx, {
         type: 'bar',
         data: { labels: labels, datasets: [{ label: 'مجموع النقاط', data: data, backgroundColor: isDark ? '#00d2ff' : '#9333ea', borderRadius: 10 }] },
-        options: { 
-          responsive: true, maintainAspectRatio: false,
-          scales: { y: { ticks: { color: isDark ? '#fff' : '#666' } }, x: { ticks: { color: isDark ? '#fff' : '#666' } } },
-          plugins: { legend: { display: false } }
-        }
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: isDark ? '#fff' : '#666' } }, x: { ticks: { color: isDark ? '#fff' : '#666' } } }, plugins: { legend: { display: false } } }
       });
     }
 
