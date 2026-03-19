@@ -69,19 +69,26 @@
       #roleBadge { display: none !important; } 
     }
 
-    /* 💎 Floating Modern Sidebar */
-    .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); box-shadow: -15px 0 50px rgba(0,0,0,0.1); transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.5s ease; z-index: 1000; padding-top: 80px; padding-bottom: 40px; overflow-y: auto; border-left: 1px solid rgba(255,255,255,0.5); }
+/* 💎 Floating Modern Sidebar (RTL Fixed) */
+    .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); box-shadow: -15px 0 50px rgba(0,0,0,0.1); transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.5s ease; z-index: 1000; padding-top: 70px; padding-bottom: 40px; overflow-y: auto; border-left: 1px solid rgba(255,255,255,0.5); text-align: right; }
     body.dark-mode .sidebar { background: rgba(15, 23, 42, 0.98); border-left: 1px solid var(--electric-glow); }
     .sidebar.open { right: 0; }
-    .sidebar a { display: flex; align-items: center; padding: 14px 25px; margin: 8px 15px; color: var(--text-muted); text-decoration: none; font-size: 1.05rem; font-weight: 700; border-radius: 14px; transition: all 0.3s ease; }
+    
+    .sidebar a { display: flex; justify-content: flex-start; align-items: center; gap: 12px; padding: 14px 20px; margin: 8px 15px; color: var(--text-muted); text-decoration: none; font-size: 1.05rem; font-weight: 700; border-radius: 14px; transition: all 0.3s ease; }
     .sidebar a:hover { background: #f8fafc; color: var(--primary); transform: translateX(-5px); }
     body.dark-mode .sidebar a:hover { background: rgba(0,210,255,0.1); color: var(--electric-blue); }
-    .sidebar a.active { background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(147, 51, 234, 0.05)); color: #9333ea; box-shadow: inset 3px 0 0 #9333ea; }
-    body.dark-mode .sidebar a.active { background: linear-gradient(135deg, rgba(0,210,255,0.1), rgba(0,210,255,0.05)); color: var(--electric-blue); box-shadow: inset 3px 0 0 var(--electric-blue); }
-    .sidebar-heading { padding: 25px 30px 10px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;}
+    
+    /* Active State Line Fixed for RTL (inset -4px) */
+    .sidebar a.active { background: linear-gradient(to left, rgba(147, 51, 234, 0.1), transparent); color: #9333ea; box-shadow: inset -4px 0 0 #9333ea; }
+    body.dark-mode .sidebar a.active { background: linear-gradient(to left, rgba(0,210,255,0.1), transparent); color: var(--electric-blue); box-shadow: inset -4px 0 0 var(--electric-blue); }
+    
+    .sidebar-heading { padding: 25px 25px 10px; font-size: 0.8rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-align: right;}
+    
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; z-index: 999; opacity: 0; transition: opacity 0.4s ease;}
     .sidebar-overlay.show { display: block; opacity: 1; }
-    .close-btn { position: absolute; top: 20px; left: 20px; font-size: 2rem; cursor: pointer; color: #94a3b8; border: none; background: none; transition: 0.3s;}
+    
+    /* Close Button Fixed to Left */
+    .close-btn { position: absolute; top: 15px; left: 15px; font-size: 2rem; cursor: pointer; color: #94a3b8; border: none; background: none; transition: 0.3s; line-height: 1; padding: 5px 10px;}
     .close-btn:hover { color: #ef4444; transform: rotate(90deg) scale(1.1); }
 
     .container { padding: 40px 20px; max-width: 1000px; margin: auto; position: relative; z-index: 1; }
@@ -168,31 +175,42 @@
   </div>
 
   <!-- 🗂️ القائمة الجانبية (Sidebar) المخصصة للدرجات -->
+<!-- 🗂️ القائمة الجانبية (Sidebar) المخصصة للدرجات -->
   <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="sidebar">
     <button class="close-btn" onclick="toggleSidebar()">×</button>
     
     <div class="sidebar-heading">نظام التقييم (Grades)</div>
-    <a href="#" onclick="switchView('grading'); toggleSidebar();" id="nav-grading" class="active">📝 إدخال الدرجات</a>
+    <a href="#" onclick="switchView('grading'); toggleSidebar();" id="nav-grading" class="active">
+      <span>📝</span> <span>إدخال الدرجات</span>
+    </a>
     
     <!-- هذه الأقسام تظهر فقط للمديرين -->
     <div class="manager-only">
-      <a href="#" onclick="switchView('top'); toggleSidebar();" id="nav-top">🏆 لوحة الشرف Top 5</a>
+      <a href="#" onclick="switchView('top'); toggleSidebar();" id="nav-top">
+        <span>🏆</span> <span>لوحة الشرف Top 5</span>
+      </a>
     </div>
     
     <!-- هذه الأقسام تظهر فقط للإدارة العليا -->
     <div class="admin-only">
-      <a href="#" onclick="switchView('settings'); toggleSidebar();" id="nav-settings">⚙️ إعدادات الكويزات</a>
+      <a href="#" onclick="switchView('settings'); toggleSidebar();" id="nav-settings">
+        <span>⚙️</span> <span>إعدادات الكويزات</span>
+      </a>
     </div>
     
     <div class="sidebar-heading" style="margin-top: 15px;">نظام الحضور (Attendance)</div>
-    <a href="index.html" style="color: var(--accent);">🏠 الانتقال لتسجيل الطلاب</a>
+    <a href="index.html" style="color: var(--accent);">
+      <span>🏠</span> <span>الانتقال لتسجيل الطلاب</span>
+    </a>
     
     <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-      <a href="#" onclick="logout();" style="color: #ef4444;">🚪 تسجيل الخروج</a>
+      <a href="#" onclick="logout();" style="color: #ef4444;">
+        <span>🚪</span> <span>تسجيل الخروج</span>
+      </a>
     </div>
   </div>
-
+  
   <div class="container">
     <div id="message"></div>
 
