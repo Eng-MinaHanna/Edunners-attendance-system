@@ -776,23 +776,47 @@
       link.href = URL.createObjectURL(blob); link.download = `Report_${group}_Lec_${lec}.csv`; link.click(); showToast("✅ تم التصدير", "success");
     }
 
-    function loadAnalytics(type = 'group') {
-      showProgress("تحليل البيانات...");
-      const group = localStorage.getItem('userGroup') || "Group A"; const lec = document.getElementById('lecture').value; const role = localStorage.getItem('userRole').toUpperCase();
+async function loadAnalytics(type = 'group') {
+      showProgress("تحليل البيانات وبناء الرسوم... 📈");
+      const group = localStorage.getItem('userGroup') || "Group A"; 
+      const lec = document.getElementById('lecture').value; 
+      const role = (localStorage.getItem('userRole') || "").toUpperCase();
+      
       let url = ""; let chartTitle = "";
       if (type === 'all' && (role === 'OWNER' || role === 'CO-FOUNDER')) {
          url = `${ATTENDANCE_API_URL}?action=getOwnerAnalytics&lectureNum=${encodeURIComponent(lec)}${getAuthParams()}`;
-         document.getElementById('analyticsDesc').innerText = `📊 مقارنة حية لحضور كافة الجروبات - محاضرة ${lec}`; chartTitle = 'حضور الجروبات';
+         document.getElementById('analyticsDesc').innerText = `📊 مقارنة حية لحضور كافة الجروبات - محاضرة ${lec}`; 
+         chartTitle = 'حضور الجروبات';
       } else {
          url = `${ATTENDANCE_API_URL}?action=getAnalytics&group=${encodeURIComponent(group)}${getAuthParams()}`;
-         document.getElementById('analyticsDesc').innerText = `📈 تتبع كفاءة الحضور لـ ${group} على مدار الكورس`; chartTitle = 'كثافة الحضور';
+         document.getElementById('analyticsDesc').innerText = `📈 تتبع كفاءة الحضور لـ ${group} على مدار الكورس`; 
+         chartTitle = 'كثافة الحضور';
       }
-      fetch(url).then(res => res.json()).then(data => {
+      
+      try {
+          const response = await fetch(url);
+          const data = await response.json();
           completeProgress();
-          if (data.status === "success") { document.getElementById('message').style.display = 'none'; renderAnalyticsChart(data.labels, data.data, chartTitle); } else { showToast(data.message, "error"); }
-        }).catch(err => { completeProgress(); showToast("❌ فشل في الرسوم البيانية.", "error"); });
+          
+          if (data.status === "success") { 
+              // 🔴 فحص أمان: التأكد إن في داتا فعلاً راجعة من السيرفر قبل الرسم
+              if(data.labels && data.labels.length > 0 && data.data && data.data.length > 0) {
+                  document.getElementById('message').style.display = 'none'; 
+                  renderAnalyticsChart(data.labels, data.data, chartTitle); 
+              } else {
+                  showToast("⚠️ لا توجد بيانات حضور كافية للرسم البياني حتى الآن.", "warning");
+                  // إخفاء الرسم القديم لو موجود
+                  if(attendanceChartInstance) { attendanceChartInstance.destroy(); }
+              }
+          } else { 
+              showToast(data.message || "حدث خطأ في جلب البيانات", "error"); 
+          }
+      } catch (err) {
+          completeProgress(); 
+          console.error("Analytics Crash Error:", err);
+          showToast("❌ فشل في جلب الرسوم البيانية. تأكد من الاتصال.", "error"); 
+      }
     }
-
     function renderAnalyticsChart(labelsArray, dataArray, labelTitle) {
       const ctx = document.getElementById('attendanceChart').getContext('2d');
       if (attendanceChartInstance) attendanceChartInstance.destroy();
