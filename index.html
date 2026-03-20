@@ -36,16 +36,13 @@
     body.dark-mode .nav-brand h2 .brand-text { background: linear-gradient(to left, #fff, var(--electric-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
     
     .nav-actions { display: flex; gap: 8px; align-items: center; }
-    
-    /* 🔴 إصلاح أزرار البار العلوي (Navbar Buttons) */
-    .nav-btn { appearance: none; -webkit-appearance: none; background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2) !important; color: white !important; width: 38px !important; height: 38px !important; border-radius: 10px !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; transition: 0.3s !important; font-size: 1.1rem !important; padding: 0 !important; margin: 0 !important; }
-    .nav-btn:hover { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-    body.dark-mode .nav-btn:hover { background: var(--electric-blue) !important; border-color: var(--electric-blue) !important; box-shadow: 0 0 10px var(--electric-glow) !important;}
+    .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
+    .nav-btn:hover { background: var(--accent); border-color: var(--accent); }
 
     /* 🗂️ Sidebar */
     .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--card-bg); backdrop-filter: blur(25px); z-index: 2000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: right; padding-top: 60px; box-shadow: -10px 0 30px rgba(0,0,0,0.2); border-left: 1px solid rgba(255,255,255,0.1); }
     .sidebar.open { right: 0; }
-    .sidebar a { display: flex; align-items: center; gap: 12px; padding: 14px 25px; color: var(--text-main); text-decoration: none; font-weight: 700; border-bottom: 1px solid rgba(0,0,0,0.05); transition: 0.3s; margin: 4px 10px; border-radius: 12px; }
+    .sidebar a { display: flex; align-items: center; gap: 12px; padding: 16px 25px; color: var(--text-main); text-decoration: none; font-weight: 700; border-bottom: 1px solid rgba(0,0,0,0.05); transition: 0.3s; margin: 4px 10px; border-radius: 12px; }
     .sidebar a i { font-size: 1.2rem; width: 25px; }
     .sidebar a:hover { background: rgba(0,0,0,0.05); transform: translateX(-5px); color: var(--accent); }
     .sidebar a.active { background: linear-gradient(135deg, rgba(245, 176, 65, 0.1), rgba(245, 176, 65, 0.05)); color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
@@ -60,47 +57,29 @@
     body.dark-mode .tab-item.active { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; }
 
     .container { padding: 10px 15px; max-width: 1000px; margin: auto; }
-    .form-wrapper { max-width: 500px; width: 100%; margin: 0 auto; }
     
     .view-section { display: none !important; background: var(--card-bg); padding: 30px 25px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); animation: slideUp 0.4s ease; margin-bottom: 25px; backdrop-filter: blur(15px); }
     .view-section.active { display: block !important; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
 
-    /* 🔴 إصلاح حقول الإدخال (Inputs) لتتوافق تماماً مع الدارك والوايت مود */
-    input, select, textarea { 
-      width: 100%; padding: 14px; border-radius: 14px; 
-      border: 2px solid transparent; background-color: #f1f5f9; color: #334155; 
-      font-size: 15px; font-weight: 800; margin-bottom: 15px; box-sizing: border-box; 
-      text-align: center; font-family: 'Cairo'; transition: 0.3s;
-    }
-    input:focus, select:focus { border-color: var(--accent) !important; outline: none; background: #fff !important;}
-    
-    body.dark-mode input, body.dark-mode select, body.dark-mode textarea { 
-      background-color: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; 
-    }
-    body.dark-mode input:focus, body.dark-mode select:focus { 
-      border-color: var(--electric-blue) !important; background-color: #0f172a !important; box-shadow: 0 0 10px var(--electric-glow) !important;
-    }
+    /* Inputs & Toggles */
+    input, select { width: 100%; padding: 14px; border-radius: 14px; border: 2px solid transparent; background-color: rgba(0,0,0,0.03); color: var(--text-main); font-size: 15px; font-weight: 800; margin-bottom: 15px; box-sizing: border-box; text-align: center; font-family: 'Cairo'; transition: 0.3s;}
+    body.dark-mode input, body.dark-mode select { background-color: #1e293b; color: #fff; border: 1px solid #334155; }
+    input:focus, select:focus { border-color: var(--accent); outline: none; background: #fff;}
+    body.dark-mode input:focus, body.dark-mode select:focus { border-color: var(--electric-blue); background: #0f172a;}
     
     .small-input { width: 70px !important; display: inline-block; padding: 8px 5px !important; margin: 0 5px !important; border: 2px solid var(--accent) !important; color: inherit !important; background: transparent !important; font-weight: 900 !important; }
 
-    /* 🔴 إصلاح الأزرار (Buttons) لمنع التمطيط والتشوه */
-    button { appearance: none; -webkit-appearance: none; width: 100%; padding: 16px; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif; position: relative; overflow: hidden; margin-bottom: 10px; }
+    button { width: 100%; padding: 16px; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif; position: relative; overflow: hidden; margin-bottom: 10px; }
     button:active { transform: scale(0.96); }
 
-    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important; color: white !important; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2) !important; }
-    body.dark-mode .btn-primary { background: linear-gradient(135deg, var(--electric-blue), #0284c7) !important; color: #fff !important; box-shadow: 0 0 15px var(--electric-glow) !important; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2); }
+    body.dark-mode .btn-primary { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.2); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
     
-    .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12) !important; color: #fff !important; box-shadow: 0 10px 20px var(--accent-glow) !important; }
-    .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow) !important; }
-    
-    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626) !important; color: white !important; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2) !important;}
-    .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(239, 68, 68, 0.4) !important;}
-    
-    .btn-excel { background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2) !important; }
-    
-    .btn-small { padding: 8px 16px !important; font-size: 13px !important; margin: 0 !important; width: auto !important; border-radius: 10px !important; box-shadow: none !important; font-weight: 700 !important;}
+    .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; box-shadow: 0 10px 20px var(--accent-glow); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; margin-bottom: 10px;}
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s;}
+    .btn-excel { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s;}
 
     /* Badges */
     .nav-badge { font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; letter-spacing: 0.5px; text-transform: uppercase; font-family: monospace; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); white-space: nowrap !important; flex-shrink: 0 !important; min-width: max-content !important; }
@@ -126,7 +105,6 @@
     th { background: #f8fafc; color: var(--text-muted); font-weight: 800; white-space: nowrap; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; transition: background 0.5s ease;}
     body.dark-mode th { background: #0f172a; color: var(--electric-blue); border-bottom: 2px solid #334155; }
     body.dark-mode td { border-bottom: 1px solid rgba(255,255,255,0.05); color: #f1f5f9;}
-    tbody tr { transition: background 0.2s ease;}
     tbody tr:hover { background-color: #f8fafc; }
     body.dark-mode tbody tr:hover { background-color: rgba(0, 210, 255, 0.08); }
     .status-badge { background: #f1f5f9; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--text-main); border: 1px solid #e2e8f0;}
@@ -140,7 +118,7 @@
     #reader { width: 100%; max-width: 500px; margin: 0 auto 20px auto; border-radius: 20px; overflow: hidden; display: none; border: 3px dashed var(--accent); background: #f8fafc; padding: 10px;}
     body.dark-mode #reader { border-color: var(--electric-blue); background: rgba(30, 41, 59, 0.5); }
 
-    .chart-container { height: 350px; margin-top: 20px; background: rgba(0,0,0,0.02); border-radius: 20px; padding: 15px;}
+    .chart-container { height: 300px; margin-top: 25px; background: rgba(0,0,0,0.02); border-radius: 20px; padding: 15px; border: 1px solid rgba(0,0,0,0.05); }
     body.dark-mode .chart-container { background: #1e293b; border-color: #334155; }
 
     /* ⚡ Loader & Toast */
@@ -153,6 +131,7 @@
 
     /* 🛡️ Permissions */
     .manager-only, .admin-only, .owner-only, .cross-group-only { display: none !important; }
+    
     body.role-manager .manager-only:not(.view-section), body.role-admin .manager-only:not(.view-section), body.role-admin .admin-only:not(.view-section), body.role-admin .cross-group-only:not(.view-section), body.role-co-founder .manager-only:not(.view-section), body.role-co-founder .admin-only:not(.view-section), body.role-co-founder .cross-group-only:not(.view-section), body.role-owner .manager-only:not(.view-section), body.role-owner .admin-only:not(.view-section), body.role-owner .cross-group-only:not(.view-section) { display: block !important; }
     .view-section.active { display: block !important; }
     #view-dashboard:not(.active), #view-analytics:not(.active), #view-users:not(.active) { display: none !important; }
@@ -205,19 +184,23 @@
 
   <div id="electricLoader">
     <div class="loader-text" id="loaderMessage">جاري نقل البيانات...</div>
-    <div class="progress-bar-container"><div class="progress-bar-fill" id="progressBarFill"></div></div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressBarFill"></div>
+    </div>
     <div class="loader-percent" id="loaderPercent">0%</div>
   </div>
 
   <div class="navbar">
     <div class="nav-content">
-      <div class="nav-brand"><h2>⚡ <span class="brand-text">Eduneers</span> <span id="welcomeName"></span></h2></div>
+      <div class="nav-brand">
+        <h2>⚡ <span class="brand-text">Eduneers</span> <span id="welcomeName"></span></h2>
+      </div>
       <div class="nav-actions">
         <span id="groupBadge" class="nav-badge group-badge" style="display: none;"></span>
         <span id="roleBadge" class="nav-badge role-badge" style="display: none;"></span>
-        <button class="nav-btn" id="themeToggle" onclick="toggleDarkMode()">☀️</button>
-        <button class="nav-btn" onclick="window.location.href='grades.html'" title="نظام الدرجات والتقييم">🎯</button>
-        <button class="nav-btn" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()">☀️</button>
+        <button class="theme-toggle" onclick="window.location.href='grades.html'" title="نظام الدرجات والتقييم">🎯</button>
+        <button class="hamburger" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
       </div>
     </div>
   </div>
@@ -230,15 +213,33 @@
         <div id="sideRole" style="font-size: 10px; opacity: 0.7; margin-top: 5px; text-transform: uppercase; background: rgba(255,255,255,0.1); display: inline-block; padding: 4px 10px; border-radius: 8px;"></div>
     </div>
     
-    <a href="#" class="active" onclick="switchView('scanner'); toggleSidebar();" id="nav-scanner"><span>📷</span> <span>مسح الـ QR</span></a>
-    <a href="#" onclick="switchView('manual'); toggleSidebar();" id="nav-manual"><span>✍️</span> <span>التسجيل اليدوي السريع</span></a>
-    <a href="grades.html" style="color: var(--accent);"><span>🎯</span> <span>نظام رصد الدرجات</span></a>
-    <a href="#" class="manager-only" onclick="switchView('dashboard'); toggleSidebar();" id="nav-dashboard"><span>📊</span> <span>لوحة الحضور</span></a>
-    <a href="#" class="manager-only" onclick="switchView('analytics'); toggleSidebar();" id="nav-analytics"><span>📈</span> <span>إحصائيات الجروبات</span></a>
-    <a href="#" class="admin-only" onclick="switchView('users'); toggleSidebar();" id="nav-users"><span>👥</span> <span>إدارة المستخدمين</span></a>
-
-    <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 25px;"></div>
-    <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 10px;"><span>🚪</span> <span>تسجيل الخروج</span></a>
+    <a href="#" class="active" onclick="switchView('scanner'); toggleSidebar();" id="nav-scanner">
+      <span>📷</span> <span>مسح الـ QR</span>
+    </a>
+    <a href="#" onclick="switchView('manual'); toggleSidebar();" id="nav-manual">
+      <span>✍️</span> <span>التسجيل اليدوي السريع</span>
+    </a>
+    
+    <a href="grades.html" style="color: var(--accent);">
+      <span>🎯</span> <span>نظام رصد الدرجات</span>
+    </a>
+    
+    <div class="sidebar-heading manager-only">متابعة الحضور</div>
+    <a href="#" onclick="switchView('dashboard'); toggleSidebar();" id="nav-dashboard" class="manager-only">
+      <span>📊</span> <span>لوحة الحضور</span>
+    </a>
+    <a href="#" onclick="switchView('analytics'); toggleSidebar();" id="nav-analytics" class="manager-only">
+      <span>📈</span> <span>إحصائيات الجروبات</span>
+    </a>
+    
+    <div class="sidebar-heading admin-only">إدارة النظام</div>
+    <a href="#" onclick="switchView('users'); toggleSidebar();" id="nav-users" class="admin-only">
+      <span>👥</span> <span>إدارة المستخدمين</span>
+    </a>
+    
+    <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+      <a href="#" onclick="logout();" style="color: #ef4444;">🚪 تسجيل الخروج</a>
+    </div>
   </div>
 
   <div class="tabs-container" id="appTabs" style="display:none;">
@@ -252,26 +253,23 @@
     <div id="toast"></div>
     <div id="offlineBadge" onclick="syncOfflineData()">📶 لديك بيانات غير مزامنة (<span id="offlineCount">0</span>). اضغط للرفع!</div>
 
-    <div id="lectureContainer" class="manager-only" style="background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); text-align:center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display:none;">
-      <div style="margin-bottom: 15px;">
-          <label style="font-weight: 800; color: var(--electric-blue); font-size: 13px; display:block; margin-bottom:10px;">رقم المحاضرة المستهدفة</label>
-          <select id="lecture" style="margin-bottom: 0; max-width: 300px;"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script></select>
-      </div>
-      <div class="cross-group-only" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display:none !important;">
-          <label style="font-weight: 800; color: #c084fc; font-size: 13px; display:block; margin-bottom:10px;">تحكم الجروب 👑</label>
-          <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
-      </div>
+    <div class="cross-group-only" style="background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); text-align:center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);" id="lectureContainer">
+        <label style="font-weight: 800; color: var(--electric-blue); font-size: 13px; display:block; margin-bottom:10px;">رقم المحاضرة المستهدفة</label>
+        <select id="lecture" style="margin-bottom: 15px; max-width: 300px;"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script></select>
+        
+        <label style="font-weight: 800; color: #c084fc; font-size: 13px; display:block; margin-bottom:10px;">تحكم الجروب 👑</label>
+        <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
     </div>
 
     <div id="view-scanner" class="view-section active">
       <div style="max-width: 500px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">المسح الضوئي للحضور</h3>
         <select id="cameraSelection"><option value="">جاري البحث عن كاميرات...</option></select>
-        <button class="btn-primary" onclick="startLiveCamera()">🎥 تفعيل المسح الذكي</button>
+        <button class="btn-primary" onclick="startLiveCamera()" style="width: 100%; display: flex; justify-content: center;">🎥 تفعيل المسح الذكي</button>
         <input type="file" id="qr-input-file" accept="image/*" capture="environment" style="display:none;">
         <button class="btn-secondary" onclick="document.getElementById('qr-input-file').click()" style="margin-bottom:0;">📸 التقاط صورة للـ QR</button>
         <div id="reader" style="width: 100%; border-radius: 20px; overflow: hidden; display: none; border: 3px dashed var(--accent); margin-top: 15px; background: rgba(0,0,0,0.05); padding: 10px;"></div>
-        <button class="btn-danger" id="stopCamBtn" style="display:none; margin-top:15px;" onclick="stopLiveCamera()">إيقاف الكاميرا</button>
+        <button class="btn-danger" id="stopCamBtn" style="display:none; margin-top:15px; width: 100%; justify-content: center;" onclick="stopLiveCamera()">إيقاف الكاميرا</button>
       </div>
     </div>
 
@@ -300,7 +298,7 @@
       <div class="table-container">
         <table id="attendeesTable">
           <thead><tr><th>الكود</th> <th>الاسم</th> <th>الوقت</th> <th class="manager-only">إجراء</th></tr></thead>
-          <tbody id="attendeesList"><tr><td colspan="4" style="text-align:center; padding: 30px; font-weight:700; color:var(--text-muted);">اضغط تحديث لعرض السجلات</td></tr></tbody>
+          <tbody id="attendeesList"><tr><td colspan="4" style="text-align:center; padding: 20px; font-weight:700; color:var(--text-muted);">اضغط تحديث لعرض السجلات</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -309,12 +307,12 @@
       <div style="max-width: 600px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">📊 الإحصائيات والتحليلات</h3>
         <div class="owner-only flex-container" style="gap: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.5); padding: 15px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); max-width: 600px; margin-left: auto; margin-right: auto;">
-          <button class="btn-primary btn-small" style="flex:1; padding:12px; font-size:14px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
-          <button class="btn-secondary btn-small" style="flex:1; padding:12px; font-size:14px;" onclick="loadAnalytics('group')">تحليل الجروب الحالي 📈</button>
+          <button class="btn-primary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
+          <button class="btn-secondary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('group')">تحليل الجروب 📈</button>
         </div>
-        <p id="analyticsDesc" style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 700; text-align:center;"></p>
+        <p id="analyticsDesc" style="font-size: 13px; color: var(--text-muted); text-align:center;"></p>
         <div class="chart-container"><canvas id="attendanceChart"></canvas></div>
-        <button class="btn-secondary" style="margin-top: 15px;" onclick="loadAnalytics()">🔄 تحديث البيانات</button>
+        <button class="btn-secondary" style="margin-top: 15px;" onclick="loadAnalytics()">تحديث البيانات 🔄</button>
       </div>
     </div>
 
@@ -374,8 +372,10 @@
     let currentView = localStorage.getItem('savedView') || 'login';
     let attendanceChartInstance = null;
     let lastSyncTime = 0; const SYNC_COOLDOWN = 60000;
+    
     let offlineQueue = JSON.parse(localStorage.getItem('offlineQueue')) || [];
 
+    // 🔴 دالة تحويل الأرقام العربية إلى إنجليزية
     function convertNumerals(str) {
       if(!str) return "";
       const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -426,8 +426,7 @@
 
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode');
-      localStorage.setItem('darkMode', isDark);
-      document.getElementById('themeToggle').innerText = isDark ? '🌙' : '☀️';
+      localStorage.setItem('darkMode', isDark); 
       if(currentView === 'analytics' && attendanceChartInstance) { loadAnalytics('group'); }
     }
 
@@ -440,9 +439,8 @@
     }
 
     function syncOfflineData() {
-      if (!navigator.onLine) return alert("الإنترنت ما زال مقطوعاً. تأكد من الاتصال أولاً.");
+      if (!navigator.onLine) return alert("الإنترنت مقطوع. تأكد من الاتصال.");
       if (offlineQueue.length === 0) return;
-      
       showProgress("جاري رفع البيانات المتأخرة للسيرفر...");
       let successCount = 0;
       function uploadNext(index) {
@@ -453,7 +451,7 @@
         fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(record.code)}&lectureNum=${encodeURIComponent(record.lecture)}&group=${encodeURIComponent(record.group)}${getAuthParams()}`)
           .then(res => res.json()).then(data => { if (data.status === "success" || data.status === "already") successCount++; uploadNext(index + 1);
           }).catch(err => {
-             offlineQueue = offlineQueue.slice(index); localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue)); updateOfflineBadge(); completeProgress(); showToast("❌ انقطع الاتصال أثناء المزامنة. حاول مجدداً.", "error");
+             offlineQueue = offlineQueue.slice(index); localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue)); updateOfflineBadge(); completeProgress(); showToast("❌ انقطع الاتصال أثناء المزامنة.", "error");
           });
       }
       uploadNext(0);
@@ -461,7 +459,7 @@
 
     window.onload = function() {
       try {
-        if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); document.getElementById('themeToggle').innerText = '🌙'; }
+        if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); }
         updateOfflineBadge(); window.addEventListener('online', updateOfflineBadge); window.addEventListener('offline', updateOfflineBadge);
 
         fillGroupSelects();
@@ -474,77 +472,65 @@
         
         if (localStorage.getItem('isLoggedIn') === 'true' && !localStorage.getItem('sessionToken')) { logout(); } 
         else { checkAuth(); }
-        
+
         if (typeof Html5Qrcode !== 'undefined') {
           Html5Qrcode.getCameras().then(devices => {
             const cameraSelect = document.getElementById('cameraSelection');
             if (cameraSelect && devices && devices.length > 0) {
               cameraSelect.innerHTML = "";
               devices.forEach((device, index) => {
-                const option = document.createElement('option');
-                option.value = device.id; option.text = device.label || `كاميرا ${index + 1}`;
-                if (option.text.toLowerCase().includes('back') || option.text.toLowerCase().includes('خلفية')) option.selected = true;
-                cameraSelect.appendChild(option);
+                let opt = document.createElement('option'); opt.value = device.id; opt.text = device.label || `كاميرا ${index + 1}`;
+                if (opt.text.toLowerCase().includes('back') || opt.text.toLowerCase().includes('خلفية')) opt.selected = true;
+                cameraSelect.appendChild(opt);
               });
             }
           }).catch(err => console.log("Cam warning:", err));
         }
+
       } catch (error) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         const loginView = document.getElementById('view-login'); if(loginView) loginView.classList.add('active');
+        showToast("❌ حدث خطأ أثناء تهيئة النظام.", "error");
       }
     };
 
     function handleManualLogin() {
       const email = document.getElementById('loginEmail').value; const pass = document.getElementById('loginPassword').value;
-      if(!email || !pass) return alert("الرجاء إدخال الإيميل وكلمة المرور.");
-      
-      showProgress("جاري التحقق من الهوية وفتح قناة اتصال مشفرة 🔐...");
+      if(!email || !pass) return showToast("❌ أدخل البيانات", "error");
+      showProgress("تحقق من الهوية...");
       fetch(`${LOGIN_API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`)
-        .then(res => res.json()).then(data => {
+      .then(r=>r.json()).then(d=>{
           completeProgress();
-          if (data.status === "success") {
-            localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('userName', data.userName);
-            localStorage.setItem('userRole', data.role); localStorage.setItem('userGroup', data.group);
-            localStorage.setItem('userEmail', email); localStorage.setItem('sessionToken', data.sessionToken);
-            showToast(`✅ أهلاً بك في منصة Eduneers، ${data.userName}`, "success");
-            setTimeout(() => { document.getElementById('loginEmail').value = ''; document.getElementById('loginPassword').value = ''; checkAuth(); }, 1000); 
-          } else { showToast(data.message, "error"); }
-        }).catch(err => { completeProgress(); showToast("❌ خطأ في الاتصال بالسيرفر المركزي.", "error"); });
+          if(d.status==='success'){
+              localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('userName', d.userName);
+              localStorage.setItem('userRole', d.role); localStorage.setItem('userGroup', d.group);
+              localStorage.setItem('userEmail', email); localStorage.setItem('sessionToken', d.sessionToken);
+              localStorage.setItem('savedView', 'scanner');
+              setTimeout(() => { document.getElementById('loginEmail').value = ''; document.getElementById('loginPassword').value = ''; checkAuth(); }, 1000); 
+          } else showToast(d.message, "error");
+      }).catch(e=> {completeProgress(); showToast("❌ خطأ اتصال", "error")});
     }
 
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1]; var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join(''));
-      return JSON.parse(jsonPayload);
-    };
-
-    function handleGoogleLogin(response) {
-      const responsePayload = parseJwt(response.credential);
-      const email = responsePayload.email; const googleName = responsePayload.name; 
-      showProgress("جاري المصادقة السريعة مع خوادم Google ⚡...");
-      fetch(`${LOGIN_API_URL}?action=googleLogin&email=${encodeURIComponent(email)}`)
-        .then(res => res.json()).then(data => {
-          completeProgress();
-          if (data.status === "success") {
-            localStorage.setItem('isLoggedIn', 'true'); const finalName = data.userName || googleName;
-            localStorage.setItem('userName', finalName); localStorage.setItem('userRole', data.role); 
-            localStorage.setItem('userGroup', data.group); localStorage.setItem('userEmail', email); 
-            localStorage.setItem('sessionToken', data.sessionToken);
-            showToast(`✅ أهلاً بك في منصة Eduneers، ${finalName}`, "success");
-            setTimeout(checkAuth, 1000); 
-          } else { showToast(data.message, "error"); }
-        }).catch(err => { completeProgress(); showToast("❌ خطأ في الاتصال.", "error"); });
+    function parseJwt(token) { var b = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''))); }
+    function handleGoogleLogin(res) {
+        const payload = parseJwt(res.credential); showProgress("تحقق جوجل...");
+        fetch(`${LOGIN_API_URL}?action=googleLogin&email=${encodeURIComponent(payload.email)}`).then(r=>r.json()).then(d=>{
+            completeProgress();
+            if(d.status==='success'){
+                localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('userName', d.userName || payload.name);
+                localStorage.setItem('userRole', d.role); localStorage.setItem('userGroup', d.group);
+                localStorage.setItem('userEmail', payload.email); localStorage.setItem('sessionToken', d.sessionToken);
+                localStorage.setItem('savedView', 'scanner');
+                setTimeout(checkAuth, 1000);
+            } else showToast(d.message, "error");
+        }).catch(e=> {completeProgress(); showToast("❌ خطأ اتصال", "error")});
     }
 
-    function syncRole(force = false) {
-      const now = Date.now();
-      if (!force && now - lastSyncTime < SYNC_COOLDOWN) return; 
+    function syncRole() {
       if (localStorage.getItem('isLoggedIn') !== 'true') return;
-      lastSyncTime = now;
       fetch(`${LOGIN_API_URL}?action=checkMyRole${getAuthParams()}`)
         .then(res => res.json()).then(data => {
-          if (data.status === "unauthorized" || data.status === "deleted") { alert("انتهت صلاحية الجلسة أو تم إلغاء حسابك. يرجى تسجيل الدخول مجدداً."); logout(); } 
+          if (data.status === "unauthorized" || data.status === "deleted") { alert("انتهت صلاحية الجلسة."); logout(); } 
           else if (data.status === "success") {
             const currentSavedRole = localStorage.getItem('userRole'); const currentSavedGroup = localStorage.getItem('userGroup');
             if (currentSavedRole !== data.role || (currentSavedGroup !== data.group && data.role !== 'Owner' && data.role !== 'CO-Founder' && data.role !== 'Team Manager' && data.role !== 'Admin')) {
@@ -555,15 +541,6 @@
             }
           }
         }).catch(err => console.log("Sync error"));
-    }
-
-    document.addEventListener("visibilitychange", function() {
-      if (document.visibilityState === 'visible' && localStorage.getItem('isLoggedIn') === 'true') { syncRole(); if (currentView === 'dashboard') loadDashboard(); }
-    });
-
-    function changeGlobalGroup(newGroup) {
-      localStorage.setItem('userGroup', newGroup); document.getElementById('groupBadge').innerText = newGroup;
-      if(currentView === 'dashboard') loadDashboard(); if(currentView === 'analytics') loadAnalytics('group');
     }
 
    function applyRolesToUI() {
@@ -586,7 +563,7 @@
       
       const ggs = document.getElementById('globalGroupSelect'); if(ggs) ggs.value = userGroup;
     }
-
+    
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; const userName = localStorage.getItem('userName');
       if (isLoggedIn) {
@@ -594,6 +571,7 @@
         const appTabs = document.getElementById('appTabs'); if(appTabs) appTabs.style.display = 'flex';
         const wName = document.getElementById('welcomeName'); if(wName) wName.innerText = `| ${userName}`;
         applyRolesToUI();
+        
         if (currentView === 'login' || !document.getElementById(`view-${currentView}`)) currentView = 'scanner'; 
         switchView(currentView); syncRole(true); 
       } else {
@@ -646,6 +624,13 @@
       if(viewId === 'dashboard') loadDashboard(); if(viewId === 'users') loadUsers(); if(viewId === 'analytics') loadAnalytics('group'); 
     }
 
+    function changeGlobalGroup(newGroup) {
+      localStorage.setItem('userGroup', newGroup); 
+      const gBadge = document.getElementById('groupBadge');
+      if(gBadge) gBadge.innerText = newGroup;
+      if(currentView === 'dashboard') loadDashboard(); if(currentView === 'analytics') loadAnalytics('group');
+    }
+
     function startLiveCamera() {
       const camId = document.getElementById('cameraSelection').value; if(!camId) return showToast("❌ اختر الكاميرا", "error");
       document.getElementById('reader').style.display = 'block'; document.getElementById('stopCamBtn').style.display = 'block';
@@ -687,30 +672,42 @@
     function sendDataToAPI(studentCode) {
       if(!studentCode) return; 
       studentCode = studentCode.toUpperCase();
-      if (!studentCode.endsWith("EDUR9")) { studentCode = studentCode + "EDUR9"; }
+      
+      if (!studentCode.endsWith("EDUR9")) {
+          studentCode = studentCode + "EDUR9";
+      }
 
       const role = localStorage.getItem('userRole').toUpperCase();
       if (role === 'OWNER' || role === 'CO-FOUNDER' || role === 'TEAM MANAGER' || role === 'ADMIN') {
           const match = studentCode.match(/^[A-Z]+/);
           if (match) {
-              const detectedGroup = "Group " + match[0]; changeGlobalGroup(detectedGroup);
+              const detectedGroup = "Group " + match[0]; 
+              changeGlobalGroup(detectedGroup);
               const ggs = document.getElementById('globalGroupSelect'); if(ggs) ggs.value = detectedGroup;
           }
       }
       
-      const lec = document.getElementById('lecture').value; const group = localStorage.getItem('userGroup') || "Group A";
+      const lec = document.getElementById('lecture').value; 
+      const group = localStorage.getItem('userGroup') || "Group A";
 
       if (!navigator.onLine) {
         offlineQueue.push({ code: studentCode, lecture: lec, group: group, time: new Date().toISOString() });
         localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
-        updateOfflineBadge(); showToast("⚠️ تم الحفظ محلياً لعدم توفر إنترنت", "warning"); playBeep('success'); return; 
+        updateOfflineBadge(); showToast("⚠️ تم الحفظ محلياً لعدم توفر إنترنت", "warning"); playBeep('success');
+        return; 
       }
 
       showProgress("توثيق الحضور...");
       fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}${getAuthParams()}`)
       .then(res => res.json()).then(data => {
           completeProgress();
-          if (data.status === "success") { showToast(data.message, "success"); playBeep('success'); } 
+          if (data.status === "success") { 
+              // 🔴 التعديل لإظهار اسم الطالب في رسالة النجاح
+              let studentName = data.name || data.studentName || data.student_name;
+              let msg = studentName ? `✅ تم تسجيل ${studentName} بنجاح` : (data.message || `✅ تم تسجيل الحضور بنجاح`);
+              showToast(msg, "success"); 
+              playBeep('success'); 
+          } 
           else { showToast(data.message, "error"); playBeep('error'); }
       }).catch(err => { 
           offlineQueue.push({ code: studentCode, lecture: lec, group: group, time: new Date().toISOString() });
@@ -744,7 +741,7 @@
       const lec = document.getElementById('lecture').value; const group = localStorage.getItem('userGroup') || "Group A"; 
       showProgress("جاري الحذف...");
       fetch(`${ATTENDANCE_API_URL}?action=deleteAttendance&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}${getAuthParams()}`)
-      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast("✅ تم الحذف", "success"); loadDashboard(); } else showToast(data.message, "error"); }).catch(err => completeProgress());
+      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast(data.message, "success"); loadDashboard(); } else showToast(data.message, "error"); }).catch(err => completeProgress());
     }
 
     function exportToExcel() {
@@ -769,7 +766,7 @@
       }
       fetch(url).then(res => res.json()).then(data => {
           completeProgress();
-          if (data.status === "success") { renderAnalyticsChart(data.labels, data.data, chartTitle); } else { showToast(data.message, "error"); }
+          if (data.status === "success") { document.getElementById('message').style.display = 'none'; renderAnalyticsChart(data.labels, data.data, chartTitle); } else { showToast(data.message, "error"); }
         }).catch(err => { completeProgress(); showToast("❌ فشل في الرسوم البيانية.", "error"); });
     }
 
