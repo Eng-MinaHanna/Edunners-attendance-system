@@ -148,16 +148,32 @@
     #offlineBadge { display: none; background: #ef4444; color: white; padding: 12px 15px; border-radius: 16px; font-weight: 800; text-align: center; margin-bottom: 20px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
 
     /* 🛡️ Permissions */
-    .manager-only, .admin-only, .cross-group-only { display: none !important; }
-    body.role-manager :not(.view-section).manager-only, body.role-manager .tab-item.manager-only { display: block !important; }
-    body.role-manager a.manager-only { display: flex !important; }
-    body.role-admin :not(.view-section).manager-only, body.role-admin :not(.view-section).admin-only, body.role-admin :not(.view-section).cross-group-only, body.role-admin .tab-item.manager-only, body.role-admin .tab-item.admin-only { display: block !important; }
-    body.role-admin a.manager-only, body.role-admin a.admin-only { display: flex !important; }
-    body.role-co-founder :not(.view-section).manager-only, body.role-co-founder :not(.view-section).admin-only, body.role-co-founder :not(.view-section).cross-group-only, body.role-co-founder .tab-item.manager-only, body.role-co-founder .tab-item.admin-only { display: block !important; }
-    body.role-co-founder a.manager-only, body.role-co-founder a.admin-only { display: flex !important; }
-    body.role-owner :not(.view-section).manager-only, body.role-owner :not(.view-section).admin-only, body.role-owner :not(.view-section).cross-group-only, body.role-owner .tab-item.manager-only, body.role-owner .tab-item.admin-only { display: block !important; }
-    body.role-owner a.manager-only, body.role-owner a.admin-only { display: flex !important; }
-    body.role-user .manager-only, body.role-user .admin-only, body.role-manager .admin-only { display: none !important; }
+/* 🛡️ نظام صلاحيات مطور يمنع تداخل الصفحات */
+    .manager-only, .admin-only, .owner-only, .cross-group-only { 
+      display: none !important; 
+    }
+
+    /* إظهار العناصر العادية (أزرار، بدجات) داخل الصفحات */
+    body.role-manager .manager-only:not(.view-section),
+    body.role-admin .manager-only:not(.view-section),
+    body.role-admin .admin-only:not(.view-section),
+    body.role-admin .cross-group-only:not(.view-section),
+    body.role-co-founder .manager-only:not(.view-section),
+    body.role-co-founder .admin-only:not(.view-section),
+    body.role-co-founder .cross-group-only:not(.view-section),
+    body.role-owner .manager-only:not(.view-section),
+    body.role-owner .admin-only:not(.view-section),
+    body.role-owner .cross-group-only:not(.view-section) { 
+      display: block !important; 
+    }
+    
+    /* إظهار التابوهات (Tabs) فقط إذا كانت الصفحة نشطة والمستخدم معه صلاحية */
+    .view-section.active { display: block !important; }
+    
+    /* حماية إضافية للأقسام الحساسة */
+    #view-dashboard:not(.active), #view-analytics:not(.active), #view-users:not(.active) {
+      display: none !important;
+    }
     
     @media (max-width: 650px) {
       .nav-brand h2 { font-size: 1.1rem; gap: 4px; }
@@ -575,35 +591,30 @@ function applyRolesToUI() {
   const role = rawRole.toUpperCase(); 
   const userGroup = localStorage.getItem('userGroup') || "Group A";
 
-  // 1. إخفاء كل العناصر الحساسة كبداية (إجباري)
-  document.querySelectorAll('.manager-only, .admin-only, .cross-group-only').forEach(e => {
-    e.style.setProperty('display', 'none', 'important');
-  });
-
-  // 2. صلاحيات المتابعة (تظهر للكل بما فيهم الـ Coordinator)
-  if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN', 'COORDINATOR'].includes(role)) {
-    document.querySelectorAll('.manager-only').forEach(e => {
-      e.style.setProperty('display', 'block', 'important'); // 👈 إضافة important هنا
-    });
-  }
-
-  // 3. صلاحيات الإدارة العليا فقط (منع الـ Coordinator من تحكم الجروب)
-  if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN'].includes(role)) {
-    document.querySelectorAll('.admin-only, .cross-group-only').forEach(e => {
-      e.style.setProperty('display', 'block', 'important'); // 👈 إضافة important هنا
-    });
-  }
-  
-  // تحديث البدجات (Badges) في الهيدر
+  // تحديث النصوص والبدجات
   const rb = document.getElementById('roleBadge');
   const gb = document.getElementById('groupBadge');
   const wn = document.getElementById('welcomeName');
-  
+  const sr = document.getElementById('sideRole');
+
   if(rb) { rb.innerText = rawRole; rb.style.display = 'flex'; }
   if(gb) { gb.innerText = userGroup; gb.style.display = 'flex'; }
   if(wn) wn.innerText = `| ${localStorage.getItem('userName')}`;
+  if(sr) sr.innerText = rawRole;
+
+  // إضافة الكلاس للجسم ليتحكم الـ CSS في الإظهار والإخفاء الذكي
+  document.body.classList.remove('role-owner', 'role-co-founder', 'role-admin', 'role-manager', 'role-user');
+  
+  if (role === 'OWNER') document.body.classList.add('role-owner');
+  else if (role === 'CO-FOUNDER') document.body.classList.add('role-co-founder');
+  else if (role === 'TEAM MANAGER' || role === 'ADMIN') document.body.classList.add('role-admin');
+  else if (role === 'COORDINATOR') document.body.classList.add('role-manager');
+  else document.body.classList.add('role-user');
+
+  const ggs = document.getElementById('globalGroupSelect'); 
+  if(ggs) ggs.value = userGroup;
 }
-    
+  
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; const userName = localStorage.getItem('userName');
       if (isLoggedIn) {
@@ -787,22 +798,29 @@ function applyRolesToUI() {
       link.href = URL.createObjectURL(blob); link.download = `Report_${group}_Lec_${lec}.csv`; link.click(); showToast("✅ تم التصدير", "success");
     }
 
-    function loadAnalytics(type = 'group') {
-      showProgress("تحليل البيانات...");
-      const group = localStorage.getItem('userGroup') || "Group A"; const lec = document.getElementById('lecture').value; const role = localStorage.getItem('userRole').toUpperCase();
-      let url = ""; let chartTitle = "";
-      if (type === 'all' && (role === 'OWNER' || role === 'CO-FOUNDER')) {
-         url = `${ATTENDANCE_API_URL}?action=getOwnerAnalytics&lectureNum=${encodeURIComponent(lec)}${getAuthParams()}`;
-         document.getElementById('analyticsDesc').innerText = `📊 مقارنة حية لحضور كافة الجروبات - محاضرة ${lec}`; chartTitle = 'حضور الجروبات';
-      } else {
-         url = `${ATTENDANCE_API_URL}?action=getAnalytics&group=${encodeURIComponent(group)}${getAuthParams()}`;
-         document.getElementById('analyticsDesc').innerText = `📈 تتبع كفاءة الحضور لـ ${group} على مدار الكورس`; chartTitle = 'كثافة الحضور';
-      }
-      fetch(url).then(res => res.json()).then(data => {
-          completeProgress();
-          if (data.status === "success") { document.getElementById('message').style.display = 'none'; renderAnalyticsChart(data.labels, data.data, chartTitle); } else { showToast(data.message, "error"); }
-        }).catch(err => { completeProgress(); showToast("❌ فشل في الرسوم البيانية.", "error"); });
+async function loadAnalytics(type = 'group') {
+  const group = localStorage.getItem('userGroup') || "Group A";
+  const lec = document.getElementById('lecture').value;
+  const auth = getAuthParams();
+  
+  showLoader(true, "جاري تحليل البيانات...");
+  
+  let url = (type === 'all') ? 
+      `${ATTENDANCE_API_URL}?action=getOwnerAnalytics&lectureNum=${lec}${auth}` : 
+      `${ATTENDANCE_API_URL}?action=getAnalytics&group=${group}${auth}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.status === "success") {
+       // 👈 السر هنا: التأكد من وجود البيانات قبل الرسم
+       setTimeout(() => {
+          renderAnalyticsChart(data.labels, data.data, type === 'all' ? 'مقارنة الجروبات' : 'حضور الجروب');
+       }, 200); 
     }
+  } catch (e) { showToast("❌ فشل تحميل البيانات", "error"); }
+  showLoader(false);
+}
 
     function renderAnalyticsChart(labelsArray, dataArray, labelTitle) {
       const ctx = document.getElementById('attendanceChart').getContext('2d');
