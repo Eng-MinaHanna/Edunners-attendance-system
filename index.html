@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
 
     :root { 
       --primary: #0f172a;      
@@ -23,17 +23,13 @@
       --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
       --text-main: #334155;
       --text-muted: #64748b;
-      --card-bg: rgba(255, 255, 255, 0.85); 
+      --card-bg: rgba(255, 255, 255, 0.9); 
       --border-radius: 24px;   
     }
 
-    body.dark-mode {
-      --primary: #f8fafc;
-      --primary-light: #e2e8f0;
-      --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
-      --text-main: #f8fafc; 
-      --text-muted: #cbd5e1; 
-      --card-bg: rgba(15, 23, 42, 0.85); 
+    body.dark-mode { 
+      --primary: #f8fafc; --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); 
+      --text-main: #f8fafc; --text-muted: #cbd5e1; --card-bg: rgba(15, 23, 42, 0.9); 
     }
     
     body.dark-mode .navbar { background: rgba(15, 23, 42, 0.98); border-bottom: 1px solid var(--electric-glow); box-shadow: 0 0 20px rgba(0,210,255,0.15);}
@@ -191,7 +187,7 @@
     .form-wrapper { max-width: 500px; width: 100%; margin: 0 auto; }
     
     .view-section { 
-      display: none !important; background: var(--card-bg); padding: 35px 25px; 
+      display: none; background: var(--card-bg); padding: 35px 25px; 
       border-radius: var(--border-radius); 
       box-shadow: 0 20px 40px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.3); 
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -200,7 +196,7 @@
       transition: background 0.5s ease;
     }
     @media (min-width: 768px) { .view-section { padding: 45px; } }
-    .view-section.active { display: block !important; }
+    .view-section.active { display: block; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
     select, input[type="text"], input[type="email"], input[type="password"] { 
@@ -214,7 +210,7 @@
       background-color: #fff; border-color: var(--accent); 
       box-shadow: 0 0 0 4px var(--accent-glow), inset 0 2px 4px rgba(0,0,0,0.01); outline: none;
     }
-    body.dark-mode select:focus, body.dark-mode input:focus { box-shadow: 0 0 0 4px var(--electric-glow); border-color: var(--electric-blue); background-color: #0f172a; }
+    body.dark-mode select:focus, body.dark-mode input:focus { box-shadow: 0 0 0 4px var(--electric-glow); border-color: var(--electric-blue); }
     
     button { 
       padding: 16px; width: 100%; border-radius: 16px; font-size: 16px; font-weight: 800; 
@@ -259,6 +255,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: right; }
     th, td { padding: 16px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); vertical-align: middle; }
     th { background: #f8fafc; color: var(--text-muted); font-weight: 800; white-space: nowrap; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; transition: background 0.5s ease;}
+    body.dark-mode th { background: #0f172a; color: var(--electric-blue); border-bottom: 2px solid #334155; }
+    body.dark-mode td { border-bottom: 1px solid rgba(255,255,255,0.05); color: #f1f5f9;}
     tbody tr { transition: background 0.2s ease;}
     tbody tr:hover { background-color: #f8fafc; }
     
@@ -334,48 +332,21 @@
     @keyframes rotate3 { 0% { transform: rotateX(65deg) rotateY(120deg) rotateZ(0deg); } 100% { transform: rotateX(65deg) rotateY(120deg) rotateZ(360deg); } }
     @keyframes pulseCore { 0% { transform: scale(0.8); } 100% { transform: scale(1.2); } }
 
-    /* 🛡️ Permissions Logic - FIXED */
-    .manager-only, .admin-only, .cross-group-only { display: none !important; }
-    
-    /* Reveal permissions based on body class */
-    body.role-manager :not(.view-section).manager-only,
-    body.role-admin :not(.view-section).manager-only,
-    body.role-co-founder :not(.view-section).manager-only,
-    body.role-owner :not(.view-section).manager-only { display: block !important; }
-    
-    body.role-manager a.manager-only,
-    body.role-admin a.manager-only,
-    body.role-co-founder a.manager-only,
-    body.role-owner a.manager-only { display: flex !important; }
-
-    body.role-admin :not(.view-section).admin-only,
-    body.role-co-founder :not(.view-section).admin-only,
-    body.role-owner :not(.view-section).admin-only { display: block !important; }
-
-    body.role-admin a.admin-only,
-    body.role-co-founder a.admin-only,
-    body.role-owner a.admin-only { display: flex !important; }
-
-    body.role-admin :not(.view-section).cross-group-only,
-    body.role-co-founder :not(.view-section).cross-group-only,
-    body.role-owner :not(.view-section).cross-group-only { display: block !important; }
-
-    /* Keep views hidden unless active */
-    body.role-manager .view-section.manager-only,
-    body.role-admin .view-section.manager-only,
-    body.role-admin .view-section.admin-only,
-    body.role-co-founder .view-section.manager-only,
-    body.role-co-founder .view-section.admin-only,
-    body.role-owner .view-section.manager-only,
-    body.role-owner .view-section.admin-only { display: none !important; }
-    
-    body.role-manager .view-section.manager-only.active,
-    body.role-admin .view-section.manager-only.active,
-    body.role-admin .view-section.admin-only.active,
-    body.role-co-founder .view-section.manager-only.active,
-    body.role-co-founder .view-section.admin-only.active,
-    body.role-owner .view-section.manager-only.active,
-    body.role-owner .view-section.admin-only.active { display: block !important; }
+    .admin-only, .manager-only, .owner-only, .cross-group-only { display: none !important; }
+    body.role-owner :not(.view-section).owner-only, body.role-owner :not(.view-section).admin-only, body.role-owner :not(.view-section).manager-only,
+    body.role-co-founder :not(.view-section).owner-only, body.role-co-founder :not(.view-section).admin-only, body.role-co-founder :not(.view-section).manager-only,
+    body.role-admin :not(.view-section).admin-only, body.role-admin :not(.view-section).manager-only,
+    body.role-manager :not(.view-section).manager-only { display: block !important; }
+    body.role-owner table .owner-only, body.role-owner table .admin-only, body.role-owner table .manager-only,
+    body.role-co-founder table .owner-only, body.role-co-founder table .admin-only, body.role-co-founder table .manager-only,
+    body.role-admin table .admin-only, body.role-admin table .manager-only,
+    body.role-manager table .manager-only { display: table-cell !important; }
+    body.role-owner div.owner-only.flex-container, body.role-co-founder div.owner-only.flex-container { display: flex !important; }
+    body.role-owner div.cross-group-only, body.role-co-founder div.cross-group-only, body.role-admin div.cross-group-only { display: flex !important; }
+    body.role-owner .view-section.active.owner-only, body.role-owner .view-section.active.admin-only, body.role-owner .view-section.active.manager-only,
+    body.role-co-founder .view-section.active.owner-only, body.role-co-founder .view-section.active.admin-only, body.role-co-founder .view-section.active.manager-only,
+    body.role-admin .view-section.active.admin-only, body.role-admin .view-section.active.manager-only,
+    body.role-manager .view-section.active.manager-only { display: block !important; }
     
     .google-btn-container { display: flex; justify-content: center; margin-top: 20px; padding: 20px; background: rgba(248, 250, 252, 0.5); border-radius: 20px; border: 2px dashed rgba(0,0,0,0.1);}
     body.dark-mode .google-btn-container { background: rgba(30, 41, 59, 0.5); border-color: rgba(255,255,255,0.1); }
@@ -425,107 +396,68 @@
     </div>
     
     <a href="#" class="active" onclick="switchView('scanner'); toggleSidebar();" id="nav-scanner">
-      <span>📷</span> <span>تسجيل الطلاب بالـ QR</span>
+      <span>📷</span> <span>مسح الـ QR</span>
     </a>
     <a href="#" onclick="switchView('manual'); toggleSidebar();" id="nav-manual">
-      <span>✍️</span> <span>التسجيل اليدوي السريع</span>
+      <span>✍️</span> <span>التسجيل اليدوي</span>
     </a>
-    
     <a href="grades.html" style="color: var(--accent);">
-      <span>🎯</span> <span>نظام رصد الدرجات</span>
+      <span>🎯</span> <span>نظام الدرجات</span>
     </a>
-    
-    <div class="sidebar-heading manager-only">متابعة الحضور</div>
-    <a href="#" onclick="switchView('dashboard'); toggleSidebar();" id="nav-dashboard" class="manager-only">
+    <a href="#" class="manager-only" onclick="switchView('dashboard'); toggleSidebar();" id="nav-dashboard">
       <span>📊</span> <span>لوحة الحضور</span>
     </a>
-    <a href="#" onclick="switchView('analytics'); toggleSidebar();" id="nav-analytics" class="manager-only">
-      <span>📈</span> <span>إحصائيات الجروبات</span>
+    <a href="#" class="manager-only" onclick="switchView('analytics'); toggleSidebar();" id="nav-analytics">
+      <span>📈</span> <span>التحليلات</span>
     </a>
-    
-    <div class="sidebar-heading admin-only">إدارة النظام</div>
-    <a href="#" onclick="switchView('users'); toggleSidebar();" id="nav-users" class="admin-only">
+    <a href="#" class="admin-only" onclick="switchView('users'); toggleSidebar();" id="nav-users">
       <span>👥</span> <span>إدارة المستخدمين</span>
     </a>
-    
-    <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-      <a href="#" onclick="logout();" style="color: #ef4444;">🚪 تسجيل الخروج</a>
-    </div>
+
+    <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 25px;"></div>
+    <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 10px;"><span>🚪</span> <span>تسجيل الخروج</span></a>
+  </div>
+
+  <div class="tabs-container" id="appTabs" style="display:none;">
+    <div class="tab-item active" id="tab-scanner" onclick="switchView('scanner', this)"><span>📷</span><span> كاميرا</span></div>
+    <div class="tab-item" id="tab-manual" onclick="switchView('manual', this)"><span>✍️</span><span> يدوي</span></div>
+    <div class="tab-item manager-only" id="tab-dashboard" onclick="switchView('dashboard', this)"><span>📊</span><span> متابعة</span></div>
+    <div class="tab-item admin-only" id="tab-users" onclick="switchView('users', this)"><span>👥</span><span> إدارة</span></div>
   </div>
 
   <div class="container">
-    
+    <div id="toast"></div>
     <div id="offlineBadge" onclick="syncOfflineData()">📶 لديك بيانات غير مزامنة (<span id="offlineCount">0</span>). اضغط للرفع!</div>
 
-    <div id="message"></div>
-
-    <div id="view-login" class="view-section">
-      <div class="form-wrapper">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <div class="atom-logo">
-            <div class="atom-ring"></div><div class="atom-ring"></div><div class="atom-ring"></div>
-            <div class="atom-core"></div>
-          </div>
-          <h2 style="color:var(--primary); margin-top:0; font-size: 28px; font-weight: 800; letter-spacing: 1px;">تسجيل الدخول</h2>
-          <p style="color: var(--text-muted); font-size: 15px; font-weight: 600;"> Attendance System | Eduneers </p>
-        </div>
+    <div class="cross-group-only" style="background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); text-align:center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);" id="lectureContainer">
+        <label style="font-weight: 800; color: var(--electric-blue); font-size: 13px; display:block; margin-bottom:10px;">رقم المحاضرة المستهدفة</label>
+        <select id="lecture" style="margin-bottom: 15px; max-width: 300px;"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script></select>
         
-        <input type="email" id="loginEmail" placeholder="البريد الإلكتروني...">
-        <input type="password" id="loginPassword" placeholder="كلمة المرور...">
-        <button class="btn-primary" onclick="handleManualLogin()">دخول آمن 🔐</button>
-        
-        <div class="divider"><hr><span>أو باستخدام</span></div>
-
-        <div class="google-btn-container">
-          <div id="g_id_onload" data-client_id="841979425871-4frlmc9t57ahvui609v35ksv8rvnvo0b.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
-          <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
-        </div>
-      </div>
+        <label style="font-weight: 800; color: #c084fc; font-size: 13px; display:block; margin-bottom:10px;">تحكم الجروب 👑</label>
+        <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
     </div>
 
-    <div id="lectureContainer" style="display:none; background: var(--card-bg); padding: 25px; border-radius: var(--border-radius); margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
-      <div style="display: flex; gap: 15px; max-width: 600px; margin: auto;">
-        <div style="flex: 1;">
-          <p style="margin: 0 0 10px 0; font-weight: 800; color: var(--text-muted); font-size: 13px; text-transform: uppercase;">تحديد المحاضرة</p>
-          <select id="lecture" style="margin-bottom: 0; box-shadow:none;">
-            <option value="1">المحاضرة 1</option> <option value="2">المحاضرة 2</option> <option value="3">المحاضرة 3</option>
-            <option value="4">المحاضرة 4</option> <option value="5">المحاضرة 5</option> <option value="6">المحاضرة 6</option>
-            <option value="7">المحاضرة 7</option> <option value="8">المحاضرة 8</option> <option value="9">المحاضرة 9</option>
-            <option value="10">المحاضرة 10</option> <option value="11">المحاضرة 11</option> <option value="12">المحاضرة 12</option>
-            <option value="13">المحاضرة 13</option> <option value="14">المحاضرة 14</option> <option value="15">المحاضرة 15</option>
-            <option value="16">المحاضرة 16</option> <option value="17">المحاضرة 17</option> <option value="18">المحاضرة 18</option>
-            <option value="19">المحاضرة 19</option> <option value="20">المحاضرة 20</option>
-          </select>
-        </div>
-        <div class="cross-group-only" style="flex: 1; flex-direction: column;">
-          <p style="margin: 0 0 10px 0; font-weight: 800; color: #8e44ad; font-size: 13px; text-transform: uppercase;">تحكم الجروب 👑</p>
-          <select id="globalGroupSelect" style="margin-bottom: 0; border-color: rgba(142, 68, 173, 0.3); background: rgba(142, 68, 173, 0.05); color:#8e44ad;" onchange="changeGlobalGroup(this.value)"></select>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-scanner" class="view-section">
-      <div class="form-wrapper">
-        <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:22px; margin-bottom: 20px; text-align:center;">المسح الضوئي للحضور</h3>
-        <select id="cameraSelection" style="border-radius:20px;"><option value="">جاري البحث عن كاميرات...</option></select>
-        <button class="btn-primary" onclick="startLiveCamera()">🎥 تفعيل المسح الذكي</button>
+    <div id="view-scanner" class="view-section active">
+      <div style="max-width: 500px; margin: auto;">
+        <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">المسح الضوئي للحضور</h3>
+        <select id="cameraSelection"><option value="">جاري البحث عن كاميرات...</option></select>
+        
+        <button class="btn-primary" onclick="startLiveCamera()" style="width: 100%; display: flex; justify-content: center;">🎥 تفعيل المسح الذكي</button>
+        
         <input type="file" id="qr-input-file" accept="image/*" capture="environment" style="display:none;">
-        <button class="btn-secondary" onclick="document.getElementById('qr-input-file').click()">📸 التقاط صورة للـ QR</button>
-      </div>
-      <div id="reader"></div>
-      <div class="form-wrapper">
-        <button class="btn-danger" id="stopCamBtn" style="display:none;" onclick="stopLiveCamera()">إيقاف الكاميرا</button>
+        <button class="btn-secondary" onclick="document.getElementById('qr-input-file').click()" style="margin-bottom:0;">📸 التقاط صورة للـ QR</button>
+        
+        <div id="reader" style="width: 100%; border-radius: 20px; overflow: hidden; display: none; border: 3px dashed var(--accent); margin-top: 15px; background: rgba(0,0,0,0.05); padding: 10px;"></div>
+        <button class="btn-danger" id="stopCamBtn" style="display:none; margin-top:15px; width: 100%; justify-content: center;" onclick="stopLiveCamera()">إيقاف الكاميرا</button>
       </div>
     </div>
 
     <div id="view-manual" class="view-section">
-      <div class="form-wrapper">
-        <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:22px; margin-bottom: 5px; text-align:center;">التسجيل اليدوي</h3>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 25px; line-height: 1.6; font-weight:600; text-align:center;">
-          أدخل <b>رقم الطالب فقط</b> (يدعم الأرقام العربية ١٢٣)، وسيتكفل النظام بالباقي أوتوماتيكياً.
-        </p>
-        <input type="text" id="manualCode" placeholder="مثال: 15 أو ١٥" style="text-align:center; font-size:24px; letter-spacing:4px; font-weight:800;">
-        <button class="btn-primary" onclick="submitManualCode()">حفظ في قاعدة البيانات 📥</button>
+      <div style="max-width: 500px; margin: auto;">
+        <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">التسجيل اليدوي السريع</h3>
+        <p style="font-size: 13px; color: var(--text-muted); text-align:center; margin-bottom: 20px;">أدخل <b>رقم الطالب فقط</b> (يدعم الأرقام العربية ١٢٣).</p>
+        <input type="text" id="manualCode" placeholder="مثال: 15 أو ١٥" style="text-align:center; font-size:24px; letter-spacing:4px; font-weight:900;">
+        <button class="btn-primary" onclick="submitManualCode()">تسجيل الحضور 📥</button>
       </div>
     </div>
 
@@ -534,90 +466,94 @@
         <span style="font-weight: 800; color: var(--primary); font-size:16px;">مؤشر الحضور الحي:</span>
         <span class="count-badge" id="dashCount">0</span>
       </div>
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="بحث ذكي بالاسم أو الكود..." onkeyup="filterDashboard()">
+      <div class="search-box" style="position: relative;">
+        <input type="text" id="searchInput" placeholder="بحث ذكي بالاسم أو الكود..." onkeyup="filterDashboard()" style="padding-right: 40px;">
+        <span style="position: absolute; right: 15px; top: 15px; opacity: 0.5;">🔍</span>
       </div>
-      
-      <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-        <button class="btn-secondary" style="flex: 1;" onclick="loadDashboard()">🔄 مزامنة</button>
-        <button class="btn-excel" style="flex: 1;" onclick="exportToExcel()">📥 تحميل Excel</button>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button class="btn-secondary" style="flex: 1; padding:12px; margin:0;" onclick="loadDashboard()">🔄 تحديث</button>
+        <button class="btn-excel" style="flex: 1; padding:12px; margin:0;" onclick="exportToExcel()">📥 تحميل Excel</button>
       </div>
-
       <div class="table-container">
         <table id="attendeesTable">
-          <thead>
-            <tr><th>الكود</th> <th>الاسم</th> <th>الوقت</th> <th class="manager-only">إجراء</th></tr>
-          </thead>
-          <tbody id="attendeesList">
-            <tr><td colspan="4" style="text-align:center; padding: 30px; font-weight:700; color:var(--text-muted);">اضغط مزامنة لعرض السجلات</td></tr>
-          </tbody>
+          <thead><tr><th>الكود</th> <th>الاسم</th> <th>الوقت</th> <th class="manager-only">إجراء</th></tr></thead>
+          <tbody id="attendeesList"><tr><td colspan="4" style="text-align:center; padding: 20px; font-weight:700; color:var(--text-muted);">اضغط تحديث لعرض السجلات</td></tr></tbody>
         </table>
       </div>
     </div>
 
     <div id="view-analytics" class="view-section manager-only">
-      <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:22px; margin-bottom: 20px;">📊 الرؤى التحليلية</h3>
-      
-      <div class="owner-only flex-container" style="gap: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.5); padding: 15px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); max-width: 600px; margin-left: auto; margin-right: auto;">
-        <button class="btn-primary btn-small" style="flex:1; padding:12px; font-size:14px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
-        <button class="btn-secondary btn-small" style="flex:1; padding:12px; font-size:14px;" onclick="loadAnalytics('group')">تحليل الجروب الحالي 📈</button>
-      </div>
-
-      <p id="analyticsDesc" style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 700; text-align:center;"></p>
-      
-      <div class="chart-container">
-        <canvas id="attendanceChart"></canvas>
-      </div>
-      <div class="form-wrapper">
-        <button class="btn-secondary" onclick="loadAnalytics()">🔄 تحديث البيانات</button>
+      <div style="max-width: 600px; margin: auto;">
+        <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">📊 الإحصائيات والتحليلات</h3>
+        <div class="owner-only" style="display:flex; gap:10px; margin-bottom: 20px;">
+          <button class="btn-primary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
+          <button class="btn-secondary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('group')">تحليل الجروب 📈</button>
+        </div>
+        <p id="analyticsDesc" style="font-size: 13px; color: var(--text-muted); text-align:center;"></p>
+        <div class="chart-container"><canvas id="attendanceChart"></canvas></div>
+        <button class="btn-secondary" style="margin-top: 15px;" onclick="loadAnalytics()">تحديث البيانات 🔄</button>
       </div>
     </div>
 
     <div id="view-users" class="view-section admin-only">
-      <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:22px; margin-bottom: 20px; text-align:center;">إدارة المنظومة 👥</h3>
-      
-      <div class="admin-form-container">
-        <input type="text" id="newUserName" placeholder="الاسم بالكامل">
-        <input type="email" id="newUserEmail" placeholder="البريد الإلكتروني الرسمي">
-        <input type="password" id="newUserPass" placeholder="كلمة مرور الدخول">
-        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-          <select id="newUserRole" style="margin-bottom: 0;">
-            <option value="Cadre">مسجل (Cadre)</option>
-            <option value="Coordinator">مراقب (Coordinator)</option>
-            <option value="Team Manager">مدير (Team Manager)</option>
-            <option value="CO-Founder">شريك مؤسس ✨</option>
-          </select>
-          <select id="newUserGroup" style="margin-bottom: 0;"></select>
+      <div style="max-width: 600px; margin: auto;">
+        <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">👥 إدارة المستخدمين</h3>
+        <div style="background: rgba(0,0,0,0.05); padding: 20px; border-radius: 16px; margin-bottom: 20px;">
+          <input type="text" id="newUserName" placeholder="الاسم بالكامل">
+          <input type="email" id="newUserEmail" placeholder="البريد الإلكتروني الرسمي">
+          <input type="password" id="newUserPass" placeholder="كلمة مرور الدخول">
+          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <select id="newUserRole" style="margin-bottom: 0;">
+              <option value="Cadre">مسجل (Cadre)</option>
+              <option value="Coordinator">مراقب (Coordinator)</option>
+              <option value="Team Manager">مدير (Team Manager)</option>
+              <option value="CO-Founder">شريك مؤسس ✨</option>
+            </select>
+            <select id="newUserGroup" style="margin-bottom: 0;"></select>
+          </div>
+          <button class="btn-submit" onclick="addUser()">توثيق المستخدم ➕</button>
         </div>
-        <button class="btn-primary" onclick="addUser()">توثيق المستخدم ➕</button>
+        <button class="btn-secondary" style="margin-bottom:15px;" onclick="loadUsers()">سحب بيانات المستخدمين 🔄</button>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>المستخدم</th> <th>الرتبة</th> <th>الجروب</th> <th>إجراء</th></tr></thead>
+            <tbody id="usersList"><tr><td colspan="4" style="text-align:center; padding: 20px; color:var(--text-muted);">جاري الاتصال...</td></tr></tbody>
+          </table>
+        </div>
       </div>
-      
-      <div class="form-wrapper">
-        <button class="btn-secondary" onclick="loadUsers()">🔄 سحب بيانات المستخدمين</button>
-      </div>
-      
-      <div class="table-container" style="margin-top:20px;">
-        <table>
-          <thead><tr><th>المستخدم</th> <th>الرتبة</th> <th>النطاق</th> <th>إجراء</th></tr></thead>
-          <tbody id="usersList"><tr><td colspan="4" style="text-align:center; padding: 30px; font-weight:700; color:var(--text-muted);">جاري الاتصال بقاعدة البيانات...</td></tr></tbody>
-        </table>
+    </div>
+
+    <div id="view-login" class="view-section">
+      <div style="max-width: 400px; margin: auto;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div style="width:60px; height:60px; border:2px solid var(--electric-blue); border-radius:50%; margin:auto; display:flex; align-items:center; justify-content:center; animation: spin 3s linear infinite;"><div style="width:10px; height:10px; background:var(--electric-blue); border-radius:50%;"></div></div>
+          <h2 style="color:var(--primary); margin-top:15px; font-size: 24px; font-weight: 800;">تسجيل الدخول</h2>
+        </div>
+        <input type="email" id="loginEmail" placeholder="البريد الإلكتروني...">
+        <input type="password" id="loginPassword" placeholder="كلمة المرور...">
+        <button class="btn-submit" onclick="handleManualLogin()">دخول آمن 🔐</button>
+        <div style="text-align:center; margin: 20px 0; color:var(--text-muted); font-size:12px;">أو باستخدام</div>
+        <div style="background: rgba(0,0,0,0.05); padding:15px; border-radius:16px; display:flex; justify-content:center;">
+          <div id="g_id_onload" data-client_id="841979425871-4frlmc9t57ahvui609v35ksv8rvnvo0b.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
+          <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black" data-text="signin_with" data-size="large"></div>
+        </div>
       </div>
     </div>
 
   </div>
 
   <script>
-    const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbxa-cJWpe21h39eHHYxj8J203gfpvhWwJpNCcPnEUp2ywWddDNLUgXI777GOJD__VN_/exec"; 
+    const ATTEND_API = "https://script.google.com/macros/s/AKfycbzrLXNuxcAM5A1euSqtbqt-3L2sqAPXGb0A3JF7hiCaJ5giW86c51bs45ISAPANa4PP/exec"; 
+    const ATTENDANCE_API_URL = ATTEND_API; 
     const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbw-oytOWrgERm2yXu-NagMlyS14HlUGeAlsWqrZl2SwRJIi0IDL1AH2VduQvsmIIkNgFA/exec";
 
     let html5QrCode; let allAttendees = []; 
     let currentView = localStorage.getItem('savedView') || 'login';
-    let attendanceChartInstance = null;
+    let attendanceChartInstance = null; let myChart = null;
     let lastSyncTime = 0; const SYNC_COOLDOWN = 60000;
     
     let offlineQueue = JSON.parse(localStorage.getItem('offlineQueue')) || [];
 
-    // 🔴 دالة تحويل الأرقام العربية إلى إنجليزية
     function convertNumerals(str) {
       if(!str) return "";
       const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -625,102 +561,75 @@
     }
 
     let loaderInterval;
-    function showProgress(message) {
-      document.getElementById('electricLoader').style.display = 'flex';
-      document.getElementById('electricLoader').style.opacity = '1';
-      document.getElementById('loaderMessage').innerText = message;
-      let p = 0;
-      document.getElementById('loaderPercent').innerText = p + '%';
-      document.getElementById('progressBarFill').style.width = p + '%';
-      clearInterval(loaderInterval);
-      loaderInterval = setInterval(() => {
-        p += Math.floor(Math.random() * 8) + 1; 
-        if(p > 90) p = 90; 
-        document.getElementById('loaderPercent').innerText = p + '%';
-        document.getElementById('progressBarFill').style.width = p + '%';
-      }, 100);
+    function showProgress(message="جاري العمل...") {
+        const l = document.getElementById('electricLoader');
+        document.getElementById('loaderMessage').innerText = message;
+        l.style.display = 'flex';
+        let p=0; document.getElementById('loaderPercent').innerText = p + '%'; document.getElementById('progressBarFill').style.width = p + '%';
+        clearInterval(loaderInterval);
+        loaderInterval = setInterval(()=>{ p+=Math.floor(Math.random()*10)+1; if(p>90)p=90; document.getElementById('progressBarFill').style.width=p+'%'; document.getElementById('loaderPercent').innerText=p+'%'; }, 100);
     }
 
     function completeProgress() {
-      clearInterval(loaderInterval);
-      document.getElementById('loaderPercent').innerText = '100%';
-      document.getElementById('progressBarFill').style.width = '100%';
-      setTimeout(() => {
-        document.getElementById('electricLoader').style.opacity = '0';
-        setTimeout(() => { 
-            document.getElementById('electricLoader').style.display = 'none'; 
-            document.getElementById('progressBarFill').style.width = '0%'; 
-        }, 300);
-      }, 400);
+        clearInterval(loaderInterval);
+        document.getElementById('progressBarFill').style.width='100%'; document.getElementById('loaderPercent').innerText='100%';
+        setTimeout(() => { document.getElementById('electricLoader').style.display = 'none'; document.getElementById('progressBarFill').style.width='0%'; }, 300);
+    }
+
+    function showToast(text, type="success") {
+        const t = document.getElementById('message'); t.innerText = text;
+        t.style.background = type === "success" ? "linear-gradient(135deg, #10b981, #059669)" : "linear-gradient(135deg, #ef4444, #dc2626)";
+        t.style.display = 'block'; setTimeout(()=> { t.style.display = 'none'; }, 4000);
+    }
+
+    function playBeep(type) {
+      if (navigator.vibrate) { if (type === 'success') navigator.vibrate(150); else navigator.vibrate([100, 50, 100, 50, 200]); }
+      const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      if(type === 'success') { osc.type = 'sine'; osc.frequency.value = 800; gain.gain.value = 0.1; osc.start(); osc.stop(ctx.currentTime + 0.15); } 
+      else { osc.type = 'sawtooth'; osc.frequency.value = 300; gain.gain.value = 0.1; osc.start(); osc.stop(ctx.currentTime + 0.3); }
     }
 
     function getAuthParams() {
-      const email = localStorage.getItem('userEmail') || "";
-      const sessionToken = localStorage.getItem('sessionToken') || "";
-      return `&email=${encodeURIComponent(email)}&token=${encodeURIComponent(sessionToken)}`;
+      return `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}`;
     }
 
     function fillGroupSelects() {
       let options = ''; const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       for(let i=0; i<letters.length; i++) { let g = 'Group ' + letters[i]; options += `<option value="${g}">${g}</option>`; }
       const newUg = document.getElementById('newUserGroup'); const ggs = document.getElementById('globalGroupSelect');
-      if(newUg && newUg.options.length === 0) newUg.innerHTML = options;
-      if(ggs && ggs.options.length === 0) { ggs.innerHTML = options; ggs.value = localStorage.getItem('userGroup') || 'Group A'; }
+      if(newUg) newUg.innerHTML = options;
+      if(ggs) { ggs.innerHTML = options; ggs.value = localStorage.getItem('userGroup') || 'Group A'; }
     }
 
     function toggleDarkMode() {
-      const body = document.body;
-      body.classList.toggle('dark-mode');
-      const isDark = body.classList.contains('dark-mode');
-      localStorage.setItem('darkMode', isDark);
-      document.getElementById('themeToggle').innerText = isDark ? '🌙' : '☀️';
-      if(currentView === 'analytics' && attendanceChartInstance) {
-          loadAnalytics('group'); 
-      }
+      document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDark); 
+      if(currentView === 'analytics' && attendanceChartInstance) { loadAnalytics('group'); }
     }
 
     function updateOfflineBadge() {
-      const badge = document.getElementById('offlineBadge');
-      const countSpan = document.getElementById('offlineCount');
+      const badge = document.getElementById('offlineBadge'); const countSpan = document.getElementById('offlineCount');
       if (offlineQueue.length > 0) {
-        badge.style.display = 'block';
-        countSpan.innerText = offlineQueue.length;
-        if (navigator.onLine) badge.style.backgroundColor = '#f39c12'; 
-        else badge.style.backgroundColor = '#ef4444'; 
-      } else {
-        badge.style.display = 'none';
-      }
+        badge.style.display = 'block'; countSpan.innerText = offlineQueue.length;
+        badge.style.backgroundColor = navigator.onLine ? '#f39c12' : '#ef4444'; 
+      } else { badge.style.display = 'none'; }
     }
 
     function syncOfflineData() {
-      if (!navigator.onLine) return alert("الإنترنت ما زال مقطوعاً. تأكد من الاتصال أولاً.");
+      if (!navigator.onLine) return alert("الإنترنت مقطوع. تأكد من الاتصال.");
       if (offlineQueue.length === 0) return;
-      
       showProgress("جاري رفع البيانات المتأخرة للسيرفر...");
       let successCount = 0;
-      
       function uploadNext(index) {
         if (index >= offlineQueue.length) {
-           offlineQueue = [];
-           localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
-           updateOfflineBadge();
-           completeProgress();
-           showMessage(`✅ تمت مزامنة ${successCount} سجلات بنجاح!`, "success");
-           return;
+           offlineQueue = []; localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue)); updateOfflineBadge(); completeProgress(); showToast(`✅ تمت مزامنة ${successCount} سجلات بنجاح!`, "success"); return;
         }
-        
         let record = offlineQueue[index];
         fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(record.code)}&lectureNum=${encodeURIComponent(record.lecture)}&group=${encodeURIComponent(record.group)}${getAuthParams()}`)
-          .then(res => res.json())
-          .then(data => {
-             if (data.status === "success" || data.status === "already") successCount++;
-             uploadNext(index + 1);
+          .then(res => res.json()).then(data => { if (data.status === "success" || data.status === "already") successCount++; uploadNext(index + 1);
           }).catch(err => {
-             offlineQueue = offlineQueue.slice(index);
-             localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
-             updateOfflineBadge();
-             completeProgress();
-             showMessage("❌ انقطع الاتصال أثناء المزامنة. حاول مجدداً.", "error");
+             offlineQueue = offlineQueue.slice(index); localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue)); updateOfflineBadge(); completeProgress(); showToast("❌ انقطع الاتصال أثناء المزامنة.", "error");
           });
       }
       uploadNext(0);
@@ -728,140 +637,88 @@
 
     window.onload = function() {
       try {
-        if (localStorage.getItem('darkMode') === 'true') {
-          document.body.classList.add('dark-mode');
-          document.getElementById('themeToggle').innerText = '🌙';
-        }
-        
-        updateOfflineBadge();
-        window.addEventListener('online', updateOfflineBadge);
-        window.addEventListener('offline', updateOfflineBadge);
+        if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); }
+        updateOfflineBadge(); window.addEventListener('online', updateOfflineBadge); window.addEventListener('offline', updateOfflineBadge);
 
         fillGroupSelects();
         let savedLecture = localStorage.getItem('savedLecture') || '1';
         let lectureElement = document.getElementById('lecture');
         if(lectureElement) {
             lectureElement.value = savedLecture;
-            lectureElement.addEventListener('change', function() {
-              localStorage.setItem('savedLecture', this.value);
-              if(currentView === 'dashboard') loadDashboard();
-            });
+            lectureElement.addEventListener('change', function() { localStorage.setItem('savedLecture', this.value); if(currentView === 'dashboard') loadDashboard(); });
         }
         
+        if (localStorage.getItem('isLoggedIn') === 'true' && !localStorage.getItem('sessionToken')) { logout(); } 
+        else { checkAuth(); }
+
         if (typeof Html5Qrcode !== 'undefined') {
           Html5Qrcode.getCameras().then(devices => {
-            const cameraSelect = document.getElementById('cameraSelection');
-            if (cameraSelect && devices && devices.length > 0) {
-              cameraSelect.innerHTML = "";
-              devices.forEach((device, index) => {
-                const option = document.createElement('option');
-                option.value = device.id; option.text = device.label || `كاميرا ${index + 1}`;
-                if (option.text.toLowerCase().includes('back') || option.text.toLowerCase().includes('خلفية')) option.selected = true;
-                cameraSelect.appendChild(option);
+            const camSel = document.getElementById('cameraSelection');
+            if (camSel && devices && devices.length > 0) {
+              camSel.innerHTML = "";
+              devices.forEach((d, i) => {
+                let opt = document.createElement('option'); opt.value = d.id; opt.text = d.label || `كاميرا ${i + 1}`;
+                if (opt.text.toLowerCase().includes('back') || opt.text.toLowerCase().includes('خلفية')) opt.selected = true;
+                camSel.appendChild(opt);
               });
             }
           }).catch(err => console.log("Cam warning:", err));
         }
 
-        if (localStorage.getItem('isLoggedIn') === 'true' && !localStorage.getItem('sessionToken')) { logout(); } 
-        else { checkAuth(); }
       } catch (error) {
-        console.error("System Error: ", error);
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-        const loginView = document.getElementById('view-login');
-        if(loginView) loginView.classList.add('active');
-        showMessage("حدث خطأ أثناء تهيئة النظام.", "error");
+        const loginView = document.getElementById('view-login'); if(loginView) loginView.classList.add('active');
+        showToast("❌ حدث خطأ أثناء تهيئة النظام.", "error");
       }
     };
 
     function handleManualLogin() {
-      const email = document.getElementById('loginEmail').value;
-      const pass = document.getElementById('loginPassword').value;
-      if(!email || !pass) return alert("الرجاء إدخال الإيميل وكلمة المرور.");
-      
-      showProgress("جاري التحقق من الهوية وفتح قناة اتصال مشفرة 🔐...");
-      
+      const email = document.getElementById('loginEmail').value; const pass = document.getElementById('loginPassword').value;
+      if(!email || !pass) return showToast("❌ أدخل البيانات", "error");
+      showProgress("تحقق من الهوية...");
       fetch(`${LOGIN_API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`)
-        .then(res => res.json()).then(data => {
+      .then(r=>r.json()).then(d=>{
           completeProgress();
-          if (data.status === "success") {
-            localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('userName', data.userName);
-            localStorage.setItem('userRole', data.role); localStorage.setItem('userGroup', data.group);
-            localStorage.setItem('userEmail', email); localStorage.setItem('sessionToken', data.sessionToken);
-            showMessage(`✅ أهلاً بك في منصة Eduneers، ${data.userName}`, "success");
-            
-            // 🔴 التوجيه الصامت دون عمل Reload لعدم فقدان الـ Session
-            setTimeout(() => {
-                document.getElementById('loginEmail').value = '';
-                document.getElementById('loginPassword').value = '';
-                checkAuth();
-            }, 1000); 
-          } else { showMessage(data.message, "error"); }
-        }).catch(err => { completeProgress(); showMessage("❌ خطأ في الاتصال بالسيرفر المركزي.", "error"); });
+          if(d.status==='success'){
+              localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('userName', d.userName);
+              localStorage.setItem('userRole', d.role); localStorage.setItem('userGroup', d.group);
+              localStorage.setItem('userEmail', email); localStorage.setItem('sessionToken', d.sessionToken);
+              localStorage.setItem('savedView', 'scanner');
+              window.location.reload();
+          } else showToast(d.message, "error");
+      }).catch(e=> {completeProgress(); showToast("❌ خطأ اتصال", "error")});
     }
 
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1]; var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join(''));
-      return JSON.parse(jsonPayload);
-    };
-
-    function handleGoogleLogin(response) {
-      const responsePayload = parseJwt(response.credential);
-      const email = responsePayload.email; const googleName = responsePayload.name; 
-      
-      showProgress("جاري المصادقة السريعة مع خوادم Google ⚡...");
-      
-      fetch(`${LOGIN_API_URL}?action=googleLogin&email=${encodeURIComponent(email)}`)
-        .then(res => res.json()).then(data => {
-          completeProgress();
-          if (data.status === "success") {
-            localStorage.setItem('isLoggedIn', 'true');
-            const finalName = data.userName || googleName;
-            localStorage.setItem('userName', finalName); localStorage.setItem('userRole', data.role); 
-            localStorage.setItem('userGroup', data.group); localStorage.setItem('userEmail', email); 
-            localStorage.setItem('sessionToken', data.sessionToken);
-            showMessage(`✅ أهلاً بك في منصة Eduneers، ${finalName}`, "success");
-            
-            setTimeout(checkAuth, 1000); 
-          } else { showMessage(data.message, "error"); }
-        }).catch(err => { completeProgress(); showMessage("❌ خطأ في الاتصال.", "error"); });
+    function parseJwt(token) { var b = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''))); }
+    function handleGoogleLogin(res) {
+        const payload = parseJwt(res.credential); showProgress("تحقق جوجل...");
+        fetch(`${LOGIN_API_URL}?action=googleLogin&email=${encodeURIComponent(payload.email)}`).then(r=>r.json()).then(d=>{
+            completeProgress();
+            if(d.status==='success'){
+                localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('userName', d.userName || payload.name);
+                localStorage.setItem('userRole', d.role); localStorage.setItem('userGroup', d.group);
+                localStorage.setItem('userEmail', payload.email); localStorage.setItem('sessionToken', d.sessionToken);
+                localStorage.setItem('savedView', 'scanner');
+                window.location.reload();
+            } else showToast(d.message, "error");
+        }).catch(e=> {completeProgress(); showToast("❌ خطأ اتصال", "error")});
     }
 
-    function syncRole(force = false) {
-      const now = Date.now();
-      if (!force && now - lastSyncTime < SYNC_COOLDOWN) return; 
+    function syncRole() {
       if (localStorage.getItem('isLoggedIn') !== 'true') return;
-      
-      lastSyncTime = now;
       fetch(`${LOGIN_API_URL}?action=checkMyRole${getAuthParams()}`)
         .then(res => res.json()).then(data => {
-          if (data.status === "unauthorized" || data.status === "deleted") { 
-            alert("انتهت صلاحية الجلسة أو تم إلغاء حسابك. يرجى تسجيل الدخول مجدداً."); logout(); 
-          } 
+          if (data.status === "unauthorized" || data.status === "deleted") { alert("انتهت صلاحية الجلسة."); logout(); } 
           else if (data.status === "success") {
             const currentSavedRole = localStorage.getItem('userRole'); const currentSavedGroup = localStorage.getItem('userGroup');
             if (currentSavedRole !== data.role || (currentSavedGroup !== data.group && data.role !== 'Owner' && data.role !== 'CO-Founder' && data.role !== 'Team Manager' && data.role !== 'Admin')) {
               localStorage.setItem('userRole', data.role);
               if (data.role !== 'Owner' && data.role !== 'CO-Founder' && data.role !== 'Team Manager' && data.role !== 'Admin') localStorage.setItem('userGroup', data.group);
-              showMessage("🔄 تم تحديث بروتوكول الصلاحيات الخاص بك", "info"); applyRolesToUI(); 
-              
-              // حماية الشاشات عند تغيير الصلاحية
+              applyRolesToUI(); 
               if (currentView === 'users' && data.role !== 'Team Manager' && data.role !== 'Admin' && data.role !== 'Owner' && data.role !== 'CO-Founder') switchView('scanner');
             }
           }
         }).catch(err => console.log("Sync error"));
-    }
-
-    document.addEventListener("visibilitychange", function() {
-      if (document.visibilityState === 'visible' && localStorage.getItem('isLoggedIn') === 'true') {
-          syncRole(); if (currentView === 'dashboard') loadDashboard(); 
-      }
-    });
-
-    function changeGlobalGroup(newGroup) {
-      localStorage.setItem('userGroup', newGroup); document.getElementById('groupBadge').innerText = newGroup;
-      if(currentView === 'dashboard') loadDashboard(); if(currentView === 'analytics') loadAnalytics('group');
     }
 
    function applyRolesToUI() {
@@ -888,11 +745,12 @@
       
       const ggs = document.getElementById('globalGroupSelect'); if(ggs) ggs.value = userGroup;
     }
-
+    
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; const userName = localStorage.getItem('userName');
       if (isLoggedIn) {
         const mBtn = document.getElementById('menuBtn'); if(mBtn) mBtn.style.display = 'flex'; 
+        const appTabs = document.getElementById('appTabs'); if(appTabs) appTabs.style.display = 'flex';
         const wName = document.getElementById('welcomeName'); if(wName) wName.innerText = `| ${userName}`;
         applyRolesToUI();
         
@@ -900,6 +758,7 @@
         switchView(currentView); syncRole(); 
       } else {
         const mBtn = document.getElementById('menuBtn'); if(mBtn) mBtn.style.display = 'none'; 
+        const appTabs = document.getElementById('appTabs'); if(appTabs) appTabs.style.display = 'none';
         const lCont = document.getElementById('lectureContainer'); if(lCont) lCont.style.display = 'none';
         const wName = document.getElementById('welcomeName'); if(wName) wName.innerText = ""; 
         const rBadge = document.getElementById('roleBadge'); if(rBadge) rBadge.style.display = 'none';
@@ -908,20 +767,24 @@
       }
     }
 
-    function logout() { localStorage.clear(); toggleSidebar(); checkAuth(); window.location.reload(); }
+    function logout() { localStorage.clear(); toggleSidebar(); checkAuth(); location.reload(); }
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
 
-    function switchView(viewId) {
+    function switchView(viewId, el) {
       if(currentView === 'scanner' && viewId !== 'scanner') stopLiveCamera();
       
       document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       
       let targetView = document.getElementById(`view-${viewId}`);
       if(!targetView) { viewId = 'scanner'; targetView = document.getElementById(`view-${viewId}`); }
       
       targetView.classList.add('active');
       const navItem = document.getElementById(`nav-${viewId}`); if(navItem) navItem.classList.add('active');
+      const tabItem = document.getElementById(`tab-${viewId}`); if(tabItem) tabItem.classList.add('active');
+      if(el && el.classList.contains('tab-item')) el.classList.add('active');
+
       currentView = viewId; localStorage.setItem('savedView', viewId);
       document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show');
 
@@ -943,6 +806,13 @@
       if(viewId === 'dashboard') loadDashboard(); if(viewId === 'users') loadUsers(); if(viewId === 'analytics') loadAnalytics('group'); 
     }
 
+    function changeGlobalGroup(newGroup) {
+      localStorage.setItem('userGroup', newGroup); 
+      const gBadge = document.getElementById('groupBadge');
+      if(gBadge) gBadge.innerText = newGroup;
+      if(currentView === 'dashboard') loadDashboard(); if(currentView === 'analytics') loadAnalytics('group');
+    }
+
     function startLiveCamera() {
       const camId = document.getElementById('cameraSelection').value; if(!camId) return showToast("❌ اختر الكاميرا", "error");
       document.getElementById('reader').style.display = 'block'; document.getElementById('stopCamBtn').style.display = 'block';
@@ -957,12 +827,12 @@
       if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
       html5QrCode.scanFile(e.target.files[0], true).then(decodedText => { 
         completeProgress(); sendDataToAPI(decodedText); e.target.value = ""; 
-      }).catch(err => { completeProgress(); showMessage("❌ لم يتم التعرف على الكود.", "error"); e.target.value = ""; });
+      }).catch(err => { completeProgress(); showToast("❌ لم يتم التعرف على الكود.", "error"); e.target.value = ""; });
     });
 
     function submitManualCode() {
       let rawCode = document.getElementById('manualCode').value.trim(); 
-      if(rawCode === "") return showMessage("❌ برجاء كتابة الكود", "error");
+      if(rawCode === "") return showToast("❌ برجاء كتابة الكود", "error");
       
       let code = convertNumerals(rawCode);
       
@@ -1005,7 +875,7 @@
       if (!navigator.onLine) {
         offlineQueue.push({ code: studentCode, lecture: lec, group: group, time: new Date().toISOString() });
         localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
-        updateOfflineBadge(); showMessage("⚠️ تم الحفظ محلياً لعدم توفر إنترنت", "warning");
+        updateOfflineBadge(); showToast("⚠️ تم الحفظ محلياً لعدم توفر إنترنت", "warning"); playBeep('success');
         return; 
       }
 
@@ -1013,12 +883,12 @@
       fetch(`${ATTENDANCE_API_URL}?action=scan&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}${getAuthParams()}`)
       .then(res => res.json()).then(data => {
           completeProgress();
-          if (data.status === "success") { showMessage(data.message, "success"); } 
-          else { showMessage(data.message, "error"); }
+          if (data.status === "success") { showToast(data.message, "success"); playBeep('success'); } 
+          else { showToast(data.message, "error"); playBeep('error'); }
       }).catch(err => { 
           offlineQueue.push({ code: studentCode, lecture: lec, group: group, time: new Date().toISOString() });
           localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
-          updateOfflineBadge(); completeProgress(); showMessage("⚠️ تم الحفظ محلياً لضعف الشبكة.", "warning"); 
+          updateOfflineBadge(); completeProgress(); showToast("⚠️ تم الحفظ محلياً لضعف الشبكة.", "warning"); playBeep('success'); 
       });
     }
 
@@ -1047,7 +917,7 @@
       const lec = document.getElementById('lecture').value; const group = localStorage.getItem('userGroup') || "Group A"; 
       showProgress("جاري الحذف...");
       fetch(`${ATTENDANCE_API_URL}?action=deleteAttendance&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}${getAuthParams()}`)
-      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showMessage(data.message, "success"); loadDashboard(); } else showMessage(data.message, "error"); }).catch(err => completeProgress());
+      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast(data.message, "success"); loadDashboard(); } else showToast(data.message, "error"); }).catch(err => completeProgress());
     }
 
     function exportToExcel() {
@@ -1056,7 +926,7 @@
       let csvContent = "\uFEFFكود الطالب,الاسم بالكامل,وقت التوثيق\n";
       allAttendees.forEach(student => { let safeName = student.name.replace(/,/g, " "); csvContent += `${student.id},${safeName},${student.time}\n`; });
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob); link.download = `Report_${group}_Lec_${lec}.csv`; link.click(); showMessage("✅ تم التصدير", "success");
+      link.href = URL.createObjectURL(blob); link.download = `Report_${group}_Lec_${lec}.csv`; link.click(); showToast("✅ تم التصدير", "success");
     }
 
     function loadAnalytics(type = 'group') {
@@ -1072,8 +942,8 @@
       }
       fetch(url).then(res => res.json()).then(data => {
           completeProgress();
-          if (data.status === "success") { document.getElementById('message').style.display = 'none'; renderAnalyticsChart(data.labels, data.data, chartTitle); } else { showMessage(data.message, "error"); }
-        }).catch(err => { completeProgress(); showMessage("❌ فشل في الرسوم البيانية.", "error"); });
+          if (data.status === "success") { document.getElementById('message').style.display = 'none'; renderAnalyticsChart(data.labels, data.data, chartTitle); } else { showToast(data.message, "error"); }
+        }).catch(err => { completeProgress(); showToast("❌ فشل في الرسوم البيانية.", "error"); });
     }
 
     function renderAnalyticsChart(labelsArray, dataArray, labelTitle) {
@@ -1084,16 +954,39 @@
     }
 
     function loadUsers() {
-      const tbody = document.getElementById('usersList'); tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">⏳ جاري جلب الصلاحيات...</td></tr>`;
+      const tbody = document.getElementById('usersList');
+      if (!tbody) return; // حماية إضافية
+      
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">⏳ جاري جلب الصلاحيات...</td></tr>`;
       showProgress("قراءة بروتوكولات الأمان...");
-      fetch(`${LOGIN_API_URL}?action=getUsers${getAuthParams()}`).then(res => res.json()).then(data => {
+      
+      fetch(`${LOGIN_API_URL}?action=getUsers${getAuthParams()}`)
+      .then(res => res.json())
+      .then(data => {
         completeProgress();
-        if (data.status === "success" && data.users.length > 0) {
-          const visibleUsers = data.users.filter(u => u.role !== 'Owner'); const currentUserRole = localStorage.getItem('userRole').toUpperCase();
-          if (visibleUsers.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">لا توجد صلاحيات</td></tr>`; return; }
-          tbody.innerHTML = visibleUsers.map(u => {
+        if (data.status === "success" && data.users && data.users.length > 0) {
+          const currentUserRole = (localStorage.getItem('userRole') || '').toUpperCase();
+          const visibleUsers = data.users.filter(u => u.role !== 'Owner'); 
+          
+          if (visibleUsers.length === 0) { 
+              tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">لا توجد صلاحيات</td></tr>`; 
+              return; 
+          }
+          
+          let tableContent = '';
+          
+          visibleUsers.forEach(u => {
             const isProtected = (u.role === 'CO-Founder' && currentUserRole !== 'OWNER');
-            return `<tr>
+            
+            // توليد قائمة الجروبات الخاصة بالمستخدم
+            let groupOptions = '';
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for(let i=0; i<letters.length; i++) { 
+                let gName = 'Group ' + letters[i]; 
+                groupOptions += `<option value="${gName}" ${u.group === gName ? 'selected' : ''}>${gName}</option>`; 
+            }
+            
+            tableContent += `<tr>
               <td style="font-size:13px; line-height: 1.5; color: inherit;"><b>${u.name}</b><br><span style="color:var(--text-muted); font-family:monospace;">${u.email}</span></td> 
               <td>
                 <select class="role-select" onchange="changeUserRole('${u.email}', this.value)" ${isProtected ? 'disabled title="مغلق - صلاحية عليا"' : ''}>
@@ -1103,24 +996,37 @@
                   <option value="CO-Founder" ${u.role === 'CO-Founder' ? 'selected' : ''}>CO-Founder ✨</option>
                 </select>
               </td>
-              <td><select class="role-select" onchange="changeUserGroup('${u.email}', this.value)" ${isProtected ? 'disabled' : ''}>${generateGroupOptions(u.group)}</select></td>
+              <td>
+                <select class="role-select" onchange="changeUserGroup('${u.email}', this.value)" ${isProtected ? 'disabled' : ''}>
+                  ${groupOptions}
+                </select>
+              </td>
               <td>${isProtected ? '<span style="font-size:12px; color:var(--electric-blue); font-weight:800; background:rgba(0, 210, 255, 0.1); padding:4px 8px; border-radius:8px;">🔒 محمي</span>' : `<button class="btn-danger btn-small" onclick="deleteUser('${u.email}')">عزل 🗑️</button>`}</td>
             </tr>`;
-          }).join('');
-        } else { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">الخادم خالي</td></tr>`; }
-      }).catch(err => { completeProgress(); tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ef4444; padding: 30px;">❌ حدث خطأ</td></tr>`; });
+          });
+          
+          tbody.innerHTML = tableContent;
+          
+        } else { 
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">الخادم خالي</td></tr>`; 
+        }
+      }).catch(err => { 
+          completeProgress(); 
+          console.error("Users Error:", err);
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ef4444; padding: 30px;">❌ حدث خطأ في جلب البيانات</td></tr>`; 
+      });
     }
 
     function changeUserRole(email, newRole) {
       showProgress("تحديث الصلاحية...");
       fetch(`${LOGIN_API_URL}?action=updateRole&targetEmail=${encodeURIComponent(email)}&role=${encodeURIComponent(newRole)}${getAuthParams()}`)
-      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showMessage("✅ تمت الترقية بنجاح", "success"); } else { showMessage(data.message, "error"); loadUsers(); } }).catch(err => { completeProgress(); showMessage("❌ خطأ.", "error"); loadUsers(); });
+      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast("✅ تمت الترقية بنجاح", "success"); } else { showToast(data.message, "error"); loadUsers(); } }).catch(err => { completeProgress(); showToast("❌ خطأ.", "error"); loadUsers(); });
     }
 
     function changeUserGroup(email, newGroup) {
       showProgress("نقل المستخدم...");
       fetch(`${LOGIN_API_URL}?action=updateGroup&targetEmail=${encodeURIComponent(email)}&group=${encodeURIComponent(newGroup)}${getAuthParams()}`)
-      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showMessage("✅ تم النقل بنجاح", "success"); } else { showMessage(data.message, "error"); loadUsers(); } }).catch(err => { completeProgress(); showMessage("❌ خطأ.", "error"); loadUsers(); });
+      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast("✅ تم النقل بنجاح", "success"); } else { showToast(data.message, "error"); loadUsers(); } }).catch(err => { completeProgress(); showToast("❌ خطأ.", "error"); loadUsers(); });
     }
 
     function addUser() {
@@ -1132,15 +1038,15 @@
       fetch(`${LOGIN_API_URL}?action=addUser&name=${encodeURIComponent(name)}&targetEmail=${encodeURIComponent(email)}&pass=${encodeURIComponent(pass)}&role=${encodeURIComponent(role)}&group=${encodeURIComponent(group)}${getAuthParams()}`)
       .then(res => res.json()).then(data => {
         completeProgress();
-        if(data.status === 'success') { showMessage("✅ تم توثيق المستخدم", "success"); document.getElementById('newUserName').value = ''; document.getElementById('newUserEmail').value = ''; document.getElementById('newUserPass').value = ''; loadUsers(); }
-        else { showMessage(data.message, "error"); }
+        if(data.status === 'success') { showToast("✅ تم التوثيق", "success"); document.getElementById('newUserName').value = ''; document.getElementById('newUserEmail').value = ''; document.getElementById('newUserPass').value = ''; loadUsers(); }
+        else { showToast(data.message, "error"); }
       });
     }
 
     function deleteUser(email) {
       if(!confirm("تأكيد العزل؟")) return; 
       showProgress("تدمير الصلاحيات...");
-      fetch(`${LOGIN_API_URL}?action=deleteUser&targetEmail=${encodeURIComponent(email)}${getAuthParams()}`).then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showMessage("✅ تم العزل", "success"); loadUsers(); } else { showMessage(data.message, "error"); } });
+      fetch(`${LOGIN_API_URL}?action=deleteUser&targetEmail=${encodeURIComponent(email)}${getAuthParams()}`).then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast("✅ تم العزل", "success"); loadUsers(); } else { showToast(data.message, "error"); } });
     }
   </script>
 <script>
