@@ -50,7 +50,13 @@
     .sidebar-overlay.show { display: block; }
     .close-btn { position: absolute; top: 15px; left: 15px; font-size: 2rem; cursor: pointer; color: var(--text-muted); border: none; background: none; }
 
-    .container { padding: 20px 15px; max-width: 1000px; margin: auto; }
+    /* 🏷️ Tabs */
+    .tabs-container { display: flex; background: var(--card-bg); margin: 15px auto; max-width: 1000px; border-radius: 15px; padding: 5px; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); overflow-x: auto; backdrop-filter: blur(10px); }
+    .tab-item { flex: 1; padding: 12px; text-align: center; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 0.8rem; color: #64748b; transition: 0.3s; min-width: 80px; }
+    .tab-item.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    body.dark-mode .tab-item.active { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; }
+
+    .container { padding: 10px 15px; max-width: 1000px; margin: auto; }
     
     .view-section { display: none !important; background: var(--card-bg); padding: 30px 25px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); animation: slideUp 0.4s ease; margin-bottom: 25px; backdrop-filter: blur(15px); }
     .view-section.active { display: block !important; }
@@ -61,15 +67,23 @@
     body.dark-mode input, body.dark-mode select { background-color: #1e293b; color: #fff; border: 1px solid #334155; }
     input:focus, select:focus { border-color: var(--accent); outline: none; background: #fff;}
     body.dark-mode input:focus, body.dark-mode select:focus { border-color: var(--electric-blue); background: #0f172a;}
+    
     .small-input { width: 70px !important; display: inline-block; padding: 8px 5px !important; margin: 0 5px !important; border: 2px solid var(--accent) !important; color: inherit !important; background: transparent !important; font-weight: 900 !important; }
 
-    .btn-submit { width: 100%; padding: 16px; border-radius: 14px; border: none; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 10px;}
-    body.dark-mode .btn-submit { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.2); }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    button { width: 100%; padding: 16px; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif; position: relative; overflow: hidden; margin-bottom: 10px; }
+    button:active { transform: scale(0.96); }
+
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2); }
+    body.dark-mode .btn-primary { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.2); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
     
-    .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; box-shadow: 0 10px 20px var(--accent-glow); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; margin-bottom: 10px;}
-    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s;}
-    .btn-excel { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s;}
+    .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; box-shadow: 0 10px 20px var(--accent-glow); }
+    .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow); }
+    
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);}
+    .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(239, 68, 68, 0.4);}
+    
+    .btn-excel { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
 
     /* Badges */
     .nav-badge { font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; letter-spacing: 0.5px; text-transform: uppercase; font-family: monospace; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); white-space: nowrap !important; flex-shrink: 0 !important; min-width: max-content !important; }
@@ -117,13 +131,13 @@
 
     /* 🛡️ Permissions */
     .manager-only, .admin-only, .cross-group-only { display: none !important; }
-    body.role-manager :not(.view-section).manager-only { display: block !important; }
+    body.role-manager :not(.view-section).manager-only, body.role-manager .tab-item.manager-only { display: block !important; }
     body.role-manager a.manager-only { display: flex !important; }
-    body.role-admin :not(.view-section).manager-only, body.role-admin :not(.view-section).admin-only, body.role-admin :not(.view-section).cross-group-only { display: block !important; }
+    body.role-admin :not(.view-section).manager-only, body.role-admin :not(.view-section).admin-only, body.role-admin :not(.view-section).cross-group-only, body.role-admin .tab-item.manager-only, body.role-admin .tab-item.admin-only { display: block !important; }
     body.role-admin a.manager-only, body.role-admin a.admin-only { display: flex !important; }
-    body.role-co-founder :not(.view-section).manager-only, body.role-co-founder :not(.view-section).admin-only, body.role-co-founder :not(.view-section).cross-group-only { display: block !important; }
+    body.role-co-founder :not(.view-section).manager-only, body.role-co-founder :not(.view-section).admin-only, body.role-co-founder :not(.view-section).cross-group-only, body.role-co-founder .tab-item.manager-only, body.role-co-founder .tab-item.admin-only { display: block !important; }
     body.role-co-founder a.manager-only, body.role-co-founder a.admin-only { display: flex !important; }
-    body.role-owner :not(.view-section).manager-only, body.role-owner :not(.view-section).admin-only, body.role-owner :not(.view-section).cross-group-only { display: block !important; }
+    body.role-owner :not(.view-section).manager-only, body.role-owner :not(.view-section).admin-only, body.role-owner :not(.view-section).cross-group-only, body.role-owner .tab-item.manager-only, body.role-owner .tab-item.admin-only { display: block !important; }
     body.role-owner a.manager-only, body.role-owner a.admin-only { display: flex !important; }
     body.role-user .manager-only, body.role-user .admin-only, body.role-manager .admin-only { display: none !important; }
     
@@ -153,8 +167,7 @@
     <div class="nav-content">
       <div class="nav-brand"><h2>⚡ <span class="brand-text">Eduneers</span> <span id="welcomeName" style="font-size: 11px; opacity:0.7;"></span></h2></div>
       <div class="nav-actions">
-        <span id="groupBadge" class="nav-badge group-badge" style="display: none;"></span>
-        <span id="roleBadge" class="nav-badge role-badge" style="display: none;"></span>
+        <span id="groupBadge" style="font-size: 11px; font-weight: 800; background: rgba(0, 210, 255, 0.1); color: var(--electric-blue); padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(0, 210, 255, 0.3); display: none;"></span>
         <button class="nav-btn" onclick="toggleDarkMode()">🌓</button>
         <button class="nav-btn" onclick="window.location.href='grades.html'" title="نظام التقييم والدرجات">🎯</button>
         <button class="nav-btn" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
@@ -171,19 +184,19 @@
     </div>
     
     <a href="#" class="active" onclick="switchView('scanner'); toggleSidebar();" id="nav-scanner">
-      <span>📷</span> <span>تسجيل الحضور بالـ QR</span>
+      <span>📷</span> <span>مسح الـ QR</span>
     </a>
     <a href="#" onclick="switchView('manual'); toggleSidebar();" id="nav-manual">
-      <span>✍️</span> <span>التسجيل اليدوي السريع</span>
+      <span>✍️</span> <span>التسجيل اليدوي</span>
     </a>
     <a href="grades.html" style="color: var(--accent);">
-      <span>🎯</span> <span>نظام رصد الدرجات</span>
+      <span>🎯</span> <span>نظام الدرجات</span>
     </a>
     <a href="#" class="manager-only" onclick="switchView('dashboard'); toggleSidebar();" id="nav-dashboard">
-      <span>📊</span> <span>لوحة المتابعة</span>
+      <span>📊</span> <span>لوحة الحضور</span>
     </a>
     <a href="#" class="manager-only" onclick="switchView('analytics'); toggleSidebar();" id="nav-analytics">
-      <span>📈</span> <span>الإحصائيات والتحليلات</span>
+      <span>📈</span> <span>التحليلات</span>
     </a>
     <a href="#" class="admin-only" onclick="switchView('users'); toggleSidebar();" id="nav-users">
       <span>👥</span> <span>إدارة المستخدمين</span>
@@ -191,6 +204,13 @@
 
     <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 25px;"></div>
     <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 10px;"><span>🚪</span> <span>تسجيل الخروج</span></a>
+  </div>
+
+  <div class="tabs-container" id="appTabs" style="display:none;">
+    <div class="tab-item active" id="tab-scanner" onclick="switchView('scanner', this)"><span>📷</span><span> كاميرا</span></div>
+    <div class="tab-item" id="tab-manual" onclick="switchView('manual', this)"><span>✍️</span><span> يدوي</span></div>
+    <div class="tab-item manager-only" id="tab-dashboard" onclick="switchView('dashboard', this)"><span>📊</span><span> متابعة</span></div>
+    <div class="tab-item admin-only" id="tab-users" onclick="switchView('users', this)"><span>👥</span><span> إدارة</span></div>
   </div>
 
   <div class="container">
@@ -205,25 +225,25 @@
         <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
     </div>
 
-     <div id="view-scanner" class="view-section">
-      <div class="form-wrapper">
-        <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:22px; margin-bottom: 20px; text-align:center;">المسح الضوئي للحضور</h3>
-        <select id="cameraSelection" style="border-radius:20px;"><option value="">جاري البحث عن كاميرات...</option></select>
-        <button class="btn-primary" onclick="startLiveCamera()">🎥 تفعيل المسح الذكي</button>
+    <div id="view-scanner" class="view-section active">
+      <div style="max-width: 500px; margin: auto;">
+        <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">المسح الضوئي للحضور</h3>
+        <select id="cameraSelection"><option value="">جاري البحث عن كاميرات...</option></select>
+        
+        <button class="btn-primary" onclick="startLiveCamera()" style="width: 100%; display: flex; justify-content: center;">🎥 تفعيل المسح الذكي</button>
+        
         <input type="file" id="qr-input-file" accept="image/*" capture="environment" style="display:none;">
-        <button class="btn-secondary" onclick="document.getElementById('qr-input-file').click()">📸 التقاط صورة للـ QR</button>
-      </div>
-      <div id="reader"></div>
-      <div class="form-wrapper">
-        <button class="btn-danger" id="stopCamBtn" style="display:none;" onclick="stopLiveCamera()">إيقاف الكاميرا</button>
+        <button class="btn-secondary" onclick="document.getElementById('qr-input-file').click()" style="margin-bottom:0;">📸 التقاط صورة للـ QR</button>
+        
+        <div id="reader" style="width: 100%; border-radius: 20px; overflow: hidden; display: none; border: 3px dashed var(--accent); margin-top: 15px; background: rgba(0,0,0,0.05); padding: 10px;"></div>
+        <button class="btn-danger" id="stopCamBtn" style="display:none; margin-top:15px; width: 100%; justify-content: center;" onclick="stopLiveCamera()">إيقاف الكاميرا</button>
       </div>
     </div>
-
 
     <div id="view-manual" class="view-section">
       <div style="max-width: 500px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">التسجيل اليدوي السريع</h3>
-        <p style="font-size: 13px; color: var(--text-muted); text-align:center; margin-bottom: 20px;">أدخل <b>رقم الطالب فقط</b> (يدعم الأرقام العربية ١٢٣)، وسيتكفل النظام بالباقي.</p>
+        <p style="font-size: 13px; color: var(--text-muted); text-align:center; margin-bottom: 20px;">أدخل <b>رقم الطالب فقط</b> (يدعم الأرقام العربية ١٢٣).</p>
         <input type="text" id="manualCode" placeholder="مثال: 15 أو ١٥" style="text-align:center; font-size:24px; letter-spacing:4px; font-weight:900;">
         <button class="btn-submit" onclick="submitManualCode()">تسجيل الحضور 📥</button>
       </div>
@@ -239,8 +259,8 @@
         <span style="position: absolute; right: 15px; top: 15px; opacity: 0.5;">🔍</span>
       </div>
       <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <button class="btn-secondary" style="flex: 1; margin:0;" onclick="loadDashboard()">🔄 تحديث</button>
-        <button class="btn-excel" style="flex: 1; margin:0;" onclick="exportToExcel()">📥 تحميل Excel</button>
+        <button class="btn-secondary" style="flex: 1; padding:12px; margin:0;" onclick="loadDashboard()">🔄 تحديث</button>
+        <button class="btn-excel" style="flex: 1; padding:12px; margin:0;" onclick="exportToExcel()">📥 تحميل Excel</button>
       </div>
       <div class="table-container">
         <table id="attendeesTable">
@@ -254,8 +274,8 @@
       <div style="max-width: 600px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">📊 الإحصائيات والتحليلات</h3>
         <div class="owner-only" style="display:flex; gap:10px; margin-bottom: 20px;">
-          <button class="btn-submit" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
-          <button class="btn-secondary" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('group')">تحليل الجروب 📈</button>
+          <button class="btn-primary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
+          <button class="btn-secondary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('group')">تحليل الجروب 📈</button>
         </div>
         <p id="analyticsDesc" style="font-size: 13px; color: var(--text-muted); text-align:center;"></p>
         <div class="chart-container"><canvas id="attendanceChart"></canvas></div>
@@ -311,16 +331,17 @@
   </div>
 
   <script>
-    const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbzrLXNuxcAM5A1euSqtbqt-3L2sqAPXGb0A3JF7hiCaJ5giW86c51bs45ISAPANa4PP/exec"; 
+    const ATTEND_API = "https://script.google.com/macros/s/AKfycbzrLXNuxcAM5A1euSqtbqt-3L2sqAPXGb0A3JF7hiCaJ5giW86c51bs45ISAPANa4PP/exec"; 
+    const ATTENDANCE_API_URL = ATTEND_API; 
     const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbw-oytOWrgERm2yXu-NagMlyS14HlUGeAlsWqrZl2SwRJIi0IDL1AH2VduQvsmIIkNgFA/exec";
 
     let html5QrCode; let allAttendees = []; 
     let currentView = localStorage.getItem('savedView') || 'login';
-    let attendanceChartInstance = null;
+    let attendanceChartInstance = null; let myChart = null;
     let lastSyncTime = 0; const SYNC_COOLDOWN = 60000;
+    
     let offlineQueue = JSON.parse(localStorage.getItem('offlineQueue')) || [];
 
-    // 🔴 دالة تحويل الأرقام العربية إلى إنجليزية
     function convertNumerals(str) {
       if(!str) return "";
       const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -332,26 +353,15 @@
         const l = document.getElementById('loader');
         document.getElementById('loaderMsg').innerText = message;
         l.style.display = 'flex';
-        let p=0; 
-        document.getElementById('percent').innerText = p + '%'; 
-        document.getElementById('barFill').style.width = p + '%';
+        let p=0; document.getElementById('percent').innerText = p + '%'; document.getElementById('barFill').style.width = p + '%';
         clearInterval(loaderInterval);
-        loaderInterval = setInterval(()=>{ 
-            p+=Math.floor(Math.random()*10)+1; 
-            if(p>90) p=90; 
-            document.getElementById('barFill').style.width=p+'%'; 
-            document.getElementById('percent').innerText=p+'%'; 
-        }, 100);
+        loaderInterval = setInterval(()=>{ p+=Math.floor(Math.random()*10)+1; if(p>90)p=90; document.getElementById('barFill').style.width=p+'%'; document.getElementById('percent').innerText=p+'%'; }, 100);
     }
 
     function completeProgress() {
         clearInterval(loaderInterval);
-        document.getElementById('barFill').style.width='100%'; 
-        document.getElementById('percent').innerText='100%';
-        setTimeout(() => { 
-            document.getElementById('loader').style.display = 'none'; 
-            document.getElementById('barFill').style.width='0%'; 
-        }, 300);
+        document.getElementById('barFill').style.width='100%'; document.getElementById('percent').innerText='100%';
+        setTimeout(() => { document.getElementById('loader').style.display = 'none'; document.getElementById('barFill').style.width='0%'; }, 300);
     }
 
     function showToast(text, type="success") {
@@ -444,7 +454,6 @@
         }
 
       } catch (error) {
-        console.error(error);
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         const loginView = document.getElementById('view-login'); if(loginView) loginView.classList.add('active');
         showToast("❌ حدث خطأ أثناء تهيئة النظام.", "error");
@@ -529,6 +538,7 @@
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; const userName = localStorage.getItem('userName');
       if (isLoggedIn) {
         const mBtn = document.getElementById('menuBtn'); if(mBtn) mBtn.style.display = 'flex'; 
+        const appTabs = document.getElementById('appTabs'); if(appTabs) appTabs.style.display = 'flex';
         const wName = document.getElementById('welcomeName'); if(wName) wName.innerText = `| ${userName}`;
         applyRolesToUI();
         
@@ -536,6 +546,7 @@
         switchView(currentView); syncRole(); 
       } else {
         const mBtn = document.getElementById('menuBtn'); if(mBtn) mBtn.style.display = 'none'; 
+        const appTabs = document.getElementById('appTabs'); if(appTabs) appTabs.style.display = 'none';
         const lCont = document.getElementById('lectureContainer'); if(lCont) lCont.style.display = 'none';
         const wName = document.getElementById('welcomeName'); if(wName) wName.innerText = ""; 
         const rBadge = document.getElementById('roleBadge'); if(rBadge) rBadge.style.display = 'none';
@@ -547,17 +558,21 @@
     function logout() { localStorage.clear(); toggleSidebar(); checkAuth(); window.location.reload(); }
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
 
-    function switchView(viewId) {
+    function switchView(viewId, el) {
       if(currentView === 'scanner' && viewId !== 'scanner') stopLiveCamera();
       
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.sidebar a').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       
       let targetView = document.getElementById(`view-${viewId}`);
       if(!targetView) { viewId = 'scanner'; targetView = document.getElementById(`view-${viewId}`); }
       
       targetView.classList.add('active');
       const navItem = document.getElementById(`nav-${viewId}`); if(navItem) navItem.classList.add('active');
+      const tabItem = document.getElementById(`tab-${viewId}`); if(tabItem) tabItem.classList.add('active');
+      if(el && el.classList.contains('tab-item')) el.classList.add('active');
+
       currentView = viewId; localStorage.setItem('savedView', viewId);
       document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show');
 
