@@ -39,7 +39,7 @@
     .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
     .nav-btn:hover { background: var(--accent); border-color: var(--accent); }
     body.dark-mode .nav-btn { background: rgba(255,255,255,0.05) !important; border-color: rgba(255,255,255,0.1) !important; color: #fff !important; }
-    body.dark-mode .nav-btn:hover { background: var(--electric-blue) !important; border-color: var(--electric-blue) !important; box-shadow: 0 0 10px var(--electric-glow); }
+    body.dark-mode .nav-btn:hover { background: var(--electric-blue) !important; border-color: var(--electric-blue) !important; box-shadow: 0 0 10px var(--electric-glow) !important;}
 
     /* 🗂️ Sidebar */
     .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--card-bg); backdrop-filter: blur(25px); z-index: 2000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: right; padding-top: 60px; box-shadow: -10px 0 30px rgba(0,0,0,0.2); border-left: 1px solid rgba(255,255,255,0.1); }
@@ -220,9 +220,9 @@
       <div class="nav-actions">
         <span id="groupBadge" class="nav-badge group-badge" style="display: none;"></span>
         <span id="roleBadge" class="nav-badge role-badge" style="display: none;"></span>
-        <button class="nav-btn" id="themeToggle" onclick="toggleDarkMode()">☀️</button>
-        <button class="nav-btn" onclick="window.location.href='grades.html'" title="نظام الدرجات والتقييم">🎯</button>
-        <button class="nav-btn" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()">☀️</button>
+        <button class="theme-toggle" onclick="window.location.href='grades.html'" title="نظام الدرجات والتقييم">🎯</button>
+        <button class="hamburger" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
       </div>
     </div>
   </div>
@@ -506,9 +506,10 @@
             if (cameraSelect && devices && devices.length > 0) {
               cameraSelect.innerHTML = "";
               devices.forEach((device, index) => {
-                let opt = document.createElement('option'); opt.value = device.id; opt.text = device.label || `كاميرا ${index + 1}`;
-                if (opt.text.toLowerCase().includes('back') || opt.text.toLowerCase().includes('خلفية')) opt.selected = true;
-                cameraSelect.appendChild(opt);
+                const option = document.createElement('option');
+                option.value = device.id; option.text = device.label || `كاميرا ${index + 1}`;
+                if (option.text.toLowerCase().includes('back') || option.text.toLowerCase().includes('خلفية')) option.selected = true;
+                cameraSelect.appendChild(option);
               });
             }
           }).catch(err => console.log("Cam warning:", err));
@@ -598,7 +599,6 @@
         const appTabs = document.getElementById('appTabs'); if(appTabs) appTabs.style.display = 'flex';
         const wName = document.getElementById('welcomeName'); if(wName) wName.innerText = `| ${userName}`;
         applyRolesToUI();
-        
         if (currentView === 'login' || !document.getElementById(`view-${currentView}`)) currentView = 'scanner'; 
         switchView(currentView); syncRole(true); 
       } else {
@@ -648,14 +648,19 @@
           }
       }
       
-      if(viewId === 'dashboard') loadDashboard(); if(viewId === 'users') loadUsers(); if(viewId === 'analytics') loadAnalytics('group'); 
+      if(viewId === 'dashboard') loadDashboard(); 
+      if(viewId === 'users') loadUsers(); 
+      if(viewId === 'analytics') {
+          fetchAnalyticsData(); // استدعاء دالة التحليلات الآمنة
+      }
     }
 
     function changeGlobalGroup(newGroup) {
       localStorage.setItem('userGroup', newGroup); 
       const gBadge = document.getElementById('groupBadge');
       if(gBadge) gBadge.innerText = newGroup;
-      if(currentView === 'dashboard') loadDashboard(); if(currentView === 'analytics') loadAnalytics('group');
+      if(currentView === 'dashboard') loadDashboard(); 
+      if(currentView === 'analytics') fetchAnalyticsData();
     }
 
     function startLiveCamera() {
@@ -708,7 +713,8 @@
       if (role === 'OWNER' || role === 'CO-FOUNDER' || role === 'TEAM MANAGER' || role === 'ADMIN') {
           const match = studentCode.match(/^[A-Z]+/);
           if (match) {
-              const detectedGroup = "Group " + match[0]; changeGlobalGroup(detectedGroup);
+              const detectedGroup = "Group " + match[0]; 
+              changeGlobalGroup(detectedGroup);
               const ggs = document.getElementById('globalGroupSelect'); if(ggs) ggs.value = detectedGroup;
           }
       }
@@ -764,7 +770,7 @@
       const lec = document.getElementById('lecture').value; const group = localStorage.getItem('userGroup') || "Group A"; 
       showProgress("جاري الحذف...");
       fetch(`${ATTENDANCE_API_URL}?action=deleteAttendance&qrCode=${encodeURIComponent(studentCode)}&lectureNum=${encodeURIComponent(lec)}&group=${encodeURIComponent(group)}${getAuthParams()}`)
-      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast(data.message, "success"); loadDashboard(); } else showToast(data.message, "error"); }).catch(err => completeProgress());
+      .then(res => res.json()).then(data => { completeProgress(); if(data.status === 'success') { showToast("✅ تم الحذف", "success"); loadDashboard(); } else showToast(data.message, "error"); }).catch(err => completeProgress());
     }
 
     function exportToExcel() {
@@ -776,28 +782,93 @@
       link.href = URL.createObjectURL(blob); link.download = `Report_${group}_Lec_${lec}.csv`; link.click(); showToast("✅ تم التصدير", "success");
     }
 
-function loadAnalytics(type = 'group') {
-      showProgress("تحليل البيانات...");
-      const group = localStorage.getItem('userGroup') || "Group A"; const lec = document.getElementById('lecture').value; const role = localStorage.getItem('userRole').toUpperCase();
-      let url = ""; let chartTitle = "";
+    // 🔴 دالة التحليلات الآمنة (Anti-Crash)
+    function fetchAnalyticsData(type = 'group') {
+      showProgress("تحليل البيانات وبناء الرسوم... 📈");
+      const group = localStorage.getItem('userGroup') || "Group A"; 
+      const lec = document.getElementById('lecture').value || "1"; 
+      const role = (localStorage.getItem('userRole') || "").toUpperCase();
+      
+      let url = ""; 
+      let chartTitle = "";
+      
       if (type === 'all' && (role === 'OWNER' || role === 'CO-FOUNDER')) {
          url = `${ATTENDANCE_API_URL}?action=getOwnerAnalytics&lectureNum=${encodeURIComponent(lec)}${getAuthParams()}`;
-         document.getElementById('analyticsDesc').innerText = `📊 مقارنة حية لحضور كافة الجروبات - محاضرة ${lec}`; chartTitle = 'حضور الجروبات';
+         document.getElementById('analyticsDesc').innerText = `📊 مقارنة حية لحضور كافة الجروبات - محاضرة ${lec}`; 
+         chartTitle = 'حضور الجروبات';
       } else {
          url = `${ATTENDANCE_API_URL}?action=getAnalytics&group=${encodeURIComponent(group)}${getAuthParams()}`;
-         document.getElementById('analyticsDesc').innerText = `📈 تتبع كفاءة الحضور لـ ${group} على مدار الكورس`; chartTitle = 'كثافة الحضور';
+         document.getElementById('analyticsDesc').innerText = `📈 تتبع كفاءة الحضور لـ ${group} على مدار الكورس`; 
+         chartTitle = 'كثافة الحضور';
       }
-      fetch(url).then(res => res.json()).then(data => {
-          completeProgress();
-          if (data.status === "success") { document.getElementById('message').style.display = 'none'; renderAnalyticsChart(data.labels, data.data, chartTitle); } else { showToast(data.message, "error"); }
-        }).catch(err => { completeProgress(); showToast("❌ فشل في الرسوم البيانية.", "error"); });
+
+      fetch(url)
+        .then(res => res.text())
+        .then(text => {
+            completeProgress();
+            try {
+                const data = JSON.parse(text);
+                if (data.status === "success") { 
+                    if(data.labels && data.labels.length > 0) {
+                        document.getElementById('analyticsDesc').style.display = 'block';
+                        renderAnalyticsChart(data.labels, data.data, chartTitle); 
+                    } else {
+                        showToast("⚠️ لا توجد بيانات حضور كافية للرسم البياني حتى الآن.", "warning");
+                        if(attendanceChartInstance) { attendanceChartInstance.destroy(); }
+                    }
+                } else { 
+                    showToast(data.message || "حدث خطأ في جلب البيانات من السيرفر", "error"); 
+                }
+            } catch(e) {
+                console.error("Server Error Response:", text);
+                showToast("❌ خطأ في الاستجابة من السيرفر الرئيسي.", "error");
+            }
+        })
+        .catch(err => { 
+            completeProgress(); 
+            showToast("❌ فشل في الاتصال بالإنترنت أو قاعدة البيانات.", "error"); 
+        });
+    }
+
+    // Wrap the old loadAnalytics to call the new safe one
+    function loadAnalytics(type = 'group') {
+        fetchAnalyticsData(type);
     }
 
     function renderAnalyticsChart(labelsArray, dataArray, labelTitle) {
-      const ctx = document.getElementById('attendanceChart').getContext('2d');
-      if (attendanceChartInstance) attendanceChartInstance.destroy();
-      const isDark = document.body.classList.contains('dark-mode'); const chartColor = isDark ? '#00d2ff' : '#0f172a'; const gridColor = isDark ? '#334155' : '#e2e8f0';
-      attendanceChartInstance = new Chart(ctx, { type: 'bar', data: { labels: labelsArray, datasets: [{ label: labelTitle, data: dataArray, backgroundColor: chartColor, borderColor: '#f5b041', borderWidth: 2, borderRadius: 12, hoverBackgroundColor: '#f5b041' }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: isDark ? '#cbd5e1' : '#64748b' } }, y: { beginAtZero: true, ticks: { stepSize: 5, color: isDark ? '#cbd5e1' : '#64748b' }, grid: { color: gridColor, borderDash: [4, 4] } } }, plugins: { legend: { display: false } }, animation: { duration: 1500, easing: 'easeOutQuart' } } });
+      const canvas = document.getElementById('attendanceChart');
+      const ctx = canvas.getContext('2d');
+      if (attendanceChartInstance) { attendanceChartInstance.destroy(); }
+      
+      const isDark = document.body.classList.contains('dark-mode'); 
+      const chartColor = isDark ? '#00d2ff' : '#0f172a'; 
+      const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+      attendanceChartInstance = new Chart(ctx, { 
+          type: 'bar', 
+          data: { 
+              labels: labelsArray, 
+              datasets: [{ 
+                  label: labelTitle, 
+                  data: dataArray, 
+                  backgroundColor: chartColor, 
+                  borderColor: '#f5b041', 
+                  borderWidth: 2, 
+                  borderRadius: 12, 
+                  hoverBackgroundColor: '#f5b041' 
+              }] 
+          }, 
+          options: { 
+              responsive: true, 
+              maintainAspectRatio: false, 
+              scales: { 
+                  x: { grid: { display: false }, ticks: { color: isDark ? '#fff' : '#334155', font: {family: 'Cairo', weight: 'bold'} } }, 
+                  y: { beginAtZero: true, ticks: { stepSize: 1, color: isDark ? '#fff' : '#334155' }, grid: { color: gridColor, borderDash: [4, 4] } } 
+              }, 
+              plugins: { legend: { display: false } }, 
+              animation: { duration: 1500, easing: 'easeOutQuart' } 
+          } 
+      });
     }
 
     function loadUsers() {
@@ -847,6 +918,7 @@ function loadAnalytics(type = 'group') {
           } else { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">الخادم خالي</td></tr>`; }
         }).catch(err => { completeProgress(); tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ef4444; padding: 30px;">❌ حدث خطأ في جلب البيانات</td></tr>`; });
     }
+
     function changeUserRole(email, newRole) {
       showProgress("تحديث الصلاحية...");
       fetch(`${LOGIN_API_URL}?action=updateRole&targetEmail=${encodeURIComponent(email)}&role=${encodeURIComponent(newRole)}${getAuthParams()}`)
