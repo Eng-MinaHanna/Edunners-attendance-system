@@ -13,10 +13,18 @@
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
 
     :root { 
-      --primary: #0f172a; --primary-light: #1e293b; --accent: #f5b041; 
-      --accent-glow: rgba(245, 176, 65, 0.6); --electric-blue: #00d2ff;
-      --electric-glow: rgba(0, 210, 255, 0.5); --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-      --text-main: #334155; --text-muted: #64748b; --card-bg: rgba(255, 255, 255, 0.9); --border-radius: 24px;   
+      --primary: #0f172a;      
+      --primary-light: #1e293b;
+      --accent: #f5b041;       
+      --accent-hover: #f39c12;
+      --accent-glow: rgba(245, 176, 65, 0.6);
+      --electric-blue: #00d2ff;
+      --electric-glow: rgba(0, 210, 255, 0.5);
+      --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      --text-main: #334155;
+      --text-muted: #64748b;
+      --card-bg: rgba(255, 255, 255, 0.9); 
+      --border-radius: 24px;   
     }
 
     body.dark-mode { 
@@ -56,25 +64,7 @@
     .tab-item.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     body.dark-mode .tab-item.active { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; }
 
-   /* 🖥️ تحسين شكل اللاب توب ومنع التمطيط */
-.container { 
-  padding: 30px 15px; 
-  max-width: 1000px; /* العرض الأقصى للمحتوى */
-  margin: auto; 
-  position: relative; 
-  z-index: 1; 
-}
-
-/* تصغير صناديق الإدخال والسكّانر لتبدو احترافية */
-.form-wrapper, #view-login .form-wrapper, #view-scanner div, #view-manual .form-wrapper { 
-  max-width: 500px; 
-  margin: 0 auto; 
-}
-
-#reader { 
-  max-width: 500px; 
-  margin: 20px auto; 
-}
+    .container { padding: 10px 15px; max-width: 1000px; margin: auto; }
     
     .view-section { display: none !important; background: var(--card-bg); padding: 30px 25px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); animation: slideUp 0.4s ease; margin-bottom: 25px; backdrop-filter: blur(15px); }
     .view-section.active { display: block !important; }
@@ -95,13 +85,9 @@
     body.dark-mode .btn-primary { background: linear-gradient(135deg, var(--electric-blue), #0284c7); color: #fff; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.2); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
     
-    .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; box-shadow: 0 10px 20px var(--accent-glow); }
-    .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow); }
-    
-    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);}
-    .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(239, 68, 68, 0.4);}
-    
-    .btn-excel { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+    .btn-secondary { background: linear-gradient(135deg, var(--accent), #f39c12); color: #fff; box-shadow: 0 10px 20px var(--accent-glow); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; margin-bottom: 10px;}
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s;}
+    .btn-excel { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); padding: 16px; width: 100%; border-radius: 14px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s;}
 
     /* Badges */
     .nav-badge { font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; letter-spacing: 0.5px; text-transform: uppercase; font-family: monospace; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); white-space: nowrap !important; flex-shrink: 0 !important; min-width: max-content !important; }
@@ -135,16 +121,12 @@
     .search-box { margin-bottom: 20px; position: relative; }
     .search-box input { margin-bottom: 0; padding-right: 45px; border-radius: 20px; background: #fff; border: 1px solid #e2e8f0;}
     body.dark-mode .search-box input { background: #1e293b; border-color: #334155; }
+    .search-box::before { content: '🔍'; position: absolute; right: 18px; top: 16px; font-size: 16px; opacity: 0.5;}
     
-  .chart-container { 
-  position: relative; 
-  height: 350px; /* 👈 تأكد من وجود طول ثابت */
-  width: 100%; 
-  margin-top: 20px;
-  background: rgba(0,0,0,0.02); 
-  border-radius: 20px; 
-  padding: 15px;
-}
+    #reader { width: 100%; max-width: 500px; margin: 0 auto 20px auto; border-radius: 20px; overflow: hidden; display: none; border: 3px dashed var(--accent); background: #f8fafc; padding: 10px;}
+    body.dark-mode #reader { border-color: var(--electric-blue); background: rgba(30, 41, 59, 0.5); }
+
+    .chart-container { position: relative; height: 350px; width: 100%; margin-top: 20px; background: rgba(0,0,0,0.02); border-radius: 20px; padding: 15px;}
     body.dark-mode .chart-container { background: #1e293b; border-color: #334155; }
 
     /* ⚡ Loader & Toast */
@@ -156,12 +138,8 @@
     #offlineBadge { display: none; background: #ef4444; color: white; padding: 12px 15px; border-radius: 16px; font-weight: 800; text-align: center; margin-bottom: 20px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
 
     /* 🛡️ Permissions */
-/* 🛡️ نظام صلاحيات مطور يمنع تداخل الصفحات */
-    .manager-only, .admin-only, .owner-only, .cross-group-only { 
-      display: none !important; 
-    }
-
-    /* إظهار العناصر العادية (أزرار، بدجات) داخل الصفحات */
+    .manager-only, .admin-only, .owner-only, .cross-group-only { display: none !important; }
+    
     body.role-manager .manager-only:not(.view-section),
     body.role-admin .manager-only:not(.view-section),
     body.role-admin .admin-only:not(.view-section),
@@ -171,48 +149,80 @@
     body.role-co-founder .cross-group-only:not(.view-section),
     body.role-owner .manager-only:not(.view-section),
     body.role-owner .admin-only:not(.view-section),
-    body.role-owner .cross-group-only:not(.view-section) { 
-      display: block !important; 
-    }
+    body.role-owner .cross-group-only:not(.view-section) { display: block !important; }
     
-    /* إظهار التابوهات (Tabs) فقط إذا كانت الصفحة نشطة والمستخدم معه صلاحية */
     .view-section.active { display: block !important; }
+    #view-dashboard:not(.active), #view-analytics:not(.active), #view-users:not(.active) { display: none !important; }
+
+    .google-btn-container { display: flex; justify-content: center; margin-top: 20px; padding: 20px; background: rgba(248, 250, 252, 0.5); border-radius: 20px; border: 2px dashed rgba(0,0,0,0.1);}
+    body.dark-mode .google-btn-container { background: rgba(30, 41, 59, 0.5); border-color: rgba(255,255,255,0.1); }
+    .divider { text-align: center; margin: 30px 0; position: relative; }
+    .divider hr { border: none; border-top: 1px solid rgba(0,0,0,0.1); }
+    body.dark-mode .divider hr { border-top-color: rgba(255,255,255,0.1); }
+    .divider span { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #fff; padding: 0 20px; color: var(--text-muted); font-size: 14px; font-weight: 700; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05);}
+    body.dark-mode .divider span { background: #0f172a; color: var(--electric-blue); border-color: rgba(0,210,255,0.2); box-shadow: 0 0 10px rgba(0,210,255,0.1); }
+    .admin-form-container { background: rgba(255,255,255,0.5); padding: 25px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); max-width: 600px; margin-left: auto; margin-right: auto;}
     
-    /* حماية إضافية للأقسام الحساسة */
-    #view-dashboard:not(.active), #view-analytics:not(.active), #view-users:not(.active) {
-      display: none !important;
+    /* ⚡ HIGH-TECH PROGRESS LOADER */
+    #electricLoader {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: none; justify-content: center; align-items: center; flex-direction: column;
+      z-index: 9999; color: var(--text-main); transition: opacity 0.3s;
     }
+    body.dark-mode #electricLoader { color: var(--electric-blue); }
+
+    .loader-text { margin-bottom: 20px; font-size: 18px; font-weight: 700; letter-spacing: 1px; animation: pulseText 1.5s infinite alternate; text-shadow: 0 0 10px currentColor;}
+    .progress-bar-container { width: 80%; max-width: 400px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; position: relative; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
+    body.dark-mode .progress-bar-container { background: rgba(0,0,0,0.4); }
+
+    .progress-bar-fill { height: 100%; width: 0%; background: var(--accent); box-shadow: 0 0 15px var(--accent-glow); border-radius: 10px; transition: width 0.1s linear; }
+    body.dark-mode .progress-bar-fill { background: var(--electric-blue); box-shadow: 0 0 15px var(--electric-glow); }
+
+    .loader-percent { margin-top: 15px; font-size: 24px; font-weight: 800; font-family: monospace; text-shadow: 0 0 10px currentColor; color: var(--accent); }
+    body.dark-mode .loader-percent { color: var(--electric-blue); }
     
-    @media (max-width: 650px) {
-      .nav-brand h2 { font-size: 1.1rem; gap: 4px; }
-      .nav-brand span#welcomeName { display: none; } 
-      .nav-badge { padding: 4px 6px; font-size: 10px; letter-spacing: 0px; }
-    }
+    @keyframes pulseText { 0% { opacity: 0.7; } 100% { opacity: 1; } }
+
+    /* Login Atom Animation */
+    .atom-logo { width: 80px; height: 80px; margin: 0 auto 15px; position: relative; display: flex; justify-content: center; align-items: center; }
+    .atom-ring { position: absolute; width: 100%; height: 100%; border: 2px solid var(--accent); border-radius: 50%; opacity: 0.6; box-shadow: 0 0 10px var(--accent-glow); }
+    body.dark-mode .atom-ring { border-color: var(--electric-blue); box-shadow: 0 0 15px var(--electric-glow); }
+    .atom-ring:nth-child(1) { animation: rotate1 4s linear infinite; }
+    .atom-ring:nth-child(2) { animation: rotate2 4s linear infinite; }
+    .atom-ring:nth-child(3) { animation: rotate3 4s linear infinite; }
+    .atom-core { width: 16px; height: 16px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent); animation: pulseCore 2s infinite alternate;}
+    body.dark-mode .atom-core { background: var(--electric-blue); box-shadow: 0 0 20px var(--electric-blue), 0 0 40px var(--electric-blue); }
+    
+    @keyframes rotate1 { 0% { transform: rotateX(65deg) rotateY(0deg) rotateZ(0deg); } 100% { transform: rotateX(65deg) rotateY(0deg) rotateZ(360deg); } }
+    @keyframes rotate2 { 0% { transform: rotateX(65deg) rotateY(60deg) rotateZ(0deg); } 100% { transform: rotateX(65deg) rotateY(60deg) rotateZ(360deg); } }
+    @keyframes rotate3 { 0% { transform: rotateX(65deg) rotateY(120deg) rotateZ(0deg); } 100% { transform: rotateX(65deg) rotateY(120deg) rotateZ(360deg); } }
+    @keyframes pulseCore { 0% { transform: scale(0.8); } 100% { transform: scale(1.2); } }
   </style>
 </head>
 <body class="dark-mode">
 
   <div class="circuit-bg"></div>
 
-  <div id="loader">
-    <div style="width:60px; height:60px; margin-bottom:20px; position:relative; display:flex; justify-content:center; align-items:center;">
-       <div style="position:absolute; width:100%; height:100%; border:2px solid var(--electric-blue); border-radius:50%; opacity:0.6; animation: spin 2s linear infinite;"></div>
-       <div style="width:12px; height:12px; background:var(--electric-blue); border-radius:50%; box-shadow: 0 0 20px var(--electric-blue);"></div>
+  <div id="electricLoader">
+    <div class="loader-text" id="loaderMessage">جاري نقل البيانات...</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressBarFill"></div>
     </div>
-    <div id="loaderMsg" style="font-weight: 800; font-size: 1.1rem; letter-spacing: 1px;">جاري العمل...</div>
-    <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
-    <div style="font-size: 24px; font-weight: 900; font-family: monospace; color: var(--electric-blue);" id="percent">0%</div>
+    <div class="loader-percent" id="loaderPercent">0%</div>
   </div>
-  <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 
   <div class="navbar">
     <div class="nav-content">
-      <div class="nav-brand"><h2>⚡ <span class="brand-text">Eduneers</span> <span id="welcomeName" style="font-size: 11px; opacity:0.7;"></span></h2></div>
+      <div class="nav-brand">
+        <h2>⚡ <span class="brand-text">Eduneers</span> <span id="welcomeName"></span></h2>
+      </div>
       <div class="nav-actions">
-        <span id="groupBadge" style="font-size: 11px; font-weight: 800; background: rgba(0, 210, 255, 0.1); color: var(--electric-blue); padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(0, 210, 255, 0.3); display: none;"></span>
-        <button class="nav-btn" onclick="toggleDarkMode()">🌓</button>
-        <button class="nav-btn" onclick="window.location.href='grades.html'" title="نظام التقييم والدرجات">🎯</button>
-        <button class="nav-btn" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
+        <span id="groupBadge" class="nav-badge group-badge" style="display: none;"></span>
+        <span id="roleBadge" class="nav-badge role-badge" style="display: none;"></span>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()">☀️</button>
+        <button class="theme-toggle" onclick="window.location.href='grades.html'" title="نظام الدرجات والتقييم">🎯</button>
+        <button class="hamburger" id="menuBtn" onclick="toggleSidebar()" style="display:none;">☰</button>
       </div>
     </div>
   </div>
@@ -229,16 +239,16 @@
       <span>📷</span> <span>مسح الـ QR</span>
     </a>
     <a href="#" onclick="switchView('manual'); toggleSidebar();" id="nav-manual">
-      <span>✍️</span> <span>التسجيل اليدوي</span>
+      <span>✍️</span> <span>التسجيل اليدوي السريع</span>
     </a>
     <a href="grades.html" style="color: var(--accent);">
-      <span>🎯</span> <span>نظام الدرجات</span>
+      <span>🎯</span> <span>نظام رصد الدرجات</span>
     </a>
     <a href="#" class="manager-only" onclick="switchView('dashboard'); toggleSidebar();" id="nav-dashboard">
       <span>📊</span> <span>لوحة الحضور</span>
     </a>
     <a href="#" class="manager-only" onclick="switchView('analytics'); toggleSidebar();" id="nav-analytics">
-      <span>📈</span> <span>التحليلات</span>
+      <span>📈</span> <span>الإحصائيات والتحليلات</span>
     </a>
     <a href="#" class="admin-only" onclick="switchView('users'); toggleSidebar();" id="nav-users">
       <span>👥</span> <span>إدارة المستخدمين</span>
@@ -259,34 +269,26 @@
     <div id="toast"></div>
     <div id="offlineBadge" onclick="syncOfflineData()">📶 لديك بيانات غير مزامنة (<span id="offlineCount">0</span>). اضغط للرفع!</div>
 
-  <div id="lectureContainer" class="manager-only" style="background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); text-align:center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display:none;">
-    
-    <!-- 1️⃣ الجزء الخاص بالمحاضرة (يظهر للـ Coordinator والمديرين) -->
-    <div style="margin-bottom: 15px;">
-        <label style="font-weight: 800; color: var(--electric-blue); font-size: 13px; display:block; margin-bottom:10px;">رقم المحاضرة المستهدفة</label>
-        <select id="lecture" style="margin-bottom: 0; max-width: 300px;">
-            <script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script>
-        </select>
+    <div id="lectureContainer" class="manager-only" style="background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); text-align:center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display:none;">
+      <div style="margin-bottom: 15px;">
+          <label style="font-weight: 800; color: var(--electric-blue); font-size: 13px; display:block; margin-bottom:10px;">رقم المحاضرة المستهدفة</label>
+          <select id="lecture" style="margin-bottom: 0; max-width: 300px;">
+              <script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script>
+          </select>
+      </div>
+      <div class="cross-group-only" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display:none !important;">
+          <label style="font-weight: 800; color: #c084fc; font-size: 13px; display:block; margin-bottom:10px;">تحكم الجروب 👑</label>
+          <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
+      </div>
     </div>
-
-    <!-- 2️⃣ الجزء الخاص بالجروب (يختفي تماماً عن الـ Coordinator ويظهر للأدمن فقط) -->
-    <div class="cross-group-only" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display:none !important;">
-        <label style="font-weight: 800; color: #c084fc; font-size: 13px; display:block; margin-bottom:10px;">تحكم الجروب 👑</label>
-        <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
-    </div>
-
-</div>
 
     <div id="view-scanner" class="view-section active">
       <div style="max-width: 500px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">المسح الضوئي للحضور</h3>
         <select id="cameraSelection"><option value="">جاري البحث عن كاميرات...</option></select>
-        
         <button class="btn-primary" onclick="startLiveCamera()" style="width: 100%; display: flex; justify-content: center;">🎥 تفعيل المسح الذكي</button>
-        
         <input type="file" id="qr-input-file" accept="image/*" capture="environment" style="display:none;">
         <button class="btn-secondary" onclick="document.getElementById('qr-input-file').click()" style="margin-bottom:0;">📸 التقاط صورة للـ QR</button>
-        
         <div id="reader" style="width: 100%; border-radius: 20px; overflow: hidden; display: none; border: 3px dashed var(--accent); margin-top: 15px; background: rgba(0,0,0,0.05); padding: 10px;"></div>
         <button class="btn-danger" id="stopCamBtn" style="display:none; margin-top:15px; width: 100%; justify-content: center;" onclick="stopLiveCamera()">إيقاف الكاميرا</button>
       </div>
@@ -295,29 +297,33 @@
     <div id="view-manual" class="view-section">
       <div style="max-width: 500px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">التسجيل اليدوي السريع</h3>
-        <p style="font-size: 13px; color: var(--text-muted); text-align:center; margin-bottom: 20px;">أدخل <b>رقم الطالب فقط</b> (يدعم الأرقام العربية ١٢٣).</p>
+        <p style="font-size: 14px; color: var(--text-muted); text-align:center; margin-bottom: 20px;">أدخل <b>رقم الطالب فقط</b> (يدعم الأرقام العربية ١٢٣).</p>
         <input type="text" id="manualCode" placeholder="مثال: 15 أو ١٥" style="text-align:center; font-size:24px; letter-spacing:4px; font-weight:900;">
-        <button class="btn-submit" onclick="submitManualCode()">تسجيل الحضور 📥</button>
+        <button class="btn-primary" onclick="submitManualCode()">تسجيل الحضور 📥</button>
       </div>
     </div>
 
     <div id="view-dashboard" class="view-section manager-only">
       <div class="dashboard-header">
-        <span style="font-weight: 800; color: var(--primary); font-size:16px;">الطلاب الحاضرين:</span>
+        <span style="font-weight: 800; color: var(--primary); font-size:16px;">مؤشر الحضور الحي:</span>
         <span class="count-badge" id="dashCount">0</span>
       </div>
       <div class="search-box" style="position: relative;">
         <input type="text" id="searchInput" placeholder="بحث ذكي بالاسم أو الكود..." onkeyup="filterDashboard()" style="padding-right: 40px;">
         <span style="position: absolute; right: 15px; top: 15px; opacity: 0.5;">🔍</span>
       </div>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <button class="btn-secondary" style="flex: 1; padding:12px; margin:0;" onclick="loadDashboard()">🔄 تحديث</button>
-        <button class="btn-excel" style="flex: 1; padding:12px; margin:0;" onclick="exportToExcel()">📥 تحميل Excel</button>
+      <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <button class="btn-secondary" style="flex: 1;" onclick="loadDashboard()">🔄 مزامنة</button>
+        <button class="btn-excel" style="flex: 1;" onclick="exportToExcel()">📥 تحميل Excel</button>
       </div>
       <div class="table-container">
         <table id="attendeesTable">
-          <thead><tr><th>الكود</th> <th>الاسم</th> <th>الوقت</th> <th class="manager-only">إجراء</th></tr></thead>
-          <tbody id="attendeesList"><tr><td colspan="4" style="text-align:center; padding: 20px; font-weight:700; color:var(--text-muted);">اضغط تحديث لعرض السجلات</td></tr></tbody>
+          <thead>
+            <tr><th>الكود</th> <th>الاسم</th> <th>الوقت</th> <th class="manager-only">إجراء</th></tr>
+          </thead>
+          <tbody id="attendeesList">
+            <tr><td colspan="4" style="text-align:center; padding: 30px; font-weight:700; color:var(--text-muted);">اضغط مزامنة لعرض السجلات</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -325,24 +331,24 @@
     <div id="view-analytics" class="view-section manager-only">
       <div style="max-width: 600px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">📊 الإحصائيات والتحليلات</h3>
-        <div class="owner-only" style="display:flex; gap:10px; margin-bottom: 20px;">
-          <button class="btn-primary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
-          <button class="btn-secondary btn-small" style="flex:1; margin:0; padding:12px;" onclick="loadAnalytics('group')">تحليل الجروب 📈</button>
+        <div class="owner-only flex-container" style="gap: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.5); padding: 15px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); max-width: 600px; margin-left: auto; margin-right: auto;">
+          <button class="btn-primary btn-small" style="flex:1; padding:12px; font-size:14px;" onclick="loadAnalytics('all')">مقارنة شاملة 🌐</button>
+          <button class="btn-secondary btn-small" style="flex:1; padding:12px; font-size:14px;" onclick="loadAnalytics('group')">تحليل الجروب الحالي 📈</button>
         </div>
-        <p id="analyticsDesc" style="font-size: 13px; color: var(--text-muted); text-align:center;"></p>
+        <p id="analyticsDesc" style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 700; text-align:center;"></p>
         <div class="chart-container"><canvas id="attendanceChart"></canvas></div>
-        <button class="btn-secondary" style="margin-top: 15px;" onclick="loadAnalytics()">تحديث البيانات 🔄</button>
+        <button class="btn-secondary" style="margin-top: 15px;" onclick="loadAnalytics()">🔄 تحديث البيانات</button>
       </div>
     </div>
 
     <div id="view-users" class="view-section admin-only">
       <div style="max-width: 600px; margin: auto;">
         <h3 style="color:var(--electric-blue); text-align:center; font-size:24px; font-weight:800; margin-bottom:20px;">👥 إدارة المستخدمين</h3>
-        <div style="background: rgba(0,0,0,0.05); padding: 20px; border-radius: 16px; margin-bottom: 20px;">
+        <div class="admin-form-container">
           <input type="text" id="newUserName" placeholder="الاسم بالكامل">
           <input type="email" id="newUserEmail" placeholder="البريد الإلكتروني الرسمي">
           <input type="password" id="newUserPass" placeholder="كلمة مرور الدخول">
-          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+          <div style="display: flex; gap: 15px; margin-bottom: 20px;">
             <select id="newUserRole" style="margin-bottom: 0;">
               <option value="Cadre">مسجل (Cadre)</option>
               <option value="Coordinator">مراقب (Coordinator)</option>
@@ -351,12 +357,14 @@
             </select>
             <select id="newUserGroup" style="margin-bottom: 0;"></select>
           </div>
-          <button class="btn-submit" onclick="addUser()">توثيق المستخدم ➕</button>
+          <button class="btn-primary" onclick="addUser()">توثيق المستخدم ➕</button>
         </div>
-        <button class="btn-secondary" style="margin-bottom:15px;" onclick="loadUsers()">سحب بيانات المستخدمين 🔄</button>
-        <div class="table-container">
+        <div class="form-wrapper">
+          <button class="btn-secondary" onclick="loadUsers()">🔄 سحب بيانات المستخدمين</button>
+        </div>
+        <div class="table-container" style="margin-top:20px;">
           <table>
-            <thead><tr><th>المستخدم</th> <th>الرتبة</th> <th>الجروب</th> <th>إجراء</th></tr></thead>
+            <thead><tr><th>المستخدم</th> <th>الرتبة</th> <th>النطاق</th> <th>إجراء</th></tr></thead>
             <tbody id="usersList"><tr><td colspan="4" style="text-align:center; padding: 20px; color:var(--text-muted);">جاري الاتصال...</td></tr></tbody>
           </table>
         </div>
@@ -364,18 +372,22 @@
     </div>
 
     <div id="view-login" class="view-section">
-      <div style="max-width: 400px; margin: auto;">
+      <div class="form-wrapper">
         <div style="text-align: center; margin-bottom: 30px;">
-          <div style="width:60px; height:60px; border:2px solid var(--electric-blue); border-radius:50%; margin:auto; display:flex; align-items:center; justify-content:center; animation: spin 3s linear infinite;"><div style="width:10px; height:10px; background:var(--electric-blue); border-radius:50%;"></div></div>
-          <h2 style="color:var(--primary); margin-top:15px; font-size: 24px; font-weight: 800;">تسجيل الدخول</h2>
+          <div class="atom-logo">
+            <div class="atom-ring"></div><div class="atom-ring"></div><div class="atom-ring"></div>
+            <div class="atom-core"></div>
+          </div>
+          <h2 style="color:var(--primary); margin-top:0; font-size: 28px; font-weight: 800; letter-spacing: 1px;">تسجيل الدخول</h2>
+          <p style="color: var(--text-muted); font-size: 15px; font-weight: 600;"> Attendance System | Eduneers </p>
         </div>
         <input type="email" id="loginEmail" placeholder="البريد الإلكتروني...">
         <input type="password" id="loginPassword" placeholder="كلمة المرور...">
-        <button class="btn-submit" onclick="handleManualLogin()">دخول آمن 🔐</button>
-        <div style="text-align:center; margin: 20px 0; color:var(--text-muted); font-size:12px;">أو باستخدام</div>
-        <div style="background: rgba(0,0,0,0.05); padding:15px; border-radius:16px; display:flex; justify-content:center;">
+        <button class="btn-primary" onclick="handleManualLogin()">دخول آمن 🔐</button>
+        <div class="divider"><hr><span>أو باستخدام</span></div>
+        <div class="google-btn-container">
           <div id="g_id_onload" data-client_id="841979425871-4frlmc9t57ahvui609v35ksv8rvnvo0b.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
-          <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black" data-text="signin_with" data-size="large"></div>
+          <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
         </div>
       </div>
     </div>
@@ -383,17 +395,17 @@
   </div>
 
   <script>
-    const ATTEND_API = "https://script.google.com/macros/s/AKfycbzrLXNuxcAM5A1euSqtbqt-3L2sqAPXGb0A3JF7hiCaJ5giW86c51bs45ISAPANa4PP/exec"; 
-    const ATTENDANCE_API_URL = ATTEND_API; 
+    const ATTENDANCE_API_URL = "https://script.google.com/macros/s/AKfycbxa-cJWpe21h39eHHYxj8J203gfpvhWwJpNCcPnEUp2ywWddDNLUgXI777GOJD__VN_/exec"; 
     const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbw-oytOWrgERm2yXu-NagMlyS14HlUGeAlsWqrZl2SwRJIi0IDL1AH2VduQvsmIIkNgFA/exec";
 
     let html5QrCode; let allAttendees = []; 
     let currentView = localStorage.getItem('savedView') || 'login';
-    let attendanceChartInstance = null; let myChart = null;
+    let attendanceChartInstance = null;
     let lastSyncTime = 0; const SYNC_COOLDOWN = 60000;
     
     let offlineQueue = JSON.parse(localStorage.getItem('offlineQueue')) || [];
 
+    // 🔴 دالة تحويل الأرقام العربية إلى إنجليزية
     function convertNumerals(str) {
       if(!str) return "";
       const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -402,18 +414,18 @@
 
     let loaderInterval;
     function showProgress(message="جاري العمل...") {
-        const l = document.getElementById('loader');
-        document.getElementById('loaderMsg').innerText = message;
+        const l = document.getElementById('electricLoader');
+        document.getElementById('loaderMessage').innerText = message;
         l.style.display = 'flex';
-        let p=0; document.getElementById('percent').innerText = p + '%'; document.getElementById('barFill').style.width = p + '%';
+        let p=0; document.getElementById('loaderPercent').innerText = p + '%'; document.getElementById('progressBarFill').style.width = p + '%';
         clearInterval(loaderInterval);
-        loaderInterval = setInterval(()=>{ p+=Math.floor(Math.random()*10)+1; if(p>90)p=90; document.getElementById('barFill').style.width=p+'%'; document.getElementById('percent').innerText=p+'%'; }, 100);
+        loaderInterval = setInterval(()=>{ p+=Math.floor(Math.random()*10)+1; if(p>90)p=90; document.getElementById('progressBarFill').style.width=p+'%'; document.getElementById('loaderPercent').innerText=p+'%'; }, 100);
     }
 
     function completeProgress() {
         clearInterval(loaderInterval);
-        document.getElementById('barFill').style.width='100%'; document.getElementById('percent').innerText='100%';
-        setTimeout(() => { document.getElementById('loader').style.display = 'none'; document.getElementById('barFill').style.width='0%'; }, 300);
+        document.getElementById('progressBarFill').style.width='100%'; document.getElementById('loaderPercent').innerText='100%';
+        setTimeout(() => { document.getElementById('electricLoader').style.display = 'none'; document.getElementById('progressBarFill').style.width='0%'; }, 300);
     }
 
     function showToast(text, type="success") {
@@ -524,7 +536,7 @@
               localStorage.setItem('userRole', d.role); localStorage.setItem('userGroup', d.group);
               localStorage.setItem('userEmail', email); localStorage.setItem('sessionToken', d.sessionToken);
               localStorage.setItem('savedView', 'scanner');
-              window.location.reload();
+              setTimeout(() => { document.getElementById('loginEmail').value = ''; document.getElementById('loginPassword').value = ''; checkAuth(); }, 1000); 
           } else showToast(d.message, "error");
       }).catch(e=> {completeProgress(); showToast("❌ خطأ اتصال", "error")});
     }
@@ -539,90 +551,53 @@
                 localStorage.setItem('userRole', d.role); localStorage.setItem('userGroup', d.group);
                 localStorage.setItem('userEmail', payload.email); localStorage.setItem('sessionToken', d.sessionToken);
                 localStorage.setItem('savedView', 'scanner');
-                window.location.reload();
+                setTimeout(checkAuth, 1000);
             } else showToast(d.message, "error");
         }).catch(e=> {completeProgress(); showToast("❌ خطأ اتصال", "error")});
     }
 
-   function syncRole() {
-  if (localStorage.getItem('isLoggedIn') !== 'true') return;
-
-  fetch(`${LOGIN_API_URL}?action=checkMyRole${getAuthParams()}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "unauthorized" || data.status === "deleted") { 
-        alert("🔒 تم تحديث جلسة العمل أو إلغاء الصلاحية. يرجى تسجيل الدخول."); 
-        logout(); 
-      } 
-      else if (data.status === "success") {
-        const currentSavedRole = localStorage.getItem('userRole') || "";
-        const currentSavedGroup = localStorage.getItem('userGroup') || "";
-        
-        // تحويل الرتبة القادمة من السيرفر لحروف كبيرة لضمان دقة المقارنة
-        const newRole = data.role.toUpperCase();
-        const oldRole = currentSavedRole.toUpperCase();
-        
-        // هل هذا المستخدم "إدارة عليا"؟ (Owner, Co-Founder, Admin, Team Manager)
-        const isHighAdmin = ['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN'].includes(newRole);
-
-        // 1. إذا تغيرت الرتبة أو تغير الجروب (بشرط ألا يكون من الإدارة العليا)
-        if (oldRole !== newRole || (currentSavedGroup !== data.group && !isHighAdmin)) {
-          
-          localStorage.setItem('userRole', data.role); // حفظ الرتبة بشكلها الأصلي
-          
-          // تحديث الجروب فقط إذا لم يكن أدمن (الأدمن حر التنقل)
-          if (!isHighAdmin) {
-            localStorage.setItem('userGroup', data.group);
+    function syncRole() {
+      if (localStorage.getItem('isLoggedIn') !== 'true') return;
+      fetch(`${LOGIN_API_URL}?action=checkMyRole${getAuthParams()}`)
+        .then(res => res.json()).then(data => {
+          if (data.status === "unauthorized" || data.status === "deleted") { alert("انتهت صلاحية الجلسة."); logout(); } 
+          else if (data.status === "success") {
+            const currentSavedRole = localStorage.getItem('userRole'); const currentSavedGroup = localStorage.getItem('userGroup');
+            if (currentSavedRole !== data.role || (currentSavedGroup !== data.group && data.role !== 'Owner' && data.role !== 'CO-Founder' && data.role !== 'Team Manager' && data.role !== 'Admin')) {
+              localStorage.setItem('userRole', data.role);
+              if (data.role !== 'Owner' && data.role !== 'CO-Founder' && data.role !== 'Team Manager' && data.role !== 'Admin') localStorage.setItem('userGroup', data.group);
+              applyRolesToUI(); 
+              if (currentView === 'users' && data.role !== 'Team Manager' && data.role !== 'Admin' && data.role !== 'Owner' && data.role !== 'CO-Founder') switchView('scanner');
+            }
           }
+        }).catch(err => console.log("Sync error"));
+    }
 
-          // تحديث الواجهة فوراً
-          if (typeof applyPermissions === "function") {
-              applyPermissions(); 
-          } else {
-              applyRolesToUI();
-          }
-          
-          // 2. طرد المستخدم من الصفحات الحساسة إذا فقد الصلاحية وهو بداخلها
-          const sensitiveViews = ['users', 'settings'];
-          if (sensitiveViews.includes(currentView) && !isHighAdmin) {
-            showToast("⚠️ تم سحب صلاحية الوصول لهذه الصفحة", "error");
-            switchView('scanner');
-          }
-        }
+   function applyRolesToUI() {
+      const userRole = localStorage.getItem('userRole'); const userGroup = localStorage.getItem('userGroup');
+      const roleBadge = document.getElementById('roleBadge'); const groupBadge = document.getElementById('groupBadge');
+      
+      if(roleBadge) {
+          roleBadge.innerText = (userRole === 'Owner') ? 'المالك 👑' : (userRole === 'CO-Founder') ? 'CO-Founder ✨' : (userRole === 'Team Manager' || userRole === 'Admin') ? 'Team Manager' : (userRole === 'Coordinator' || userRole === 'Manager') ? 'Coordinator' : 'Cadre';
+          roleBadge.style.display = 'flex';
       }
-    })
-    .catch(err => console.log("Sync error ignored."));
-}
-
-function applyRolesToUI() {
-  const rawRole = localStorage.getItem('userRole') || "CADRE";
-  const role = rawRole.toUpperCase(); 
-  const userGroup = localStorage.getItem('userGroup') || "Group A";
-
-  // تحديث النصوص والبدجات
-  const rb = document.getElementById('roleBadge');
-  const gb = document.getElementById('groupBadge');
-  const wn = document.getElementById('welcomeName');
-  const sr = document.getElementById('sideRole');
-
-  if(rb) { rb.innerText = rawRole; rb.style.display = 'flex'; }
-  if(gb) { gb.innerText = userGroup; gb.style.display = 'flex'; }
-  if(wn) wn.innerText = `| ${localStorage.getItem('userName')}`;
-  if(sr) sr.innerText = rawRole;
-
-  // إضافة الكلاس للجسم ليتحكم الـ CSS في الإظهار والإخفاء الذكي
-  document.body.classList.remove('role-owner', 'role-co-founder', 'role-admin', 'role-manager', 'role-user');
-  
-  if (role === 'OWNER') document.body.classList.add('role-owner');
-  else if (role === 'CO-FOUNDER') document.body.classList.add('role-co-founder');
-  else if (role === 'TEAM MANAGER' || role === 'ADMIN') document.body.classList.add('role-admin');
-  else if (role === 'COORDINATOR') document.body.classList.add('role-manager');
-  else document.body.classList.add('role-user');
-
-  const ggs = document.getElementById('globalGroupSelect'); 
-  if(ggs) ggs.value = userGroup;
-}
-  
+      
+      if(groupBadge) {
+          groupBadge.innerText = userGroup; 
+          groupBadge.style.display = 'flex';
+      }
+      
+      document.body.className = document.body.classList.contains('dark-mode') ? 'dark-mode ' : ''; 
+      
+      if (userRole === 'Owner') { document.body.classList.add('role-owner'); } 
+      else if (userRole === 'CO-Founder') { document.body.classList.add('role-co-founder'); } 
+      else if (userRole === 'Team Manager' || userRole === 'Admin') { document.body.classList.add('role-admin'); } 
+      else if (userRole === 'Coordinator' || userRole === 'Manager') { document.body.classList.add('role-manager'); } 
+      else { document.body.classList.add('role-user'); }
+      
+      const ggs = document.getElementById('globalGroupSelect'); if(ggs) ggs.value = userGroup;
+    }
+    
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; const userName = localStorage.getItem('userName');
       if (isLoggedIn) {
@@ -631,8 +606,8 @@ function applyRolesToUI() {
         const wName = document.getElementById('welcomeName'); if(wName) wName.innerText = `| ${userName}`;
         applyRolesToUI();
         
-        if (currentView === 'login' || !document.getElementById(`view-${currentView}`)) currentView = 'scanner'; 
-        switchView(currentView); syncRole(); 
+        if (currentView === 'login' || !document.getElementById(`view-${currentView}`)) currentView = 'manual'; 
+        switchView(currentView); syncRole(true); 
       } else {
         const mBtn = document.getElementById('menuBtn'); if(mBtn) mBtn.style.display = 'none'; 
         const appTabs = document.getElementById('appTabs'); if(appTabs) appTabs.style.display = 'none';
@@ -647,30 +622,47 @@ function applyRolesToUI() {
     function logout() { localStorage.clear(); toggleSidebar(); checkAuth(); window.location.reload(); }
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
 
-function switchView(viewId, el) {
-  if(html5QrCode && html5QrCode.isScanning) stopLiveCamera();
-  
-  document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  
-  let targetView = document.getElementById(`view-${viewId}`);
-  if(!targetView) return;
-  
-  targetView.classList.add('active');
-  const tabItem = document.getElementById(`tab-${viewId}`);
-  if(tabItem) tabItem.classList.add('active');
+    function switchView(viewId, el) {
+      if(currentView === 'scanner' && viewId !== 'scanner') stopLiveCamera();
+      
+      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      
+      let targetView = document.getElementById(`view-${viewId}`);
+      if(!targetView) { viewId = 'scanner'; targetView = document.getElementById(`view-${viewId}`); }
+      
+      targetView.classList.add('active');
+      const navItem = document.getElementById(`nav-${viewId}`); if(navItem) navItem.classList.add('active');
+      const tabItem = document.getElementById(`tab-${viewId}`); if(tabItem) tabItem.classList.add('active');
+      if(el && el.classList.contains('tab-item')) el.classList.add('active');
 
-  currentView = viewId;
-  localStorage.setItem('savedView', viewId);
+      currentView = viewId; localStorage.setItem('savedView', viewId);
+      document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show');
 
-  // 👈 الإصلاح هنا: ننتظر قليلاً حتى تظهر الحاوية قبل الرسم
-  if(viewId === 'dashboard') loadDashboard();
-  if(viewId === 'users') loadUsers();
-  if(viewId === 'analytics') {
-      document.getElementById('attendanceChart').style.opacity = '0'; // إخفاء مؤقت للرسم
-      setTimeout(() => { loadAnalytics('group'); }, 350); 
-  }
-}
+      const lecContainer = document.getElementById('lectureContainer');
+      if (viewId === 'users' || viewId === 'login') { 
+          lecContainer.style.setProperty('display', 'none', 'important'); 
+      } else { 
+          if(document.body.classList.contains('role-admin') || document.body.classList.contains('role-owner') || document.body.classList.contains('role-co-founder')) {
+              lecContainer.style.setProperty('display', 'block', 'important');
+          } else if(viewId === 'scanner' || viewId === 'manual') {
+              lecContainer.style.setProperty('display', 'block', 'important');
+              const cgo = document.querySelector('#lectureContainer .cross-group-only');
+              if(cgo) cgo.style.display = 'none';
+          } else {
+              lecContainer.style.setProperty('display', 'none', 'important');
+          }
+      }
+      
+      // 👈 الإصلاح هنا: ننتظر قليلاً حتى تظهر الحاوية قبل الرسم أو طلب الداتا
+      if(viewId === 'dashboard') loadDashboard(); 
+      if(viewId === 'users') loadUsers(); 
+      if(viewId === 'analytics') {
+          document.getElementById('attendanceChart').style.opacity = '0'; // إخفاء مؤقت للرسم
+          setTimeout(() => { loadAnalytics('group'); }, 350); 
+      }
+    }
 
     function changeGlobalGroup(newGroup) {
       localStorage.setItem('userGroup', newGroup); 
@@ -794,95 +786,136 @@ function switchView(viewId, el) {
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a");
       link.href = URL.createObjectURL(blob); link.download = `Report_${group}_Lec_${lec}.csv`; link.click(); showToast("✅ تم التصدير", "success");
     }
-async function loadAnalytics(type = 'group') {
-  const group = localStorage.getItem('userGroup') || "Group A";
-  const lec = document.getElementById('lecture').value;
-  const auth = getAuthParams(); // 👈 إرسال بيانات الجلسة لضمان الأمان
-  
-  showLoader(true, "جاري سحب البيانات وتحليل الأداء... 📈");
-  
-  let url = (type === 'all') ? 
-      `${ATTENDANCE_API_URL}?action=getOwnerAnalytics&lectureNum=${lec}${auth}` : 
-      `${ATTENDANCE_API_URL}?action=getAnalytics&group=${group}${auth}`;
 
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-    if (data.status === "success" && data.data.length > 0) {
-       renderAnalyticsChart(data.labels, data.data, type === 'all' ? 'مقارنة الجروبات' : 'حضور ' + group);
-       document.getElementById('analyticsDesc').innerText = `✅ تم تحديث البيانات بناءً على محاضرة رقم ${lec}`;
-    } else {
-       showToast("⚠️ لا توجد بيانات كافية للرسم", "error");
-    }
-  } catch (e) {
-    showToast("❌ خطأ في الاتصال بالسيرفر", "error");
-  }
-  showLoader(false);
-}
+    // 🔴 إصلاح دالة التحليلات (Chart.js)
+    async function loadAnalytics(type = 'group') {
+      const group = localStorage.getItem('userGroup') || "Group A";
+      const lec = document.getElementById('lecture').value;
+      const auth = getAuthParams(); 
+      
+      showProgress("جاري سحب البيانات وتحليل الأداء... 📈");
+      
+      let url = (type === 'all') ? 
+          `${ATTENDANCE_API_URL}?action=getOwnerAnalytics&lectureNum=${lec}${auth}` : 
+          `${ATTENDANCE_API_URL}?action=getAnalytics&group=${group}${auth}`;
 
-   function renderAnalyticsChart(labelsArray, dataArray, labelTitle) {
-  const canvas = document.getElementById('attendanceChart');
-  const ctx = canvas.getContext('2d');
-  
-  // 👈 تدمير الرسم القديم إجباري لمنع تداخل الرسوم
-  if (attendanceChartInstance) { attendanceChartInstance.destroy(); }
-
-  document.getElementById('attendanceChart').style.opacity = '1';
-
-  const isDark = document.body.classList.contains('dark-mode');
-  const accentColor = isDark ? '#00d2ff' : '#0f172a'; // أزرق نيون في المظلم
-
-  attendanceChartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labelsArray,
-      datasets: [{
-        label: labelTitle,
-        data: dataArray,
-        backgroundColor: accentColor,
-        borderColor: '#f5b041',
-        borderWidth: 2,
-        borderRadius: 10, // زوايا دائرية للأعمدة
-        hoverBackgroundColor: '#f39c12'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: { ticks: { color: isDark ? '#fff' : '#334155', font: {family: 'Cairo', weight: 'bold'} } },
-        y: { beginAtZero: true, ticks: { stepSize: 1, color: isDark ? '#fff' : '#334155' }, grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' } }
-      },
-      plugins: { legend: { display: false } }
-    }
-  });
-}
-
-    function loadUsers() {
-  const tbody = document.getElementById('usersList');
-  tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">⏳ جاري فك التشفير...</td></tr>`;
-  
-  // 👈 هنا الإصلاح: إرسال الإيميل والتوكن مع الطلب
-  fetch(`${LOGIN_API_URL}?action=getUsers${getAuthParams()}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "success" && data.users.length > 0) {
-        const visibleUsers = data.users.filter(u => u.role !== 'Owner');
-        tbody.innerHTML = visibleUsers.map(u => {
-          return `<tr>
-            <td style="font-size:13px;"><b>${u.name}</b><br><span style="opacity:0.6; font-size:10px;">${u.email}</span></td> 
-            <td><span class="status-badge">${u.role}</span></td>
-            <td><span class="status-badge">${u.group}</span></td>
-            <td><button class="btn-danger btn-small" onclick="deleteUser('${u.email}')">عزل</button></td>
-          </tr>`;
-        }).join('');
-      } else {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">لا توجد صلاحيات مسجلة</td></tr>`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (data.status === "success" && data.data && data.data.length > 0) {
+           renderAnalyticsChart(data.labels, data.data, type === 'all' ? 'مقارنة الجروبات' : 'حضور ' + group);
+           document.getElementById('analyticsDesc').innerText = `✅ تم تحديث البيانات بناءً على محاضرة رقم ${lec}`;
+        } else {
+           showToast("⚠️ لا توجد بيانات كافية للرسم", "error");
+        }
+      } catch (e) {
+        showToast("❌ خطأ في الاتصال بالسيرفر", "error");
       }
-    }).catch(err => {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ef4444; padding: 20px;">❌ فشل في جلب البيانات (تأكد من صلاحياتك)</td></tr>`;
-    });
-}
+      completeProgress();
+    }
+
+    function renderAnalyticsChart(labelsArray, dataArray, labelTitle) {
+      const canvas = document.getElementById('attendanceChart');
+      const ctx = canvas.getContext('2d');
+      
+      // 👈 تدمير الرسم القديم إجباري لمنع تداخل الرسوم
+      if (attendanceChartInstance) { attendanceChartInstance.destroy(); }
+
+      document.getElementById('attendanceChart').style.opacity = '1';
+
+      const isDark = document.body.classList.contains('dark-mode');
+      const accentColor = isDark ? '#00d2ff' : '#0f172a'; // أزرق نيون في المظلم
+
+      attendanceChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labelsArray,
+          datasets: [{
+            label: labelTitle,
+            data: dataArray,
+            backgroundColor: accentColor,
+            borderColor: '#f5b041',
+            borderWidth: 2,
+            borderRadius: 10,
+            hoverBackgroundColor: '#f39c12'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { color: isDark ? '#fff' : '#334155', font: {family: 'Cairo', weight: 'bold'} } },
+            y: { beginAtZero: true, ticks: { stepSize: 1, color: isDark ? '#fff' : '#334155' }, grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    // 🔴 دالة تحميل المستخدمين المُصلحة
+    function loadUsers() {
+      const tbody = document.getElementById('usersList');
+      if (!tbody) return; 
+      
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">⏳ جاري فك التشفير...</td></tr>`;
+      showProgress("قراءة بروتوكولات الأمان...");
+      
+      fetch(`${LOGIN_API_URL}?action=getUsers${getAuthParams()}`)
+        .then(res => res.json())
+        .then(data => {
+          completeProgress();
+          if (data.status === "success" && data.users && data.users.length > 0) {
+            const currentUserRole = (localStorage.getItem('userRole') || '').toUpperCase();
+            const visibleUsers = data.users.filter(u => u.role !== 'Owner'); 
+            
+            if (visibleUsers.length === 0) { 
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">لا توجد صلاحيات</td></tr>`; 
+                return; 
+            }
+            
+            let tableContent = '';
+            
+            visibleUsers.forEach(u => {
+              const isProtected = (u.role === 'CO-Founder' && currentUserRole !== 'OWNER');
+              
+              let groupOptions = '';
+              const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+              for(let i=0; i<letters.length; i++) { 
+                  let gName = 'Group ' + letters[i]; 
+                  groupOptions += `<option value="${gName}" ${u.group === gName ? 'selected' : ''}>${gName}</option>`; 
+              }
+              
+              tableContent += `<tr>
+                <td style="font-size:13px; line-height: 1.5; color: inherit;"><b>${u.name}</b><br><span style="color:var(--text-muted); font-family:monospace;">${u.email}</span></td> 
+                <td>
+                  <select class="role-select" onchange="changeUserRole('${u.email}', this.value)" ${isProtected ? 'disabled title="مغلق - صلاحية عليا"' : ''}>
+                    <option value="Cadre" ${u.role === 'Cadre' || u.role === 'User' ? 'selected' : ''}>Cadre</option>
+                    <option value="Coordinator" ${u.role === 'Coordinator' || u.role === 'Manager' ? 'selected' : ''}>Coordinator</option>
+                    <option value="Team Manager" ${u.role === 'Team Manager' || u.role === 'Admin' ? 'selected' : ''}>Team Manager</option>
+                    <option value="CO-Founder" ${u.role === 'CO-Founder' ? 'selected' : ''}>CO-Founder ✨</option>
+                  </select>
+                </td>
+                <td>
+                  <select class="role-select" onchange="changeUserGroup('${u.email}', this.value)" ${isProtected ? 'disabled' : ''}>
+                    ${groupOptions}
+                  </select>
+                </td>
+                <td>${isProtected ? '<span style="font-size:12px; color:var(--electric-blue); font-weight:800; background:rgba(0, 210, 255, 0.1); padding:4px 8px; border-radius:8px;">🔒 محمي</span>' : `<button class="btn-danger btn-small" onclick="deleteUser('${u.email}')">عزل 🗑️</button>`}</td>
+              </tr>`;
+            });
+            
+            tbody.innerHTML = tableContent;
+            
+          } else { 
+              tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 30px;">الخادم خالي</td></tr>`; 
+          }
+        }).catch(err => { 
+            completeProgress(); 
+            console.error("Users Error:", err);
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ef4444; padding: 30px;">❌ حدث خطأ في جلب البيانات</td></tr>`; 
+        });
+    }
 
     function changeUserRole(email, newRole) {
       showProgress("تحديث الصلاحية...");
