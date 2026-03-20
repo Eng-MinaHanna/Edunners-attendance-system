@@ -510,22 +510,55 @@
         }).catch(e=> {completeProgress(); showToast("❌ خطأ اتصال", "error")});
     }
 
-    function syncRole() {
-      if (localStorage.getItem('isLoggedIn') !== 'true') return;
-      fetch(`${LOGIN_API_URL}?action=checkMyRole${getAuthParams()}`)
-        .then(res => res.json()).then(data => {
-          if (data.status === "unauthorized" || data.status === "deleted") { alert("انتهت صلاحية الجلسة."); logout(); } 
-          else if (data.status === "success") {
-            const currentSavedRole = localStorage.getItem('userRole'); const currentSavedGroup = localStorage.getItem('userGroup');
-            if (currentSavedRole !== data.role || (currentSavedGroup !== data.group && data.role !== 'Owner' && data.role !== 'CO-Founder' && data.role !== 'Team Manager' && data.role !== 'Admin')) {
-              localStorage.setItem('userRole', data.role);
-              if (data.role !== 'Owner' && data.role !== 'CO-Founder' && data.role !== 'Team Manager' && data.role !== 'Admin') localStorage.setItem('userGroup', data.group);
-              applyRolesToUI(); 
-              if (currentView === 'users' && data.role !== 'Team Manager' && data.role !== 'Admin' && data.role !== 'Owner' && data.role !== 'CO-Founder') switchView('scanner');
-            }
+   function syncRole() {
+  if (localStorage.getItem('isLoggedIn') !== 'true') return;
+
+  fetch(`${LOGIN_API_URL}?action=checkMyRole${getAuthParams()}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "unauthorized" || data.status === "deleted") { 
+        alert("🔒 تم تحديث جلسة العمل أو إلغاء الصلاحية. يرجى تسجيل الدخول."); 
+        logout(); 
+      } 
+      else if (data.status === "success") {
+        const currentSavedRole = localStorage.getItem('userRole') || "";
+        const currentSavedGroup = localStorage.getItem('userGroup') || "";
+        
+        // تحويل الرتبة القادمة من السيرفر لحروف كبيرة لضمان دقة المقارنة
+        const newRole = data.role.toUpperCase();
+        const oldRole = currentSavedRole.toUpperCase();
+        
+        // هل هذا المستخدم "إدارة عليا"؟ (Owner, Co-Founder, Admin, Team Manager)
+        const isHighAdmin = ['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN'].includes(newRole);
+
+        // 1. إذا تغيرت الرتبة أو تغير الجروب (بشرط ألا يكون من الإدارة العليا)
+        if (oldRole !== newRole || (currentSavedGroup !== data.group && !isHighAdmin)) {
+          
+          localStorage.setItem('userRole', data.role); // حفظ الرتبة بشكلها الأصلي
+          
+          // تحديث الجروب فقط إذا لم يكن أدمن (الأدمن حر التنقل)
+          if (!isHighAdmin) {
+            localStorage.setItem('userGroup', data.group);
           }
-        }).catch(err => console.log("Sync error"));
-    }
+
+          // تحديث الواجهة فوراً
+          if (typeof applyPermissions === "function") {
+              applyPermissions(); 
+          } else {
+              applyRolesToUI();
+          }
+          
+          // 2. طرد المستخدم من الصفحات الحساسة إذا فقد الصلاحية وهو بداخلها
+          const sensitiveViews = ['users', 'settings'];
+          if (sensitiveViews.includes(currentView) && !isHighAdmin) {
+            showToast("⚠️ تم سحب صلاحية الوصول لهذه الصفحة", "error");
+            switchView('scanner');
+          }
+        }
+      }
+    })
+    .catch(err => console.log("Sync error ignored."));
+}
 
    function applyRolesToUI() {
       const userRole = localStorage.getItem('userRole'); const userGroup = localStorage.getItem('userGroup');
