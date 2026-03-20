@@ -235,13 +235,23 @@
     <div id="toast"></div>
     <div id="offlineBadge" onclick="syncOfflineData()">📶 لديك بيانات غير مزامنة (<span id="offlineCount">0</span>). اضغط للرفع!</div>
 
-    <div class="cross-group-only" style="background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); text-align:center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);" id="lectureContainer">
+  <div id="lectureContainer" class="manager-only" style="background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); text-align:center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display:none;">
+    
+    <!-- 1️⃣ الجزء الخاص بالمحاضرة (يظهر للـ Coordinator والمديرين) -->
+    <div style="margin-bottom: 15px;">
         <label style="font-weight: 800; color: var(--electric-blue); font-size: 13px; display:block; margin-bottom:10px;">رقم المحاضرة المستهدفة</label>
-        <select id="lecture" style="margin-bottom: 15px; max-width: 300px;"><script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script></select>
-        
+        <select id="lecture" style="margin-bottom: 0; max-width: 300px;">
+            <script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">المحاضرة ${i}</option>`);</script>
+        </select>
+    </div>
+
+    <!-- 2️⃣ الجزء الخاص بالجروب (يختفي تماماً عن الـ Coordinator ويظهر للأدمن فقط) -->
+    <div class="cross-group-only" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display:none !important;">
         <label style="font-weight: 800; color: #c084fc; font-size: 13px; display:block; margin-bottom:10px;">تحكم الجروب 👑</label>
         <select id="globalGroupSelect" style="margin-bottom:0; max-width: 300px; border-color:#c084fc; color:#c084fc;" onchange="changeGlobalGroup(this.value)"></select>
     </div>
+
+</div>
 
     <div id="view-scanner" class="view-section active">
       <div style="max-width: 500px; margin: auto;">
@@ -560,30 +570,39 @@
     .catch(err => console.log("Sync error ignored."));
 }
 
-   function applyRolesToUI() {
-      const userRole = localStorage.getItem('userRole'); const userGroup = localStorage.getItem('userGroup');
-      const roleBadge = document.getElementById('roleBadge'); const groupBadge = document.getElementById('groupBadge');
-      
-      if(roleBadge) {
-          roleBadge.innerText = (userRole === 'Owner') ? 'المالك 👑' : (userRole === 'CO-Founder') ? 'CO-Founder ✨' : (userRole === 'Team Manager' || userRole === 'Admin') ? 'Team Manager' : (userRole === 'Coordinator' || userRole === 'Manager') ? 'Coordinator' : 'Cadre';
-          roleBadge.style.display = 'flex';
-      }
-      
-      if(groupBadge) {
-          groupBadge.innerText = userGroup; 
-          groupBadge.style.display = 'flex';
-      }
-      
-      document.body.className = document.body.classList.contains('dark-mode') ? 'dark-mode ' : ''; 
-      
-      if (userRole === 'Owner') { document.body.classList.add('role-owner'); } 
-      else if (userRole === 'CO-Founder') { document.body.classList.add('role-co-founder'); } 
-      else if (userRole === 'Team Manager' || userRole === 'Admin') { document.body.classList.add('role-admin'); } 
-      else if (userRole === 'Coordinator' || userRole === 'Manager') { document.body.classList.add('role-manager'); } 
-      else { document.body.classList.add('role-user'); }
-      
-      const ggs = document.getElementById('globalGroupSelect'); if(ggs) ggs.value = userGroup;
-    }
+function applyRolesToUI() {
+  const rawRole = localStorage.getItem('userRole') || "CADRE";
+  const role = rawRole.toUpperCase(); 
+  const userGroup = localStorage.getItem('userGroup') || "Group A";
+
+  // 1. إخفاء كل العناصر الحساسة كبداية (إجباري)
+  document.querySelectorAll('.manager-only, .admin-only, .cross-group-only').forEach(e => {
+    e.style.setProperty('display', 'none', 'important');
+  });
+
+  // 2. صلاحيات المتابعة (تظهر للكل بما فيهم الـ Coordinator)
+  if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN', 'COORDINATOR'].includes(role)) {
+    document.querySelectorAll('.manager-only').forEach(e => {
+      e.style.setProperty('display', 'block', 'important'); // 👈 إضافة important هنا
+    });
+  }
+
+  // 3. صلاحيات الإدارة العليا فقط (منع الـ Coordinator من تحكم الجروب)
+  if(['OWNER', 'CO-FOUNDER', 'TEAM MANAGER', 'ADMIN'].includes(role)) {
+    document.querySelectorAll('.admin-only, .cross-group-only').forEach(e => {
+      e.style.setProperty('display', 'block', 'important'); // 👈 إضافة important هنا
+    });
+  }
+  
+  // تحديث البدجات (Badges) في الهيدر
+  const rb = document.getElementById('roleBadge');
+  const gb = document.getElementById('groupBadge');
+  const wn = document.getElementById('welcomeName');
+  
+  if(rb) { rb.innerText = rawRole; rb.style.display = 'flex'; }
+  if(gb) { gb.innerText = userGroup; gb.style.display = 'flex'; }
+  if(wn) wn.innerText = `| ${localStorage.getItem('userName')}`;
+}
     
     function checkAuth() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; const userName = localStorage.getItem('userName');
