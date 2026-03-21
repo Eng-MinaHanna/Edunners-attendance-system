@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مقارنة الجروبات | Eduneers</title>
+  <title>مقارنة الأداء الشاملة | Eduneers</title>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,154 +12,111 @@
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
 
     :root { 
-      --primary: #f8fafc; 
-      --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); 
-      --text-main: #f8fafc; 
-      --text-muted: #cbd5e1; 
-      --card-bg: rgba(30, 41, 59, 0.7); 
-      --accent: #f5b041; 
-      --electric-blue: #00d2ff;
-      --border-color: rgba(255,255,255,0.1);
+      --primary: #0f172a; --primary-light: #1e293b; --accent: #f5b041; 
+      --accent-glow: rgba(245, 176, 65, 0.6); --electric-blue: #00d2ff;
+      --electric-glow: rgba(0, 210, 255, 0.5); --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      --text-main: #334155; --text-muted: #64748b; --card-bg: rgba(255, 255, 255, 0.9); --border-radius: 24px;   
     }
 
-    body { 
-      font-family: 'Cairo', sans-serif; 
-      background: var(--bg-gradient); 
-      color: var(--text-main); 
-      min-height: 100vh; 
-      padding-bottom: 50px;
-      margin: 0;
-    }
-
-    /* Navbar */
-    .navbar-custom {
-      background: rgba(15, 23, 42, 0.9); 
-      backdrop-filter: blur(16px); 
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    /* Cards */
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      transition: 0.3s ease;
+    body.dark-mode { 
+      --primary: #f8fafc; --bg-gradient: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); 
+      --text-main: #f8fafc; --text-muted: #cbd5e1; --card-bg: rgba(15, 23, 42, 0.8); 
     }
     
-    .icon-box {
-      width: 50px; height: 50px;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
+    body { font-family: 'Cairo', sans-serif; background: var(--bg-gradient); margin: 0; color: var(--text-main); min-height: 100vh; transition: 0.5s; overflow-x: hidden; }
+    
+    .glass-card {
+      background: var(--card-bg); backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
     }
-    .bg-electric { background: rgba(0, 210, 255, 0.1); color: var(--electric-blue); border: 1px solid rgba(0, 210, 255, 0.3); }
-    .bg-accent { background: rgba(245, 176, 65, 0.1); color: var(--accent); border: 1px solid rgba(245, 176, 65, 0.3); }
-    .bg-purple { background: rgba(168, 85, 247, 0.1); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
 
-    /* Selection List */
-    .group-selector {
-      max-height: 350px;
-      overflow-y: auto;
-    }
+    /* ⚡ Loader */
+    #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.95); display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; color: white; backdrop-filter: blur(10px); }
+    .bar-bg { width: 70%; max-width: 400px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 15px 0; }
+    .bar-fill { width: 0%; height: 100%; background: var(--electric-blue); transition: 0.1s linear; box-shadow: 0 0 15px var(--electric-blue); }
+
+    /* Tables */
+    .table-custom { color: var(--text-main); }
+    .table-custom thead th { color: var(--electric-blue); border-bottom: 2px solid rgba(0, 210, 255, 0.2); }
+    
+    .group-selector { max-height: 350px; overflow-y: auto; padding-left: 10px; }
     .group-selector::-webkit-scrollbar { width: 5px; }
     .group-selector::-webkit-scrollbar-thumb { background: var(--electric-blue); border-radius: 10px; }
 
-    /* Table Customization */
-    .table { color: var(--text-main); }
-    .table thead th { color: var(--electric-blue); border-bottom: 2px solid var(--border-color); }
-    .table td { border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    .icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .bg-att { background: rgba(0, 210, 255, 0.1); color: var(--electric-blue); }
+    .bg-tsk { background: rgba(245, 176, 65, 0.1); color: var(--accent); }
+    .bg-fbk { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
 
-    .progress-custom { height: 10px; background: rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; }
-    .progress-bar-fill { background: var(--electric-blue); box-shadow: 0 0 10px var(--electric-blue); }
+    /* الصلاحيات */
+    .manager-only { display: none !important; }
+    body.role-manager .manager-only, body.role-admin .manager-only, body.role-owner .manager-only, body.role-co-founder .manager-only { display: block !important; }
   </style>
 </head>
-<body>
+<body class="dark-mode">
 
-  <nav class="navbar navbar-custom py-3 mb-4">
-    <div class="container d-flex justify-content-between align-items-center">
-      <h4 class="m-0 fw-bold">⚡ Eduneers <span style="color: var(--electric-blue);">Analytics</span></h4>
-      <button class="btn btn-outline-light btn-sm fw-bold" onclick="window.location.href='index.html'">الرئيسية 🏠</button>
+  <div id="loader">
+    <div id="loaderMsg" style="font-weight: 800; margin-bottom: 10px;">جاري تحليل البيانات الضخمة...</div>
+    <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+    <div style="font-size: 24px; font-weight: 900; color: var(--electric-blue);" id="percent">0%</div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg border-bottom border-secondary-subtle mb-4" style="background: rgba(15, 23, 42, 0.9);">
+    <div class="container">
+      <h4 class="m-0 fw-bold text-white">⚡ Eduneers <span style="color: var(--electric-blue);">Comparison</span></h4>
+      <button class="btn btn-outline-info btn-sm fw-bold" onclick="window.location.href='grades.html'">العودة للتقييم 🎯</button>
     </div>
   </nav>
 
   <div class="container">
-    <div class="row mb-5 text-center">
-      <div class="col-12">
-        <h2 class="fw-bold" style="color: var(--accent);">لوحة مقارنة الأداء التفاعلية</h2>
-        <p class="text-muted">بيانات حقيقية محدثة لجميع الجروبات</p>
-      </div>
-    </div>
-
-    <div class="row g-4 mb-5">
+    <div class="row g-4 mb-4">
       <div class="col-md-4">
-        <div class="glass-card p-4 d-flex align-items-center gap-3">
-          <div class="icon-box bg-electric">👥</div>
-          <div>
-            <h6 class="text-muted mb-1 fw-bold">الأعلى حضوراً</h6>
-            <h4 class="mb-0 fw-bold" id="topAttendanceGroup">--</h4>
-          </div>
+        <div class="glass-card p-3 d-flex align-items-center gap-3">
+          <div class="icon-box bg-att">👥</div>
+          <div><small class="text-muted d-block fw-bold">الأعلى حضوراً</small><span class="fw-bold" id="topAtt">--</span></div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="glass-card p-4 d-flex align-items-center gap-3">
-          <div class="icon-box bg-accent">📝</div>
-          <div>
-            <h6 class="text-muted mb-1 fw-bold">الأكثر تسليماً للتاسكات</h6>
-            <h4 class="mb-0 fw-bold" id="topTasksGroup">--</h4>
-          </div>
+        <div class="glass-card p-3 d-flex align-items-center gap-3">
+          <div class="icon-box bg-tsk">📝</div>
+          <div><small class="text-muted d-block fw-bold">الأعلى تاسكات</small><span class="fw-bold" id="topTsk">--</span></div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="glass-card p-4 d-flex align-items-center gap-3">
-          <div class="icon-box bg-purple">⭐</div>
-          <div>
-            <h6 class="text-muted mb-1 fw-bold">الأفضل تقييماً (Feedback)</h6>
-            <h4 class="mb-0 fw-bold" id="topFeedbackGroup">--</h4>
-          </div>
+        <div class="glass-card p-3 d-flex align-items-center gap-3">
+          <div class="icon-box bg-fbk">⭐</div>
+          <div><small class="text-muted d-block fw-bold">الأعلى فيدباك</small><span class="fw-bold" id="topFbk">--</span></div>
         </div>
       </div>
     </div>
 
-    <div class="row g-4 mb-5">
+    <div class="row g-4">
       <div class="col-lg-3">
-        <div class="glass-card p-4 h-100">
-          <h5 class="fw-bold mb-3" style="color: var(--electric-blue);">اختر الجروبات</h5>
-          <hr style="border-color: var(--border-color);">
-          <div class="group-selector" id="checkboxContainer">
-             <p class="text-muted small">جاري تحميل القائمة...</p>
-          </div>
+        <div class="glass-card p-3">
+          <h6 class="fw-bold mb-3 border-bottom pb-2">اختر الجروبات (A-Z)</h6>
+          <div class="group-selector" id="checkList"></div>
         </div>
       </div>
-      
       <div class="col-lg-9">
-        <div class="glass-card p-4 h-100">
-          <div style="height: 400px;">
-            <canvas id="comparisonChart"></canvas>
-          </div>
+        <div class="glass-card p-3 mb-4">
+          <div style="height: 380px;"><canvas id="mainChart"></canvas></div>
         </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12">
-        <div class="glass-card p-4">
-          <h5 class="fw-bold mb-4" style="color: var(--accent);">📊 إحصائيات الطلاب التفصيلية</h5>
+        
+        <div class="glass-card p-3 manager-only">
+          <h6 class="fw-bold mb-3 text-info">📊 جدول المقارنة الرقمي</h6>
           <div class="table-responsive">
-            <table class="table align-middle">
+            <table class="table table-custom align-middle text-center">
               <thead>
                 <tr>
                   <th>الجروب</th>
                   <th>الحضور</th>
                   <th>التاسكات</th>
                   <th>الفيدباك</th>
-                  <th>كفاءة الجروب</th>
+                  <th>الكفاءة</th>
                 </tr>
               </thead>
-              <tbody id="tableBody">
-                <tr><td colspan="5" class="text-center py-5">جاري جلب البيانات من السيرفر...</td></tr>
-              </tbody>
+              <tbody id="tableBody"></tbody>
             </table>
           </div>
         </div>
@@ -168,103 +125,91 @@
   </div>
 
   <script>
-// الروابط الخاصة بك
+    // الروابط المرجعية الخاصة بك
     const GRADES_API = "https://script.google.com/macros/s/AKfycbzJkCGpIcc6uzgITufJcDnv8yC2RvF-DTlX1rw-9ZojdHmQyj2GSHsPFFAKCOiWV4Q/exec"; 
-    const QUIZ_API = "https://script.google.com/macros/s/AKfycbwne4ufHfwjbcS6p39pfslPsTtPsQn8n24zapV4ytou5L4sacK0Y8KHYq_vx64PiYOVMQ/exec"; 
     const ATTEND_API = "https://script.google.com/macros/s/AKfycbzrLXNuxcAM5A1euSqtbqt-3L2sqAPXGb0A3JF7hiCaJ5giW86c51bs45ISAPANa4PP/exec"; 
+    const EXTRA_API = "https://script.google.com/macros/s/AKfycbyuG4SgLlQsWZ10mjlBQJ4GZjWzAG1u_DuPEfMG9KlHw1NbUDVgmijLxfSecp4PWQKAVg/exec";
 
     let groupsData = [];
-    let myChart;
+    let chartInstance = null;
 
-    async function loadData() {
-      const email = localStorage.getItem('userEmail') || '';
-      const token = localStorage.getItem('sessionToken') || '';
-      const auth = `&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
+    function showLoader(show, msg) {
+        const l = document.getElementById('loader');
+        if(show) {
+            document.getElementById('loaderMsg').innerText = msg;
+            l.style.display = 'flex';
+            let p=0; window.ldrItv = setInterval(()=>{ p+=Math.floor(Math.random()*15)+1; if(p>90)p=90; document.getElementById('barFill').style.width=p+'%'; document.getElementById('percent').innerText=p+'%'; }, 80);
+        } else {
+            clearInterval(window.ldrItv);
+            document.getElementById('barFill').style.width='100%'; document.getElementById('percent').innerText='100%';
+            setTimeout(() => { l.style.display = 'none'; }, 300);
+        }
+    }
+
+    async function init() {
+      // تطبيق الصلاحيات
+      const role = (localStorage.getItem('userRole') || "").toUpperCase();
+      document.body.className = (localStorage.getItem('darkMode') === 'true' ? 'dark-mode ' : '') + `role-${role.toLowerCase().replace(" ","-")}`;
+      
+      showLoader(true, "جاري استدعاء البيانات من الـ APIs المختلفة 📡");
+      
+      const auth = `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}`;
 
       try {
-        // سحب البيانات من الحضور والتاسكات (Grades) في نفس الوقت
-        const [attendRes, gradesRes] = await Promise.all([
-          fetch(`${ATTEND_API}?action=getComparisonData${auth}`),
-          fetch(`${GRADES_API}?action=getComparisonData${auth}`)
+        const [resAtt, resGrd, resExt] = await Promise.all([
+          fetch(`${ATTEND_API}?action=getComparisonData${auth}`).then(r => r.json()),
+          fetch(`${GRADES_API}?action=getComparisonData${auth}`).then(r => r.json()),
+          fetch(`${EXTRA_API}?action=getComparisonData${auth}`).then(r => r.json())
         ]);
 
-        const attendResult = await attendRes.json();
-        const gradesResult = await gradesRes.json();
-
-        if (attendResult.status === "success" && gradesResult.status === "success") {
-          // دمج البيانات بناءً على اسم الجروب
-          groupsData = mergeData(attendResult.data, gradesResult.data);
-          renderUI();
+        if (resAtt.status === "success") {
+          mergeAndRender(resAtt.data, resGrd.data || [], resExt.data || []);
         }
+        showLoader(false);
       } catch (e) {
-        console.error("Error fetching data:", e);
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center text-danger">⚠️ حدث خطأ أثناء ربط الـ APIs. تأكد من تفعيل الكروس أوريجين (CORS) في السكريبت.</td></tr>`;
+        showLoader(false);
+        alert("❌ خطأ في ربط الـ APIs. تأكد من تفعيل CORS وإعدادات النشر.");
       }
     }
 
-    // دالة لدمج بيانات الحضور مع بيانات التاسكات
-    function mergeData(attendArr, gradesArr) {
-      const merged = {};
-      
-      attendArr.forEach(item => {
-        merged[item.name] = { ...item, tasks: 0, feedback: 0 };
-      });
+    function mergeAndRender(att, grd, ext) {
+      const map = {};
+      // دمج بيانات الحضور
+      att.forEach(i => map[i.name] = { name: i.name, att: i.attendance || 0, tsk: 0, fbk: 0 });
+      // دمج بيانات التاسكات
+      grd.forEach(i => { if(map[i.name]) map[i.name].tsk = i.tasks || 0; });
+      // دمج بيانات الفيدباك
+      ext.forEach(i => { if(map[i.name]) map[i.name].fbk = i.feedback || 0; });
 
-      gradesArr.forEach(item => {
-        if (merged[item.name]) {
-          merged[item.name].tasks = item.tasks || 0;
-          merged[item.name].feedback = item.feedback || 0;
-        } else {
-          merged[item.name] = { name: item.name, attendance: 0, tasks: item.tasks || 0, feedback: item.feedback || 0 };
-        }
-      });
+      groupsData = Object.values(map).sort((a,b) => a.name.localeCompare(b.name));
 
-      return Object.values(merged).sort((a, b) => a.name.localeCompare(b.name));
-    }
+      // تحديث الكروت
+      document.getElementById('topAtt').innerText = [...groupsData].sort((a,b) => b.att - a.att)[0]?.name || "--";
+      document.getElementById('topTsk').innerText = [...groupsData].sort((a,b) => b.tsk - a.tsk)[0]?.name || "--";
+      document.getElementById('topFbk').innerText = [...groupsData].sort((a,b) => b.fbk - a.fbk)[0]?.name || "--";
 
-    function renderUI() {
-      // تحديث الكروت العلوية (أرقام صحيحة)
-      const topAtt = [...groupsData].sort((a,b) => b.attendance - a.attendance)[0];
-      const topTsk = [...groupsData].sort((a,b) => b.tasks - a.tasks)[0];
-      const topFbk = [...groupsData].sort((a,b) => b.feedback - a.feedback)[0];
-
-      document.getElementById('topAttendanceGroup').innerText = topAtt?.name || "--";
-      document.getElementById('topTasksGroup').innerText = topTsk?.name || "--";
-      document.getElementById('topFeedbackGroup').innerText = topFbk?.name || "--";
-
-      // بناء الجدول
+      // بناء الجدول والقائمة
       const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = '';
-      groupsData.forEach(g => {
-        const total = Math.round(g.attendance + g.tasks + g.feedback);
-        const avg = Math.round((total / 150) * 100); // افتراض 150 هو المجموع المثالي
+      const checklist = document.getElementById('checkList');
+      tbody.innerHTML = ''; checklist.innerHTML = '';
 
+      groupsData.forEach((g, index) => {
+        const efficiency = Math.round(((g.att + g.tsk + g.fbk) / 150) * 100);
+        
         tbody.insertAdjacentHTML('beforeend', `
           <tr>
             <td class="fw-bold">${g.name}</td>
-            <td>${Math.round(g.attendance)}</td>
-            <td>${Math.round(g.tasks)}</td>
-            <td>${Math.round(g.feedback)}</td>
-            <td>
-              <div class="d-flex align-items-center gap-2">
-                <span class="small fw-bold">${avg}%</span>
-                <div class="progress-custom w-100">
-                  <div class="progress-bar-fill" style="width: ${avg > 100 ? 100 : avg}%; height:100%"></div>
-                </div>
-              </div>
-            </td>
+            <td>${Math.round(g.att)}</td>
+            <td>${Math.round(g.tsk)}</td>
+            <td>${Math.round(g.fbk)}</td>
+            <td><span class="badge ${efficiency > 70 ? 'bg-success' : 'bg-warning'}">${efficiency}%</span></td>
           </tr>
         `);
-      });
 
-      // بناء قائمة الاختيار
-      const container = document.getElementById('checkboxContainer');
-      container.innerHTML = '';
-      groupsData.forEach((g, i) => {
-        container.insertAdjacentHTML('beforeend', `
-          <div class="form-check mb-2">
-            <input class="form-check-input group-chk" type="checkbox" value="${g.name}" id="c${i}" ${i < 4 ? 'checked' : ''} onchange="updateChart()">
-            <label class="form-check-label" for="c${i}">${g.name}</label>
+        checklist.insertAdjacentHTML('beforeend', `
+          <div class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" value="${g.name}" id="ch${index}" ${index < 4 ? 'checked' : ''} onchange="updateChart()">
+            <label class="form-check-label small" for="ch${index}">${g.name}</label>
           </div>
         `);
       });
@@ -273,35 +218,34 @@
     }
 
     function updateChart() {
-      const selected = Array.from(document.querySelectorAll('.group-chk:checked')).map(c => c.value);
+      const selected = Array.from(document.querySelectorAll('.form-check-input:checked')).map(c => c.value);
       const filtered = groupsData.filter(g => selected.includes(g.name));
       
-      if (myChart) myChart.destroy();
-      const ctx = document.getElementById('comparisonChart').getContext('2d');
-      
-      myChart = new Chart(ctx, {
+      const ctx = document.getElementById('mainChart').getContext('2d');
+      if(chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: filtered.map(g => g.name),
           datasets: [
-            { label: 'الحضور', data: filtered.map(g => Math.round(g.attendance)), backgroundColor: '#00d2ff' },
-            { label: 'التاسكات', data: filtered.map(g => Math.round(g.tasks)), backgroundColor: '#f5b041' },
-            { label: 'الفيدباك', data: filtered.map(g => Math.round(g.feedback)), backgroundColor: '#a855f7' }
+            { label: 'الحضور', data: filtered.map(g => g.att), backgroundColor: '#00d2ff' },
+            { label: 'التاسكات', data: filtered.map(g => g.tsk), backgroundColor: '#f5b041' },
+            { label: 'الفيدباك', data: filtered.map(g => g.fbk), backgroundColor: '#a855f7' }
           ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+          responsive: true, maintainAspectRatio: false,
           plugins: { legend: { labels: { color: '#fff', font: { family: 'Cairo' } } } },
           scales: {
-            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1' } },
+            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#cbd5e1' } },
             x: { ticks: { color: '#fff', font: { family: 'Cairo', weight: 'bold' } } }
           }
         }
       });
     }
 
-    window.onload = loadData;
+    window.onload = init;
   </script>
 </body>
 </html>
