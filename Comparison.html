@@ -168,7 +168,11 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxa-cJWpe21h39eHHYxj8J203gfpvhWwJpNCcPnEUp2ywWddDNLUgXI777GOJD__VN_/exec"; 
+// الروابط الخاصة بك
+    const GRADES_API = "https://script.google.com/macros/s/AKfycbzJkCGpIcc6uzgITufJcDnv8yC2RvF-DTlX1rw-9ZojdHmQyj2GSHsPFFAKCOiWV4Q/exec"; 
+    const QUIZ_API = "https://script.google.com/macros/s/AKfycbwne4ufHfwjbcS6p39pfslPsTtPsQn8n24zapV4ytou5L4sacK0Y8KHYq_vx64PiYOVMQ/exec"; 
+    const ATTEND_API = "https://script.google.com/macros/s/AKfycbzrLXNuxcAM5A1euSqtbqt-3L2sqAPXGb0A3JF7hiCaJ5giW86c51bs45ISAPANa4PP/exec"; 
+
     let groupsData = [];
     let myChart;
 
@@ -178,61 +182,91 @@
       const auth = `&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
 
       try {
-        const res = await fetch(`${API_URL}?action=getComparisonData${auth}`);
-        const result = await res.json();
+        // سحب البيانات من الحضور والتاسكات (Grades) في نفس الوقت
+        const [attendRes, gradesRes] = await Promise.all([
+          fetch(`${ATTEND_API}?action=getComparisonData${auth}`),
+          fetch(`${GRADES_API}?action=getComparisonData${auth}`)
+        ]);
 
-        if (result.status === "success") {
-          groupsData = result.data;
+        const attendResult = await attendRes.json();
+        const gradesResult = await gradesRes.json();
+
+        if (attendResult.status === "success" && gradesResult.status === "success") {
+          // دمج البيانات بناءً على اسم الجروب
+          groupsData = mergeData(attendResult.data, gradesResult.data);
           renderUI();
         }
       } catch (e) {
-        console.error("Error:", e);
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center text-danger">فشل الاتصال بالسيرفر</td></tr>`;
+        console.error("Error fetching data:", e);
+        document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center text-danger">⚠️ حدث خطأ أثناء ربط الـ APIs. تأكد من تفعيل الكروس أوريجين (CORS) في السكريبت.</td></tr>`;
       }
     }
 
+    // دالة لدمج بيانات الحضور مع بيانات التاسكات
+    function mergeData(attendArr, gradesArr) {
+      const merged = {};
+      
+      attendArr.forEach(item => {
+        merged[item.name] = { ...item, tasks: 0, feedback: 0 };
+      });
+
+      gradesArr.forEach(item => {
+        if (merged[item.name]) {
+          merged[item.name].tasks = item.tasks || 0;
+          merged[item.name].feedback = item.feedback || 0;
+        } else {
+          merged[item.name] = { name: item.name, attendance: 0, tasks: item.tasks || 0, feedback: item.feedback || 0 };
+        }
+      });
+
+      return Object.values(merged).sort((a, b) => a.name.localeCompare(b.name));
+    }
+
     function renderUI() {
-      // 1. Top Performers (Rounding to ensure whole numbers if they were averages)
-      const sortedByAtt = [...groupsData].sort((a,b) => b.attendance - a.attendance);
-      const sortedByTsk = [...groupsData].sort((a,b) => b.tasks - a.tasks);
-      const sortedByFbk = [...groupsData].sort((a,b) => b.feedback - a.feedback);
+      // تحديث الكروت العلوية (أرقام صحيحة)
+      const topAtt = [...groupsData].sort((a,b) => b.attendance - a.attendance)[0];
+      const topTsk = [...groupsData].sort((a,b) => b.tasks - a.tasks)[0];
+      const topFbk = [...groupsData].sort((a,b) => b.feedback - a.feedback)[0];
 
-      document.getElementById('topAttendanceGroup').innerText = sortedByAtt[0]?.name || "--";
-      document.getElementById('topTasksGroup').innerText = sortedByTsk[0]?.name || "--";
-      document.getElementById('topFeedbackGroup').innerText = sortedByFbk[0]?.name || "--";
+      document.getElementById('topAttendanceGroup').innerText = topAtt?.name || "--";
+      document.getElementById('topTasksGroup').innerText = topTsk?.name || "--";
+      document.getElementById('topFeedbackGroup').innerText = topFbk?.name || "--";
 
-      // 2. Build Table
+      // بناء الجدول
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = '';
       groupsData.forEach(g => {
-        const avg = Math.round(((g.attendance + g.tasks + g.feedback) / 150) * 100);
-        const row = `<tr>
-          <td class="fw-bold">${g.name}</td>
-          <td>${Math.round(g.attendance)} طالب</td>
-          <td>${Math.round(g.tasks)} طالب</td>
-          <td>${Math.round(g.feedback)} طالب</td>
-          <td>
-            <div class="d-flex align-items-center gap-2">
-              <span class="small fw-bold">${avg}%</span>
-              <div class="progress-custom w-100">
-                <div class="progress-bar-fill" style="width: ${avg}%; height:100%"></div>
+        const total = Math.round(g.attendance + g.tasks + g.feedback);
+        const avg = Math.round((total / 150) * 100); // افتراض 150 هو المجموع المثالي
+
+        tbody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td class="fw-bold">${g.name}</td>
+            <td>${Math.round(g.attendance)}</td>
+            <td>${Math.round(g.tasks)}</td>
+            <td>${Math.round(g.feedback)}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <span class="small fw-bold">${avg}%</span>
+                <div class="progress-custom w-100">
+                  <div class="progress-bar-fill" style="width: ${avg > 100 ? 100 : avg}%; height:100%"></div>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>`;
-        tbody.insertAdjacentHTML('beforeend', row);
+            </td>
+          </tr>
+        `);
       });
 
-      // 3. Checkboxes
+      // بناء قائمة الاختيار
       const container = document.getElementById('checkboxContainer');
       container.innerHTML = '';
       groupsData.forEach((g, i) => {
-        const checked = i < 4 ? 'checked' : '';
-        const chk = `<div class="form-check mb-2">
-          <input class="form-check-input group-chk" type="checkbox" value="${g.name}" id="c${i}" ${checked} onchange="updateChart()">
-          <label class="form-check-label" for="c${i}">${g.name}</label>
-        </div>`;
-        container.insertAdjacentHTML('beforeend', chk);
+        container.insertAdjacentHTML('beforeend', `
+          <div class="form-check mb-2">
+            <input class="form-check-input group-chk" type="checkbox" value="${g.name}" id="c${i}" ${i < 4 ? 'checked' : ''} onchange="updateChart()">
+            <label class="form-check-label" for="c${i}">${g.name}</label>
+          </div>
+        `);
       });
 
       updateChart();
