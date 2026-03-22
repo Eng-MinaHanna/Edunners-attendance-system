@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // 🔴 أهم سطر: يخبر Next.js بتوليد ملفات ثابتة لجيت هاب
+  output: 'export',
   images: {
-    unoptimized: true, // جيت هاب لا يدعم معالجة الصور الخاصة بـ Next.js
+    unoptimized: true,
   },
-  // ⚠️ ملاحظة هامة: قم بإزالة الـ // من السطر القادم واكتب اسم الريبو بتاعك لو المشروع مش على الدومين الرئيسي
-  // basePath: '/Eduneers-Dashboard', 
+  // السطر ده هو اللي بيظبط مسار التصميم
+  basePath: '/Eduneers-attendance-system', 
 };
 
 export default nextConfig;
