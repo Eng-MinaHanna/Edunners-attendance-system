@@ -165,14 +165,12 @@
 </head>
 <body>
 
-  <!-- 📡 Loader Section -->
   <div id="loader">
     <div style="font-weight: 900; margin-bottom: 20px; letter-spacing: 2px; color: var(--electric-blue);">EDUNEERS CORE ANALYTICS</div>
     <div class="loading-energy"></div>
     <div id="loaderPercent" style="margin-top: 15px; font-family: 'JetBrains Mono'; color: var(--accent-gold);">BOOTING... 0%</div>
   </div>
 
-  <!-- 💎 Header -->
   <div class="tech-header">
     <div class="container d-flex justify-content-between align-items-center">
       <div>
@@ -187,7 +185,6 @@
   </div>
 
   <div class="container">
-    <!-- 🏆 Master Metrics -->
     <div class="row g-4 mb-5">
       <div class="col-md-4">
         <div class="glass-card text-center">
@@ -213,7 +210,6 @@
     </div>
 
     <div class="row g-4">
-      <!-- 🎛️ Group Filter Panel -->
       <div class="col-lg-3">
         <div class="glass-card">
           <h6 class="fw-bold mb-4" style="color: var(--accent-gold);">📡 المجموعات النشطة</h6>
@@ -224,7 +220,6 @@
         </div>
       </div>
 
-      <!-- 📈 Main Visualizer -->
       <div class="col-lg-9">
         <div class="glass-card mb-4" style="min-height: 400px;">
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -234,7 +229,6 @@
           <div style="height: 350px;"><canvas id="mainChart"></canvas></div>
         </div>
 
-        <!-- 📊 Analytical Data Table -->
         <div class="glass-card">
           <h6 class="fw-bold mb-4 text-info">📊 جدول تحليل الكفاءة الكمي</h6>
           <div class="table-responsive">
@@ -259,7 +253,7 @@
   <div id="toast"></div>
 
   <script>
-    // ⚠️ تأكد من إضافة معامل ?api_type في روابط الـ API الخاصة بك
+    // ✅ تم تصحيح الروابط وإبقاء المُعرفات الخاصة بك
     const ATTEND_API = "https://script.google.com/macros/s/AKfycbyQlZlxpCyr68rjjsxGmXrPcLk0X7agsGEpG6YaGGNZwTvPY3sSbx2td5blRPP6oqbfhg/exec"; 
     const GRADES_API = "https://script.google.com/macros/s/AKfycbzJkCGpIcc6uzgITufJcDnv8yC2RvF-DTlX1rw-9ZojdHmQyj2GSHsPFFAKCOiWV4Q/exec"; 
     const EXTRA_API = "https://script.google.com/macros/s/AKfycbz06d7stdEv5_4m529xIKToSNiR-_pciUDFcdhFQXA7RrE9rt_Puv8dhBdpR4V5L3XioQ/exec";
@@ -270,7 +264,6 @@
     function showLoader(show, msg) {
         const l = document.getElementById('loader');
         if(show) {
-            document.getElementById('loaderMsg').innerText = msg;
             l.style.display = 'flex';
             let p = 0;
             window.ldrItv = setInterval(() => {
@@ -292,18 +285,22 @@
       const auth = `&email=${encodeURIComponent(localStorage.getItem('userEmail'))}&token=${encodeURIComponent(localStorage.getItem('sessionToken'))}`;
 
       try {
+        // ✅ تم إصلاح علامة & إلى ? لبدء الباراميترات (CORS Fix)
         const [resAtt, resGrd, resExt] = await Promise.all([
-          fetch(`${ATTEND_API}&action=getComparisonData${auth}`).then(r => r.json()),
-          fetch(`${GRADES_API}&action=getComparisonData${auth}`).then(r => r.json()),
-          fetch(`${EXTRA_API}&action=getComparisonData${auth}`).then(r => r.json())
+          fetch(`${ATTEND_API}?action=getComparisonData${auth}`).then(r => r.json()),
+          fetch(`${GRADES_API}?action=getComparisonData${auth}`).then(r => r.json()),
+          fetch(`${EXTRA_API}?action=getComparisonData${auth}`).then(r => r.json())
         ]);
 
         if (resAtt.status === "success") {
           mergeAndRender(resAtt.data, resGrd.data || [], resExt.data || []);
           showToast("تم تحديث البيانات بنجاح 📡");
+        } else {
+          alert("خطأ في البيانات المسترجعة: " + (resAtt.message || "Unknown error"));
         }
       } catch (e) {
         alert("❌ خطأ تقني في الربط: تأكد من تفعيل CORS وعمل Deployment جديد لكل السكريبتات.");
+        console.error(e);
       }
       showLoader(false);
     }
@@ -414,11 +411,6 @@
         const t = document.getElementById('toast');
         t.innerText = msg; t.style.display = 'block';
         setTimeout(() => { t.style.display = 'none'; }, 3000);
-    }
-
-    function toggleDarkMode() {
-        // صفحة المقارنة مصممة لتكون مظلمة افتراضياً للثيم الكهربي
-        showToast("الوضع المظلم هو الوضع الرسمي لهذه اللوحة 🌌");
     }
 
     window.onload = init;
